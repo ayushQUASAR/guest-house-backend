@@ -6,10 +6,11 @@ const Other = require("./other");
 const Faculty = require("./faculty");
 
 const refSchema  = new mongoose.Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
-         required: true,
-    },
+    // _id: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //      required: true,
+    //      unique: true,
+    // },
       refTo : {
         type:  mongoose.Schema.Types.ObjectId,
         required: true,
@@ -18,7 +19,7 @@ const refSchema  = new mongoose.Schema({
         refType : {
             type: String,
             required: true,
-            enum: ['Student', 'Alumni', 'Other', 'Faculty'],
+            enum: ['Student', 'Alumni','Other','Faculty'],
         }, 
        
         refFrom : {
@@ -30,3 +31,4 @@ const refSchema  = new mongoose.Schema({
 
 const Ref = new mongoose.model("Reference", refSchema);
 
+module.exports = Ref;

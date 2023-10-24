@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
 const facultySchema = new mongoose.Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
-         required: true,
-    },
     name: {
         type: String,
         required: true,
@@ -13,7 +9,7 @@ const facultySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    deptt: {
+    dept: {
         type: String,
         required:true,
     },

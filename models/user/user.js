@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 const Ref = require('./ref');
+const Image = require('../Image');
 
 const userSchema = new mongoose.Schema({
+    // _id: {
+    //     type:  mongoose.Schema.Types.ObjectId,
+    //     required: true,
+    //     unique: true,
+    // },
 name: {
     type: String,
     required: true,
@@ -13,21 +19,27 @@ required: true,
 email: {
     type: String,
     required: true,
+    unique: true,
 },
 city: {
     type: String,
     required:true,
 },
+address: {
+    type: String,
+required: true,
+},
 govtID: {
-    type: number, 
+    type: String, 
     required: true,
 },
 userLogo: {
-type: Buffer,
+type: mongoose.Schema.Types.ObjectId,
+ref: 'Image',
 },
 idProof: {
-    type: Buffer, // image as string  
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref:'Image',
 },
 
 reference: {

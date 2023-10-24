@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
 const alumniSchema = new mongoose.Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
-         required: true,
-    },
     name: {
        type: String,
        required: true,
@@ -18,7 +14,7 @@ const alumniSchema = new mongoose.Schema({
         required: true,
     },
 
-    current_job: {
+    currentJob: {
       type: String, 
       required: true
     },
