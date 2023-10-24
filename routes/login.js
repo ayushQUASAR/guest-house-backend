@@ -1,8 +1,9 @@
 const express =  require("express");
 const bcrypt = require("bcrypt")
+const dotenv = require("dotenv");
 
 
-
+dotenv.config();
 const app = express();
 const router = express.Router();
 
@@ -13,9 +14,9 @@ const Login = require("../models/login");
 
 router.get("/", async (req, res) => {
 try {
-    const hashedPassword = await bcrypt.hash("nit_jalandhar", 10);
+    const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASS, 10);
     const adminLogin = new Login({
-        email: "guesthouse@admin.com",
+        email: process.env.ADMIN_EMAIL,
         password: hashedPassword,
     });
 
