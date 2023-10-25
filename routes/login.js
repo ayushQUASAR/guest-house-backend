@@ -14,10 +14,11 @@ const Login = require("../models/login");
 
 router.get("/", async (req, res) => {
 try {
-    const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASS, 10);
+    // const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASS, 10);
     const adminLogin = new Login({
         email: process.env.ADMIN_EMAIL,
-        password: hashedPassword,
+        // password: hashedPassword,
+        password: process.env.ADMIN_PASS,
     });
 
     
@@ -28,7 +29,8 @@ try {
        }
       
         //created new user
-        res.status(201);
+        console.log("admin created successfully");
+        res.status(201).json({message:"admin created successfully"});
        
 }
   
@@ -41,19 +43,23 @@ catch(err) {
 router.post("/", async (req,res) => {
     const loginData = req.body;
     try {
-          const admin = await Login.find({email: loginData.email});
-          if(admin === null) {
+          const user = await Login.find({email: loginData.email});
+          if(user === null) {
+            console.log("email does not matches");
             res.status(401).json({message:  "email does not matches"});
           }
           else {
 
-           const result =  await  bcrypt.compare(loginData.password, admin.password);
-
+        //    const result =  await  bcrypt.compare(loginData.password, admin.password);
+        const result = loginData.Password === user.password;
+ 
            if(result === false) {
+            console.log("not valid user");
                   res.status(403).json({message: "not valid admin"});
            }
            else{
-            res.status(200).json({message: "Admin login successful"});
+            console.log("user login successful");
+            res.status(200).json({message: "User login successful"});
            }
           }
     }

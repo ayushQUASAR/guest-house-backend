@@ -1,11 +1,16 @@
 const mongoose = require("mongoose");
-const User = require("./user/user");
 
 const schema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        required: true,
+    
+        // type: String,
+        // required: true,
+        // unique: true,
      },
 });
 
 const RejectedUser = new mongoose.model("RejectedUser", schema);
+
+module.exports = RejectedUser;

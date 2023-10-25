@@ -1,0 +1,53 @@
+###
+
+POST http://localhost:4000/register 
+Content-Type: application/json
+
+{
+"Firstname": "abhi",
+"Lastname":"sharma",
+"Phnnumber":"7347652278",
+"Email":"npc234@yahoooo.com",
+"Password":"xyz",
+"Address": "asfdasadfadsfd, UP",
+"selectedOption": "student"
+}
+
+
+
+###
+GET http://localhost:4000/users
+
+###
+
+GET http://localhost:4000/users/653970e3f377359fedc70352
+
+### 
+
+GET http://localhost:4000/users/approved/registered
+
+###
+
+GET http://localhost:4000/users/approved/rejected
+
+###
+
+POST http://localhost:4000/admin/approveRegistration
+Content-Type: application/json
+
+{
+    "user": "6539821b5a0700fb27f33d0f",
+    "status":"accept"
+}
+
+
+### 
+
+
+POST http://localhost:4000/admin/approveRegistration
+Content-Type: application/json
+
+{
+"user":"6539800af09eae409fd99fd3",
+"status": "reject"
+}

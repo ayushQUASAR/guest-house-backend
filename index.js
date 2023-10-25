@@ -40,6 +40,8 @@ app.use("/admin/approveRegistration", approveRegistrationRoute);
 app.use("/users", usersRoute);
 app.use("/login", loginRoute);
 
+
+
 app.listen(port, ()=> {
     console.log(`Server is listening on port ${port}`);
-})
+});
