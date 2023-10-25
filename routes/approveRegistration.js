@@ -5,8 +5,7 @@ const RegApproval = require("../models/regApproval");
 const RegisteredUser = require("../models/registeredUsers");
 const RejectedUser = require("../models/rejectedUsers");
 const Ref = require("../models/user/ref");
-
-
+const Login = require("../models/login");
 
 router.post("/", async (req,res) => {
       const approvalInfo = req.body;
@@ -41,9 +40,33 @@ router.post("/", async (req,res) => {
             const registeredUser = await x.save();
 
 
-            if(registeredUser === null) {
+            if(registeredUser.length === 0) {
                 throw new Error("registered user not added");
             }
+
+             const uuuser = await User.find({_id: registeredUser.user})
+
+            if(uuuser.length === 0) {
+              throw new Error("User not found");
+            }
+            
+
+            const login_data = 
+              {
+                email: `${uuuser[0].email}`,
+                password: `${uuuser[0].password}`,
+                isAdmin: false
+               }
+            
+           const userLogin = new Login(login_data);
+          
+
+            const newLogin = await userLogin.save();
+            if(newLogin.length === 0) {
+              throw new Error("new Login not added");
+            }
+
+            
 
             // add registered User to the his reference
           //  const ref = await Ref.update({_id: registeredUser.reference}, {$push: {refFrom: registeredUser._id}});
@@ -62,6 +85,8 @@ router.post("/", async (req,res) => {
             if(rejectedUser === null) {
               throw new Error("rejected user could not be added");
             }
+
+
 
              const deleted_user = await User.deleteOne({_id: newApproval.user});
              if(deleted_user!== null) {

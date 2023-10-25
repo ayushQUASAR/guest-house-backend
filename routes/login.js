@@ -12,13 +12,14 @@ const router = express.Router();
 const Login = require("../models/login");
 
 
-router.get("/", async (req, res) => {
+router.get("/admin", async (req, res) => {
 try {
     // const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASS, 10);
     const adminLogin = new Login({
         email: process.env.ADMIN_EMAIL,
         // password: hashedPassword,
         password: process.env.ADMIN_PASS,
+        isAdmin: true
     });
 
     
@@ -39,12 +40,25 @@ catch(err) {
 }
 });
 
+router.get("/", async (req,res) => {
+    try {
+        const alllogins = await Login.find({});
+        if(alllogins.length === 0) {
+            console.log("No logins yet");
+        }
+        res.status(200).json(alllogins);
+    }
+    catch(err) {
+res.json({message: err.message})
+    }
+})
+
 
 router.post("/", async (req,res) => {
     const loginData = req.body;
     try {
           const user = await Login.find({email: loginData.email});
-          if(user === null) {
+          if(user.length === 0) {
             console.log("email does not matches");
             res.status(401).json({message:  "email does not matches"});
           }
@@ -66,6 +80,19 @@ router.post("/", async (req,res) => {
     catch(err) {
         console.log({message: err.message});
              res.json({message: err.message});
+    }
+})
+
+
+router.delete("/", async (req,res) => {
+    try {
+    const deletedLogins = await Login.deleteMany({});
+    
+        res.status(200).json({message:"Logins Deleted successfully"});
+    
+    }
+    catch(err) {
+        res.json({message: err.message})
     }
 })
 

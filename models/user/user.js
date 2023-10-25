@@ -52,6 +52,7 @@ reference: {
 ,
 password: {
     type: String,
+    required: true,
 }
 });
 
