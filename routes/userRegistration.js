@@ -8,6 +8,9 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 
 
+const bcrypt = require("bcrypt");
+
+
 const Image = require("../models/Image");
 const Ref = require("../models/user/ref");
 const User = require('../models/user/user');
@@ -25,7 +28,22 @@ const Other = require("../models/user/other");
 //         cb(null, `${file.filename}-${Date.now()}.png`);
 //     }
 // });
+const Student = require("../models/user/student");
+const Alumni = require("../models/user/alumni");
+const Faculty = require("../models/user/faculty");
+const Other = require("../models/user/other");
 
+
+// const storage = multer.diskStorage({
+//     destination: (req,file, cb) => {
+//         cb(null, 'uploads');
+//     },
+//     filename: (req,file,cb) => {
+//         cb(null, `${file.filename}-${Date.now()}.png`);
+//     }
+// });
+
+// const upload = multer({storage:storage});
 // const upload = multer({storage:storage});
 
 
