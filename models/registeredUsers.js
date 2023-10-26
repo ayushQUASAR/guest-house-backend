@@ -4,6 +4,7 @@ const schema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
+        unique: true,
     },
     bookingHistory: {
         type:[mongoose.Schema.Types.ObjectId],

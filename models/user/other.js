@@ -23,3 +23,5 @@ const otherSchema = new mongoose.Schema({
 
 
 const Other = new mongoose.model("Other", otherSchema);
+
+module.exports = Other;

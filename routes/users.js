@@ -5,21 +5,18 @@ const router = express.Router();
 const User = require('../models/user/user');
 const RegisteredUser = require("../models/registeredUsers");
 const RejectedUser = require("../models/rejectedUsers");
+const PendingUser = require("../models/pendingUsers");
 
 router.get("/", async (req, res) => {
     try {
          const users =  await User.find({});
          console.log(users);
-         if(users === null) {
-            res.status(404).json({message: "No Users found"});
-         }
-         else {
                   res.status(200).json(users);
-         }
+         
     }
     catch(err) {
         console.log({message: err.message});
-        res.json({message: err.message});
+        res.status(500).json({message: err.message});
     }
 });
 
@@ -34,7 +31,7 @@ if(x!== null) {
 
 }
 catch(err) {
-    res.json({message: err.message});
+    res.status(500).json({message: err.message});
 }
 })
 
@@ -42,41 +39,29 @@ router.get("/:id", async (req, res) => {
     const userId = req.params.id;
     try {
          const user = await User.find({_id: userId});
-         if(user === null) {
-            console.log({message: "user with given id not found"});
-            res.status(404).json({message: "user with given id not found"});
-         }
-         else {
             console.log(user);
             res.status(200).json(user);
-         }
+         
     }
     catch(err) {
          console.log({message: err.message})
-         res.json({message: err.message})
+         res.status(500).json({message: err.message})
     }
 })
 module.exports = router;
-
-
 
 
 router.get('/approved/registered', async (req,res) => {
     console.log("this is registered route");
     try {
         const users =  await RegisteredUser.find({});
-        if(users === null) {
-            console.log("No registered users found");
-           res.status(404).json({message: "No Registered Users found"});
-        }
-        else {
             console.log(users);
                  res.status(200).json(users);
-        }
+        
    }
    catch(err) {
     console.log({message: err.message});
-       res.json({message: err.message});
+       res.status(500).json({message: err.message});
    }
 });
 
@@ -88,25 +73,20 @@ router.delete("/approved/registered", async (req,res) => {
   }
     }
     catch(err) {
-res.json({message: err.message});
+res.status(500).json({message: err.message});
     }
 
 });
 router.get("/approved/rejected", async (req,res) => {
     try {
         const users =  await RejectedUser.find({});
-        if(users === null) {
-            console.log("No registered users found");
-           res.status(404).json({message: "No Rejected Users found"});
-        }
-        else {
                  console.log(users);
-                 res.status(200).json(users);
-        }
+               res.status(200).json(users);
+        
    }
    catch(err) {
     console.log({message: err.message});
-       res.json({message: err.message});
+       res.status(500).json({message: err.message});
    }
 })
 
@@ -118,7 +98,37 @@ router.delete("/approved/rejected", async (req,res) => {
   }
     }
     catch(err) {
-res.json({message: err.message});
+res.status(500).json({message: err.message});
     }
 
 });
+
+
+router.get('/approved/pending', async (req,res) => {
+    console.log("this is registered route");
+    try {
+        const users =  await PendingUser.find({});
+        console.log(users);
+   res.status(200).json(users);
+   }
+   catch(err) {
+    console.log({message: err.message});
+       res.status(500).json({message: err.message});
+   }
+});
+
+
+
+router.delete("/approved/pending", async (req,res) => {
+    try {
+  const users =  await PendingUser.deleteMany({});
+  if(users !== null) {
+    res.status(200).json({message: "Pending users deleted successfully"});
+  }
+    }
+    catch(err) {
+res.status(500).json({message: err.message});
+    }
+
+});
+

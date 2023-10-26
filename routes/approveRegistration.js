@@ -6,6 +6,7 @@ const RegisteredUser = require("../models/registeredUsers");
 const RejectedUser = require("../models/rejectedUsers");
 const Ref = require("../models/user/ref");
 const Login = require("../models/login");
+const PendingUser = require("../models/pendingUsers");
 
 router.post("/", async (req,res) => {
       const approvalInfo = req.body;
@@ -30,8 +31,10 @@ router.post("/", async (req,res) => {
           throw new Error({message: `user with id ${newApproval.user} not found in the database` });
         }
         console.log({message: `new approval: ${newApproval._id} created successfully`});
-       
 
+        // delete user from pending user
+        await PendingUser.deleteOne({user: newApproval.user});
+       
         if(newApproval.status === "accept") {
           console.log("this is accepted status");
             const x  = new RegisteredUser({
@@ -76,6 +79,7 @@ router.post("/", async (req,res) => {
         // }
         }
 
+        
         else if(newApproval.status === "reject") {
           console.log('this is rejected status');
             const user = new RejectedUser({

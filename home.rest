@@ -16,11 +16,12 @@ Content-Type: application/json
 
 
 ###
+
 GET http://localhost:4000/users
 
 ###
 
-GET http://localhost:4000/users/653996e7c6175a18cd09cbc3
+GET http://localhost:4000/users/653a988078d11f8a414073a1
 
 ### 
 
@@ -36,7 +37,7 @@ POST http://localhost:4000/admin/approveRegistration
 Content-Type: application/json
 
 {
-    "user": "653998cb0b879a9833e68236",
+    "user": "653a988078d11f8a414073a1",
     "status":"accept"
 }
 
@@ -64,3 +65,24 @@ GET http://localhost:4000/login/admin
 GET http://localhost:4000/login
 
 
+### 
+
+
+GET http://localhost:4000/users/approved/pending
+
+
+### 
+
+GET http://localhost:4000/references
+
+###
+
+GET http://localhost:4000/references/type/student
+
+###
+
+GET http://localhost:4000/references/type/faculty
+
+###
+
+GET http://localhost:4000/references/type/alumni

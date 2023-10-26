@@ -8,9 +8,6 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 
 
-const bcrypt = require("bcrypt");
-
-
 const Image = require("../models/Image");
 const Ref = require("../models/user/ref");
 const User = require('../models/user/user');
@@ -18,102 +15,103 @@ const Student = require("../models/user/student");
 const Alumni = require("../models/user/alumni");
 const Faculty = require("../models/user/faculty");
 const Other = require("../models/user/other");
+const PendingUser = require('../models/pendingUsers');
 
+const storage = multer.diskStorage({
+    destination: (req,file, cb) => {
+        cb(null, 'uploads');
+    },
+    filename: (req,file,cb) => {
+        const [name, ext] = file.mimetype.split("/");
+        cb(null, `${name}-${Date.now()}.${ext}`);
+    }
+});
 
-// const storage = multer.diskStorage({
-//     destination: (req,file, cb) => {
-//         cb(null, 'uploads');
-//     },
-//     filename: (req,file,cb) => {
-//         cb(null, `${file.filename}-${Date.now()}.png`);
-//     }
-// });
-const Student = require("../models/user/student");
-const Alumni = require("../models/user/alumni");
-const Faculty = require("../models/user/faculty");
-const Other = require("../models/user/other");
+const upload = multer({
+    storage:storage,
+    fileFilter:(req,file,cb) => {
+        if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'application/pdf') {
+            cb(null, true);
+          }
+          else {
+            cb(null, new Error("Invalid file type. Supported types: PNG, JPEG, JPG, PDF."));
+          }
+    },
 
-
-// const storage = multer.diskStorage({
-//     destination: (req,file, cb) => {
-//         cb(null, 'uploads');
-//     },
-//     filename: (req,file,cb) => {
-//         cb(null, `${file.filename}-${Date.now()}.png`);
-//     }
-// });
-
-// const upload = multer({storage:storage});
-// const upload = multer({storage:storage});
+    limits: {fileSize: 1000000},
+});
 
 
 router.get("/", (req, res) => {
     res.write("hello from register");
     console.log(process.cwd());
 });
-// router.post("/", upload.single('idProof'),async (req,res)=> {
-router.post("/", async (req, res) => {
+router.post("/", upload.single('idProof'),async (req,res)=> {
+// router.post("/", async (req, res) => {
     const data = req.body;
-    // if(req.file === null) {
-    //     throw new Error("no file attached");
-    // }
-    // const idProof = new Image({
-    // data: fs.readFileSync(path.join(process.cwd()+"/uploads/" + req.file.filename)),
-    // contentType: "image/png",
-    // });
+    if (!req.file) {
+        return res.status(400).json({ error: 'File not provided or does not meet requirements.' });
+      }
+    console.log("this is file",req.file);
+    const idProof = new Image({
+    data: fs.readFileSync(path.join(process.cwd()+"/uploads/" + req.file.filename)),
+    });
 
-    // const refType = data.selectedOption;
-    // let refTo = refType === "Student" ? new Student({
-    //     name: data?.studentName,
-    //     roll: data?.studentRoll,
-    //     branch: data?.studentBranch,
-    //     phone: data?.studentPhone,
-    // }) : refType === "Alumni" ? new Alumni({
-    //     name: data?.alumniName,
-    //     batch: data?.alumniBatch,
-    //     branch: data?.alumniBranch,
-    //     currentJob: data?.alumniCurrentJob,
-    //     phone: data?.alumniPhone,
-    // }): refType === "Faculty" ? new Faculty({
-    //     name: data?.facultyName,
-    //     email:data?.facultyEmail,
-    //     dept: data?.facultyDept,
-    //     phone: data?.facultyPhone
+    const refType = data.selectedOption;
+    const refName = `${data.RefFirstName} ${data.RefLastName}`;
+    const refPhone = data.RefPhoneNumber;
 
-    // }): new Other({
-    //     name: data?.otherName,
+    let refTo = refType === "student" ? new Student({
+        name: refName,
+        roll: data.StudentRollNumber,
+        branch: data.StudentBranch,
+        phone: refPhone,
+    }) : refType === "alumni" ? new Alumni({
+        name: refName,
+        batch: data.AlumniBatch,
+        branch: data.AlumniBranch,
+        currentJob: data.ALumniJobProfile,
+        phone: refPhone,
+    }): new Faculty({
+        name: refName,
+        email:data.FacultyEmail,
+        dept: data.Department,
+        phone: refPhone,
+    })
+
+
+    //: new Other({
+    //     name: refName,
     //     email:data?.otherEmail,
     //     dept: data?.otherDept,
-    //     phone: data?.otherPhone
+    //     phone: refPhone,
     // });
 
 
 
     try {
 
-        // let refToFinal = await refTo.save();
+        let refToFinal = await refTo.save();
 
-        // if(refToFinal === null) {
-        //     throw new Error("refTo not added");
-        // }
+        const reference = new Ref({
+            refType: data.selectedOption,
+            refTo: refToFinal._id,
+        });
 
-        // const reference = new Ref({
-        //     refType: data.reference,
-        //     refTo: refToFinal._id,
-        // });
+        const finalRef = await reference.save();
 
-        // const finalRef = await reference.save();
-        // if(finalRef === null) {
-        //     throw new Error("finalRef not added");
-        // }
+        if(finalRef === null) {
+            throw new Error("finalRef not added");
+        }
 
 
-        // const proof = await idProof.save();
+        const proof = await idProof.save();
 
 
-        // if(proof === null) {
-        //     throw new Error("id proof not added");
-        // }
+        if(proof === null) {
+            throw new Error("id proof not added");
+        }
+
 
         const hashedPassword = await bcrypt.hash(data.Password,10);
         if(hashedPassword === null) {
@@ -127,13 +125,11 @@ router.post("/", async (req, res) => {
             name: `${data.Firstname} ${data.Lastname}`,
             phone: data.Phnnumber,
             email: data.Email,
-            // city: data.city,
             address: data.Address,
             password: hashedPassword,
-            refInfo: data.selectedOption
-            // govtID: data.govtID,
-            // idProof: proof._id,
-            // reference: finalRef._id,
+            refInfo: data.selectedOption,
+            idProof: proof._id,
+            reference: finalRef._id,
         };
 
 
@@ -145,7 +141,18 @@ router.post("/", async (req, res) => {
             throw new Error("user could not be added to database");
         }
         else {
+             
+            const pendingUser = new PendingUser({user: newUser._id});
+           const newPendingUser = await pendingUser.save();
+
+
+           if(newPendingUser === null) {
+             throw new Error("Pending user not created");
+           }
+
             const msg = `user with id: ${newUser._id} created successfully`;
+
+
             console.log(msg);
             res.status(201).json({ message: msg });
         }
