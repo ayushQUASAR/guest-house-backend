@@ -23,7 +23,7 @@ email: {
 },
 city: {
     type: String,
-    required:true,
+    // required:true,
 },
 address: {
     type: String,
@@ -31,7 +31,7 @@ required: true,
 },
 govtID: {
     type: String, 
-    required: true,
+    // required: true,
 },
 userLogo: {
 type: mongoose.Schema.Types.ObjectId,
@@ -42,11 +42,18 @@ idProof: {
     ref:'Image',
 },
 
+refInfo: {
+    type: String,
+},
 reference: {
   type: mongoose.Schema.Types.ObjectId,
   ref:'Ref',
 }
-
+,
+password: {
+    type: String,
+    required: true,
+}
 });
 
 const User = new mongoose.model("User", userSchema);

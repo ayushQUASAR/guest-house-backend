@@ -1,0 +1,66 @@
+###
+
+POST http://localhost:4000/register 
+Content-Type: application/json
+
+{
+"Firstname": "xyz",
+"Lastname":"adf",
+"Phnnumber":"7347652278",
+"Email":"j69@nx.com",
+"Password":"xyz",
+"Address": "asfdasadfadsfd, UP",
+"selectedOption": "student"
+}
+
+
+
+###
+GET http://localhost:4000/users
+
+###
+
+GET http://localhost:4000/users/653996e7c6175a18cd09cbc3
+
+### 
+
+GET http://localhost:4000/users/approved/registered
+
+###
+
+GET http://localhost:4000/users/approved/rejected
+
+###
+
+POST http://localhost:4000/admin/approveRegistration
+Content-Type: application/json
+
+{
+    "user": "653998cb0b879a9833e68236",
+    "status":"accept"
+}
+
+
+### 
+
+
+POST http://localhost:4000/admin/approveRegistration
+Content-Type: application/json
+
+{
+"user":"6539800af09eae409fd99fd3",
+"status": "reject"
+}
+
+
+
+### 
+
+GET http://localhost:4000/login/admin
+
+###
+
+
+GET http://localhost:4000/login
+
+

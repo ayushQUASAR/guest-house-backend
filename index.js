@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const multer = require("multer");
 dotenv.config();
+const cors = require("cors");
 
 
 //configuring routes 
@@ -14,7 +15,7 @@ const loginRoute = require("./routes/login");
 
 //configuring packages
 const app = express();
-mongoose.connect("mongodb://127.0.0.1:27017/guestHouse");
+mongoose.connect("mongodb+srv://user:user@cluster0.5rmy7ke.mongodb.net/guest-house");
 const db = mongoose.connection;
 db.once('open', ()=>{
     console.log("Database connected")
@@ -24,7 +25,7 @@ db.on("error", (err)=> {
 } );
 const port  = process.env.PORT || 3000;
 
-
+app.use(cors());
 //body parsing
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -40,6 +41,8 @@ app.use("/admin/approveRegistration", approveRegistrationRoute);
 app.use("/users", usersRoute);
 app.use("/login", loginRoute);
 
+
+
 app.listen(port, ()=> {
     console.log(`Server is listening on port ${port}`);
-})
+});
