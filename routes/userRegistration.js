@@ -6,6 +6,8 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require("path");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
+
 
 
 const Image = require("../models/Image");

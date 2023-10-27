@@ -87,3 +87,8 @@ GET http://localhost:4000/references/type/faculty
 ###
 
 GET http://localhost:4000/references/type/alumni
+
+
+###
+
+GET http://localhost:4000/email

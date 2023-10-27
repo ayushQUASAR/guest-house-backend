@@ -12,6 +12,7 @@ const approveRegistrationRoute = require("./routes/approveRegistration");
 const usersRoute = require("./routes/users");
 const loginRoute = require("./routes/login");
 const referenceRoutes = require("./routes/references");
+const emailRoute = require("./routes/email")
 
 
 //configuring packages
@@ -43,6 +44,7 @@ app.use("/admin/approveRegistration", approveRegistrationRoute);
 app.use("/users", usersRoute);
 app.use("/login", loginRoute);
 app.use("/references", referenceRoutes);
+app.use("/email", emailRoute);
 
 
 
