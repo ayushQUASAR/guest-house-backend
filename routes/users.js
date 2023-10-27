@@ -54,7 +54,7 @@ module.exports = router;
 router.get('/approved/registered', async (req,res) => {
     console.log("this is registered route");
     try {
-        const users =  await RegisteredUser.find({});
+        const users =  await RegisteredUser.find({}).populate('user');
             console.log(users);
                  res.status(200).json(users);
         
@@ -105,9 +105,8 @@ res.status(500).json({message: err.message});
 
 
 router.get('/approved/pending', async (req,res) => {
-    console.log("this is registered route");
     try {
-        const users =  await PendingUser.find({});
+        const users =  await PendingUser.find({}).populate('user');
         console.log(users);
    res.status(200).json(users);
    }

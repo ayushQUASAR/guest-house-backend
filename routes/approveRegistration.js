@@ -31,16 +31,17 @@ router.post("/", async (req,res) => {
           throw new Error({message: `user with id ${newApproval.user} not found in the database` });
         }
         console.log({message: `new approval: ${newApproval._id} created successfully`});
+        // res.json({message: `new approval: ${newApproval._id} created successfully`});
 
         // delete user from pending user
         await PendingUser.deleteOne({user: newApproval.user});
        
         if(newApproval.status === "accept") {
           console.log("this is accepted status");
-            const x  = new RegisteredUser({
+            const y  = new RegisteredUser({
               user: newApproval.user,
             });
-            const registeredUser = await x.save();
+            const registeredUser = await y.save();
 
 
             if(registeredUser.length === 0) {
@@ -48,6 +49,7 @@ router.post("/", async (req,res) => {
             }
 
              const uuuser = await User.find({_id: registeredUser.user})
+
 
             if(uuuser.length === 0) {
               throw new Error("User not found");
@@ -68,7 +70,7 @@ router.post("/", async (req,res) => {
             if(newLogin.length === 0) {
               throw new Error("new Login not added");
             }
-
+     res.json({message: `${x[0].name} has registered successfully`});
             
 
             // add registered User to the his reference
@@ -96,6 +98,8 @@ router.post("/", async (req,res) => {
              if(deleted_user!== null) {
               console.log("User deleted successfully");
                 // res.status(200).json({message: "User deleted successfully"});
+
+                res.json({message: `${x[0].name} rejection confirmed..`});
              }
              else {
               console.log("user could not be deleted");

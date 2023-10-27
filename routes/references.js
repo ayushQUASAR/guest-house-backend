@@ -12,9 +12,7 @@ router.get("/", async (req, res) => {
 
     try {
         const references = await Ref.find({});
-        if(references.length === 0) {
-            console.log({message: "No reference are in the database"});
-        }
+        console.log(references);
           res.status(200).json(references);
     }
 
@@ -34,11 +32,7 @@ router.get("/type/:id", async (req, res) => {
         let ref = type === 'student' ? await Student.find({})
         : type === 'faculty' ? await Faculty.find({})
         : await Alumni.find({});
-
-        if(ref.length === 0) {
-            console.log({message: `${type} has no data in database`});
-        }
-
+            console.log(ref);
         res.status(200).send(ref);
      }
 

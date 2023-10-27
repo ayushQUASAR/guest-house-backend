@@ -45,6 +45,22 @@ catch(err) {
 }
 });
 
+router.get("/admin/:id", async (req,res) => {
+    const  id = req.params.id;
+try {
+    const admin = await Login.find({_id:id });
+     if(admin.length === 0) {
+        res.status(404).json({message: "no admin found, matching that id"});
+     }
+
+     res.status(200).json(admin);
+
+}
+catch(err) {
+    res.status(500).json({message: err.message});
+}
+});
+
 router.get("/", async (req,res) => {
     try {
         const alllogins = await Login.find({});

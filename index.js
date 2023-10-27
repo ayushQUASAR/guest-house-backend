@@ -16,8 +16,8 @@ const referenceRoutes = require("./routes/references");
 
 //configuring packages
 const app = express();
-mongoose.connect("mongodb+srv://user:user@cluster0.5rmy7ke.mongodb.net/guest-house");
-// mongoose.connect('mongodb://127.0.0.1:27017/guestHouse1');
+// mongoose.connect("mongodb+srv://user:user@cluster0.5rmy7ke.mongodb.net/guest-house");
+mongoose.connect('mongodb://127.0.0.1:27017/guestHouse1');
 const db = mongoose.connection;
 db.once('open', ()=>{
     console.log("Database connected")

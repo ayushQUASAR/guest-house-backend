@@ -77,7 +77,7 @@ router.post("/", upload.single('idProof'),async (req,res)=> {
         email:data.FacultyEmail,
         dept: data.Department,
         phone: refPhone,
-    })
+    });
 
 
     //: new Other({
