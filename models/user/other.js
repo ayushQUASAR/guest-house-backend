@@ -22,6 +22,6 @@ const otherSchema = new mongoose.Schema({
 
 
 
-const Other = new mongoose.model("Other", otherSchema);
+const Other = new mongoose.model("other", otherSchema);
 
 module.exports = Other;

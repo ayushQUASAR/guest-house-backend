@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Ref = require('./ref');
 const Image = require('../Image');
 
+
 const userSchema = new mongoose.Schema({
     // _id: {
     //     type:  mongoose.Schema.Types.ObjectId,
@@ -47,7 +48,7 @@ refInfo: {
 },
 reference: {
   type: mongoose.Schema.Types.ObjectId,
-  ref:'Ref',
+  ref:'Reference',
 }
 ,
 password: {

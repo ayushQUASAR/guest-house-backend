@@ -6,6 +6,7 @@ const User = require('../models/user/user');
 const RegisteredUser = require("../models/registeredUsers");
 const RejectedUser = require("../models/rejectedUsers");
 const PendingUser = require("../models/pendingUsers");
+const Ref = require("../models/user/ref");
 
 router.get("/", async (req, res) => {
     try {
@@ -38,9 +39,21 @@ catch(err) {
 router.get("/:id", async (req, res) => {
     const userId = req.params.id;
     try {
-         const user = await User.find({_id: userId});
-            console.log(user);
-            res.status(200).json(user);
+         const user = await User.find({_id: userId}).populate('reference');
+      
+
+         const ref = await Ref.find({_id: user[0].reference._id}).populate('refTo');
+
+       console.log({user: user[0], referenceDetails: ref[0]});
+              
+              res.json({userDetails: user[0], referenceDetails: ref[0]})
+                
+                // const finalUser = {
+                //     ...user[0],
+                //     reference: ref[0],
+                // }
+            // console.log(finalUser);
+        // console.log(ref);
          
     }
     catch(err) {

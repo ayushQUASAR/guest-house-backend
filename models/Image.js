@@ -15,7 +15,7 @@ const ImageSchema = new mongoose.Schema({
             type: String, 
             required: true,
             default: "image/png",
-            enum:["image/png", "image/jpeg", "image/jpg"]
+            enum:["image/png", "image/jpeg", "image/jpg", "application/pdf"]
         }
   
 });

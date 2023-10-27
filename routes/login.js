@@ -11,6 +11,7 @@ const router = express.Router();
 
 
 const Login = require("../models/login");
+const User = require("../models/user/user");
 
 
 router.get("/admin", async (req, res) => {
@@ -80,6 +81,7 @@ router.post("/", async (req,res) => {
     console.log(loginData);
     try {
           const user = await Login.find({email: loginData.Email});
+
           console.log(user);
           if(user.length === 0) {
             console.log("email does not matches");
@@ -94,8 +96,9 @@ router.post("/", async (req,res) => {
                   res.status(403).json({message: `not valid ${user[0].isAdmin ? "admin" : "user" }`});
            }
            else{
+            let  user1 = await User.find({email: user[0].email});
             console.log(`${user[0].isAdmin ? "Admin" : "User"} login successful`);
-            res.status(200).json({message: `${user[0].isAdmin ? "Admin" : "User"} login successful`, isAdmin: user[0].isAdmin,id: user[0]._id});
+            res.status(200).json({message: `${user[0].isAdmin ? "Admin" : "User"} login successful`, isAdmin: user[0].isAdmin,id: user[0].isAdmin ? user[0]._id:  user1[0]._id});
            }
           }
     }
