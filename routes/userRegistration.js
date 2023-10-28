@@ -7,6 +7,7 @@ const fs = require('fs');
 const path = require("path");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+const jwt = require("jsonwebtoken");
 
 
 
@@ -42,6 +43,9 @@ const upload = multer({
 
     limits: {fileSize: 1000000},
 });
+
+
+
 
 
 router.get("/", (req, res) => {
@@ -120,7 +124,7 @@ router.post("/", upload.single('idProof'),async (req,res)=> {
             throw new Error("hash could not be created");
         }
 
-
+const token = jwt.sign({email: data.Email}, process.env.JWT_SECRET);
 
 
         const actualData = {
@@ -132,9 +136,10 @@ router.post("/", upload.single('idProof'),async (req,res)=> {
             refInfo: data.selectedOption,
             idProof: proof._id,
             reference: finalRef._id,
+            verificationToken: token,
         };
 
-
+         
         const newUser = new User(actualData);
 
         const x = await newUser.save();
@@ -156,7 +161,8 @@ router.post("/", upload.single('idProof'),async (req,res)=> {
 
 
             console.log(msg);
-            res.status(201).json({ message: msg });
+            // res.status(201).json({ message: msg });
+           res.redirect(`http://localhost:4000/email/${data.Email}/sendVerificationEmail/${token}`);
         }
 
     }
@@ -164,6 +170,9 @@ router.post("/", upload.single('idProof'),async (req,res)=> {
         console.log({ message: err.message });
         res.json({ message: err.message });
     }
+    
+    
+    
 
 })
 
