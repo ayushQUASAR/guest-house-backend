@@ -21,7 +21,7 @@ router.post("/",  async (req,res) => {
 
                 
          const actualData = {
-     kind: data.visitType,
+    kind: data.visitType,
     purpose: data.purpose,
     name: `${data.firstName} ${data.lastName}`,
     designation: data.designation,
