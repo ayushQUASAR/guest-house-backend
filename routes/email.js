@@ -1,7 +1,13 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
+
 const User = require("../models/user/user");
+const bookingEmailRoute = require('./booking/bookingEmail');
+
 const router  = express.Router();
+
+//##### all the booking email notification will be handled here....
+router.use("/booking", bookingEmailRoute);
 
 
 const transportOptions = {
@@ -36,12 +42,44 @@ const emailHTMLTemplate = ({email}) =>  `
  }
 
  
+ const adminNotificationTemplate = ({name, email, phone, address, refInfo, reference}) =>  `
+<h3>Hi,</h3> 
+<p>A new user has registered:</p>
+<table>
+    <tr>
+        <th>Name</th>
+        <td>${name}</td>
+    </tr>
+    <tr>
+        <th>Phone</th>
+        <td>${phone}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>${email}</td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td>${address}</td>
+    </tr>
+    <tr>
+        <th>Reference Info</th>
+        <td>${refInfo}</td>
+    </tr>
+    <tr>
+        <th>Reference ID</th>
+        <td>${reference}</td>
+    </tr>
+</table>
+<br/>
+<a href="#">Click here to approve</a>
+`;
 
 router.get("/", async (req,res) => {
     const mailOptions = {
         from: {
            name:"donotreply",
-           address:"chakshud21@gmail.com",
+           address:"mrimann96@gmail.com",
         },
         to: "dhimanmridul91@gmail.com",
         subject: "Just checking",
@@ -70,9 +108,9 @@ res.send(`<h1>${req.params.id} successfully verified</h1>`);
 
 
 
-router.get("/:id/sendVerificationEmail/:token", async (req,res) => {
-   const email= req.params.id;
-const token = req.params.token;
+router.post("/sendVerificationEmail/", async (req,res) => {
+   const email= req.body.email;
+const token = req.body.token;
 
    const mailOptions = {
     from: {
@@ -116,5 +154,26 @@ catch(err) {
 }
 })
 
+
+router.get("/adminNotification/:name/:email/:phone/:address/:refInfo/:reference", async (req,res) => {
+    const {name, email, phone, address, refInfo, reference} = req.params;
+
+    const mailOptions = {
+        from: {
+            name: "donotreply",
+            address: "mrimann96@gmail.com",
+        },
+        to: "mriduld.cs.21@nitj.ac.in",
+        subject: "New user registration",
+        html: adminNotificationTemplate({name, email, phone, address, refInfo, reference}),
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        res.json({message: "Admin has been notified"});
+    } catch (err) {
+        res.json({message: err.message});
+    }
+});
 
 module.exports = router;

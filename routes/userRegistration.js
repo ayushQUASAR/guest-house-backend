@@ -8,6 +8,7 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
 
 
 
@@ -162,7 +163,21 @@ const token = jwt.sign({email: data.Email}, process.env.JWT_SECRET);
 
             console.log(msg);
             // res.status(201).json({ message: msg });
-           res.redirect(`http://localhost:4000/email/${data.Email}/sendVerificationEmail/${token}`);
+            await Promise.all([
+                axios.get(`http://localhost:4000/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(actualData.reference)}`),
+    
+                axios.post(`http://localhost:4000/email/sendVerificationEmail`, {
+                    email: actualData.email,
+                    token: token
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }),
+    
+               ]);
+        //    res.redirect(`http://localhost:4000/email/${data.Email}/sendVerificationEmail/${token}`);
         }
 
     }
@@ -174,7 +189,9 @@ const token = jwt.sign({email: data.Email}, process.env.JWT_SECRET);
     
     
 
-})
+});
+
+
 
 module.exports = router;
 

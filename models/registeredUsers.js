@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const User = require('./user/user');
+const Booking = require('./booking/booking');
 
 const schema = new mongoose.Schema({
     user: {
@@ -9,6 +10,7 @@ const schema = new mongoose.Schema({
     bookingHistory: {
         type:[mongoose.Schema.Types.ObjectId],
         default:[],
+        ref: 'Booking'
     }
 });
 

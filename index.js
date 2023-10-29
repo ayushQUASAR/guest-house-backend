@@ -13,6 +13,10 @@ const usersRoute = require("./routes/users");
 const loginRoute = require("./routes/login");
 const referenceRoutes = require("./routes/references");
 const emailRoute = require("./routes/email")
+const bookingRoute = require("./routes/booking/booking");
+const bookingApprovalRoute = require("./routes/booking/bookingApproval");
+const guestHouseRoute = require("./routes/guestHouse")
+
 
 
 
@@ -46,7 +50,10 @@ app.use("/users", usersRoute);
 app.use("/login", loginRoute);
 app.use("/references", referenceRoutes);
 app.use("/email", emailRoute);
-
+//booking routes
+app.use("/booking", bookingRoute);
+app.use("/admin/bookingApproval", bookingApprovalRoute);
+app.use("/guestHouse", guestHouseRoute);
 
 
 app.listen(port, ()=> {

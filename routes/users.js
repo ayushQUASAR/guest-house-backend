@@ -67,9 +67,9 @@ module.exports = router;
 router.get('/approved/registered', async (req,res) => {
     console.log("this is registered route");
     try {
-        const users =  await RegisteredUser.find({}).populate('user');
+        const users =  await RegisteredUser.find({}).populate('user').populate('bookingHistory');
             console.log(users);
-                 res.status(200).json(users);
+            res.status(200).json(users);
         
    }
    catch(err) {
