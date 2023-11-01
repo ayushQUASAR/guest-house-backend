@@ -8,10 +8,13 @@ router.post('/', async (req,res) => {
     // create all guestHouses
     try {
         const guestHouse1 = new guestHouse({guestHouseId: 1});
-        const guestHouse2 = new guestHouse({guestHouseId: 2});
-        const guestHouse3 = new guestHouse({guestHouseId: 3});
+        await guestHouse1.save();
 
-        await Promise.all[guestHouse1.save(), guestHouse2.save(), guestHouse3.save()];  
+        const guestHouse2 = new guestHouse({guestHouseId: 2});
+        await guestHouse2.save();
+
+        const guestHouse3 = new guestHouse({guestHouseId: 3});
+        await guestHouse3.save();
 
 
         res.json({message: "guest houses created successfully"});
@@ -23,6 +26,17 @@ router.post('/', async (req,res) => {
 })
 
 
+router.delete("/", async (req,res) => {
+    try {
+         await guestHouse.deleteMany({});
+
+         res.json({message: "Guesthouses deleted successfully..."})
+    }
+    catch(err) {
+        console.log({message: err.message});
+        res.json({message: err.message});
+    }
+})
 
 //GET info regarding the guest houses 
 router.get("/", async (req, res) => {
@@ -38,7 +52,7 @@ router.get("/", async (req, res) => {
 
 
 //Get guesthouse by id 
-router.get("/guestHouse/:id", async (req,res) => {
+router.get("/:id", async (req,res) => {
     const id = req.params.id;
     try {
       const guestHouseDetails = await guestHouse.find({guestHouseId: id});
@@ -52,21 +66,29 @@ router.get("/guestHouse/:id", async (req,res) => {
 });
 
 
-// update guesthouse room details 
-
-router.put("/guesthouse/:id", async (req,res) => {
+// update guesthouse and room details 
+router.put("/room/allot", async (req,res) => {
     const data = req.body;
-    const id = req.params.id;
     try {
-        await guestHouse.updateOne({
-            guestHouseId: id,
-        },
-        {
+          const guestHouses = data.guestHouseAllotted;
+          const rooms = data.roomAllotted;
 
-        })
+
+        for(let i = 0;i<=1;i++) {
+            // rooms ka index true kr diya 
+            const incObject = {};
+            incObject[`rooms.${rooms[i]-1}`] = true;
+             await guestHouse.updateOne({
+                   guestHouseId: guestHouses[i]
+             }, {
+              $set:  incObject
+             });
+        }
+
     }
     catch(err) {
-
+console.log({message: err.message});
+res.json({message: err.mesage});
     }
 })
 

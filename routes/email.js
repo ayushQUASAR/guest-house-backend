@@ -42,7 +42,7 @@ const emailHTMLTemplate = ({email}) =>  `
  }
 
  
- const adminNotificationTemplate = ({name, email, phone, address, refInfo, reference}) =>  `
+ const adminNotificationTemplate = ({name, email, phone, address, refInfo, refName, refPhone}) =>  `
 <h3>Hi,</h3> 
 <p>A new user has registered:</p>
 <table>
@@ -67,8 +67,12 @@ const emailHTMLTemplate = ({email}) =>  `
         <td>${refInfo}</td>
     </tr>
     <tr>
-        <th>Reference ID</th>
-        <td>${reference}</td>
+        <th>Reference Name</th>
+        <td>${refName}</td>
+    </tr>
+    <tr>
+        <th>Reference Contact Details</th>
+        <td>${refPhone}</td>
     </tr>
 </table>
 <br/>
@@ -155,8 +159,8 @@ catch(err) {
 })
 
 
-router.get("/adminNotification/:name/:email/:phone/:address/:refInfo/:reference", async (req,res) => {
-    const {name, email, phone, address, refInfo, reference} = req.params;
+router.get("/adminNotification/:name/:email/:phone/:address/:refInfo/:refName/:refPhone", async (req,res) => {
+    const {name, email, phone, address, refInfo, refName, refPhone} = req.params;
 
     const mailOptions = {
         from: {
@@ -165,7 +169,7 @@ router.get("/adminNotification/:name/:email/:phone/:address/:refInfo/:reference"
         },
         to: "mriduld.cs.21@nitj.ac.in",
         subject: "New user registration",
-        html: adminNotificationTemplate({name, email, phone, address, refInfo, reference}),
+        html: adminNotificationTemplate({name, email, phone, address, refInfo, refName, refPhone}),
     };
 
     try {

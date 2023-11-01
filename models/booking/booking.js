@@ -44,22 +44,22 @@ const bookingSchema = new mongoose.Schema({
 
     startDate: {
         type: Date,
-        required: true,
+        // required: true,
     },
 
     startTime: {
          type: String,
-         required: true,
+        //  required: true,
     },
 
     endDate: {
         type: Date,
-        required: true,
+        // required: true,
     },
 
     endTime: {
         type: String, 
-        required: true,
+        // required: true,
     },
 
     status: {
@@ -73,6 +73,26 @@ const bookingSchema = new mongoose.Schema({
          type: String,
     },
 
+   guestHouseSelected :{
+        type: [Number],
+
+   },
+
+   roomSelected :{
+         type: [Number],
+         
+   },
+
+   roomAllotted: {
+           type: [Number],
+           default : []
+   },
+  
+   guestHouseAllotted: {
+          type: [Number],
+          default: [],
+
+   },
     roomBooker: {
         name: {
             type: String,

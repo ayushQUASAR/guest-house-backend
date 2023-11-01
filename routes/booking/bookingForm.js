@@ -1,5 +1,9 @@
 const express = require('express');
+const axios = require("axios");
+
+
 const router = express.Router();
+
 const Booking = require("../../models/booking/booking");
 const RegisteredUser = require('../../models/registeredUsers');
 
@@ -28,11 +32,13 @@ router.post("/",  async (req,res) => {
     address: data.address,
     phone: data.phNumber,
     email: data.email,
+    guestHouseSelected :data.guestHouseSelected,
+    roomSelected: data.roomSelected,
     companions: companions,
     startDate: data.arrivalDate,
-    startTime: data.arrivalTime,
+    // startTime: data.arrivalTime,
     endDate: data.departureDate,
-    endTime: data.departureTime,
+    // endTime: data.departureTime,
     bookingFor: data.bookingFor,
      roomBooker: {
       // random fields
@@ -48,14 +54,30 @@ router.post("/",  async (req,res) => {
          await newBooking.save();
 
 
+         res.status(200).json({message:`New booking ${newBooking._id} created successfully...`});
 //###Task 2: add the booking id to the booking history of Registered User...
 // Here, you need to find the Registered User using roomBooker's email and then update it's booking history.
-const x = await RegisteredUser.updateOne({
-  'user.email' : actualData.email
-}, 
+// const x = await RegisteredUser.updateOne({
+//   'user.email' : actualData.roomBooker.email
+// }, 
+// {
+//   $push : {bookingHistory: newBooking._id}
+// });
+
+const registeredUsers = await RegisteredUser.find({}).populate('user');
+const user = registeredUsers.filter((user) => user.user.email === actualData.roomBooker.email);
+await RegisteredUser.updateOne({
+  _id: user[0]._id
+},
 {
-  $push : {bookingHistory: newBooking._id}
-})
+  $push : {bookingHistory : newBooking._id}
+}
+)
+
+
+// const xx = await x.findOne();
+
+
 
 
 //###Task 3: send the email to admin, regarding the booking form, work in bookingEmail.js
@@ -68,7 +90,7 @@ await axios.post("http://localhost:4000/email/booking/adminNotification", {
       }
 });
 
-res.status(200).json({message:`New booking ${newBooking._id} created successfully...`});
+
     }
 
     catch(err) {

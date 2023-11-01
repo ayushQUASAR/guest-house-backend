@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 const express = require("express");
+const axios = require('axios'); 
+
+
 const app = express();
 const router = express.Router();
 const User = require('../models/user/user');
@@ -44,7 +47,7 @@ router.get("/:id", async (req, res) => {
 
          const ref = await Ref.find({_id: user[0].reference._id}).populate('refTo');
 
-       console.log({user: user[0], referenceDetails: ref[0]});
+    //    console.log({user: user[0], referenceDetails: ref[0]});
               
               res.json({userDetails: user[0], referenceDetails: ref[0]})
                 
@@ -65,10 +68,9 @@ module.exports = router;
 
 
 router.get('/approved/registered', async (req,res) => {
-    console.log("this is registered route");
     try {
         const users =  await RegisteredUser.find({}).populate('user').populate('bookingHistory');
-            console.log(users);
+            // console.log(users);
             res.status(200).json(users);
         
    }
@@ -77,6 +79,33 @@ router.get('/approved/registered', async (req,res) => {
        res.status(500).json({message: err.message});
    }
 });
+
+
+//get booking history
+router.get("/:id/bookingHistory", async (req,res) => {
+    const userId = req.params.id;
+    try {
+      const response =  await axios.get(`http://localhost:4000/users/${userId}`);
+
+      
+      const registeredUsers = await axios.get('http://localhost:4000/users/approved/registered');
+
+      const arr = registeredUsers.data;
+    //   console.log(arr);
+
+const a = arr.filter((user) => user.user._id === userId);
+const finalArr = {
+    ...response.data,
+    bookingHistory: a[0].bookingHistory,
+}
+
+      
+   res.json(finalArr);
+    }
+    catch(err) {
+console.log(err.message);
+    }
+})
 
 router.delete("/approved/registered", async (req,res) => {
     try {
@@ -90,6 +119,9 @@ res.status(500).json({message: err.message});
     }
 
 });
+
+
+
 router.get("/approved/rejected", async (req,res) => {
     try {
         const users =  await RejectedUser.find({});

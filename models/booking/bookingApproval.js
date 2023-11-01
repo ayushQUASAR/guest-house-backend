@@ -8,18 +8,23 @@ type: mongoose.Schema.Types.ObjectId,
 required: true,
 ref:'Booking',
 },
-paymentStatus: {
-    type:mongoose.Schema.Types.ObjectId,
-    enum: ['Pending', "Completed"],
-    default: false
-},
 status: {
    type: String,
    required: true,
    enum: ["accept", "reject"]
 },
 
+roomAllotted: {
+   type: [Number],
+   default: [-1,-1],
+},
+guestHouseAllotted:{
+   type:  [Number],
+   default: [-1,-1]
+}
 });
+
+
 
 const BookingApproval = new mongoose.model("BookingApproval", schema);
 

@@ -43,24 +43,24 @@ const adminNotificationTemplate = ({actualData}) => `
     </tr>
     <tr>
         <th>Reference Info</th>
-        <td>${actualData.refInfo}</td>
+        <td>${actualData.roomBooker.name}</td>
     </tr>
     <tr>
-        <th>Reference ID</th>
-        <td>${actualData.reference}</td>
+        <th>Reference Contact Details</th>
+        <td>${actualData.roomBooker.phone}</td>
     </tr>
+    <tr>
+    <th>Reference Email</th>
+    <td>${actualData.roomBooker.email}</td>
+</tr>
     <tr>
         <th>Booking Date</th>
-        <td>${actualData.bookingDate}</td>
+        <td>${actualData.startDate}</td>
     </tr>
     <tr>
-        <th>Booking Time</th>
-        <td>${actualData.bookingTime}</td>
-    </tr>
-    <tr>
-        <th>Booking Duration</th>
-        <td>${actualData.bookingDuration} hours</td>
-    </tr>
+        <th>Booking Duration </th>
+        <td>${(new Date(actualData.endDate).getTime() - new Date(actualData.startDate).getTime())/(1000*3600*24)} days</td>
+    </tr> 
 </table>
 <br/>
 <a href="#">Click here to approve this booking</a>
@@ -77,7 +77,7 @@ router.post("/adminNotification/", async (req, res) => {
             name: "donotreply",
             address: "mrimann96@gmail.com",
         },
-        to: "anshdeeps.cs.21@nitj.ac.in",
+        to: "mriduld.cs.21@nitj.ac.in",
         subject: "New booking form filled for guest house",
         html: adminNotificationTemplate({actualData}),
     };
@@ -93,20 +93,25 @@ router.post("/adminNotification/", async (req, res) => {
 
 const userApprovalNotificationTemplate = ({bookingDetails}) => `
 <h3>Hi,</h3> 
-<p>Your account has been ${bookingDetails.status}.</p>
+<p>Your booking has been approved...</p>
+<ul>Rooms allotted are: 
+<li> Room no. ${bookingDetails.roomAllotted[0]} in Guesthouse ${bookingDetails.guestHouseAllotted[0]}</li>
+<li> Room no. ${bookingDetails.roomAllotted[1]} in Guesthouse ${bookingDetails.guestHouseAllotted[1]}</li>
+</ul>
 <p>Please login to your account for more details.</p>
 `;
 
 router.post("/sendApprovalNotification", async (req, res) => {
-    const bookingDetails = req.body.booking;
-
+const bookingDetails = req.body.booking;
+  
     //send alerts to user and visitor regarding the booking confirmation
+    const mailList = [bookingDetails.booking.email, bookingDetails.booking.roomBooker.email];
     const mailOptions = {
         from: {
             name: "donotreply",
             address: "mrimann96@gmail.com",
         },
-        to: "anshdeeps.cs.21@nitj.ac.in", // we need to change here to user email
+        to: mailList, // we need to change here to user email
         subject: "Regarding approval for guest house",
         html: userApprovalNotificationTemplate({bookingDetails}),
     };

@@ -8,38 +8,56 @@ guestHouseId: {
     min: 1,
     max: 3, 
 },
-noOfRooms: Number,
-rooms:[Boolean],
-roomPrice:Number,
+
+noOfRooms: {
+    type: Number,
+    default: 10,
+},
+
+rooms: {
+    type: [Boolean],
+    default: new Array(10).fill(false)
+},
+
+roomPrice:{
+    type : Number,
+    default: 1200
+},
+
+
 roomType: {
     type: String,
-    enum: ['Non AC', 'AC']
+    enum: ['Non AC', 'AC'],
+    default: "Non AC",
 }
 
 });
 
 //based on id (guest house schema will get )
-guestHouseSchema.pre('save', () => {
+guestHouseSchema.pre('save', function (next) {
     if(this.guestHouseId === 1) {
-        this.no_of_rooms = 10;
+        this.noOfRooms = 10;
         this.roomPrice = 1200;
         this.roomType = 'AC';
-        this.rooms = new Array(10).fill(false);
+        this.rooms = new Array(12).fill(false);
     }
 
     if(this.guestHouseId === 2) {
-        this.no_of_rooms = 12;
+        this.noOfRooms = 12;
         this.roomPrice = 300;
         this.roomType = 'Non AC';
         this.rooms = new Array(12).fill(false);
     }
 
     if(this.guestHouseId === 3) {
-        this.no_of_rooms = 8;
+        this.noOfRooms = 8;
         this.roomPrice = 300;
         this.roomType = "Non AC";
         this.rooms = new Array(8).fill(false);
     }
+
+    // continue with save operation
+    next();
 })
 
 const guestHouse = new mongoose.model("GuestHouse", guestHouseSchema);

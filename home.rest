@@ -10,7 +10,8 @@ Content-Type: application/json
 "Email":"j69@nx.com",
 "Password":"xyz",
 "Address": "asfdasadfadsfd, UP",
-"selectedOption": "student"
+"selectedOption": "student",
+
 }
 
 
@@ -23,13 +24,20 @@ GET http://localhost:4000/users
 ###
 
 
-GET http://localhost:4000/users/653bba43ff7652f35da327fb
+GET http://localhost:4000/users/653caf19fbb06044688fcd73
 
 ### 
+
 
 GET http://localhost:4000/users/approved/registered
 
 ###
+
+GET http://localhost:4000/users/653bba43ff7652f35da327fb/bookingHistory
+
+
+###
+
 
 GET http://localhost:4000/users/approved/rejected
 
@@ -93,6 +101,70 @@ GET http://localhost:4000/references/type/alumni
 ###
 
 GET http://localhost:4000/email
+
+###
+
+
+POST  http://localhost:4000/booking/register 
+Content-Type: application/json
+
+{
+    "visitType": "official",
+    "purpose": "Seminar conduction",
+    "firstName" : "Vikas",
+    "lastName" : "Jaglan",
+     "guestHouseSelected": ["1", "1"],
+     "roomSelected" : ["8", "9"],
+    "designation": "Professor at IIT Roorkee",
+    "address": "Benaras, UP",
+    "phNumber": "12345678",
+    "email": "chakshud21@gmail.com",
+    "companion1": "Dr. Subramanium",
+    "companion2" : "Dr. Srinivasan",
+    "companion3" : "Dr. Venky Nair",
+      "bookingFor": "myself",
+      "arrivalDate" : "2023-11-01",
+      "departureDate" : "2023-11-03",
+    "roomBooker" : {
+        "name": "Mridul",
+        "designation":"Student at Nitj",
+        "dept": "CSE",
+        "phone": "923452355",
+        "email": "dhimanmridul91@gmail.com",
+        "address": "Baijnath, Himachal"
+    }
+}
+
+
+
+###
+
+
+GET http://localhost:4000/booking 
+
+
+###
+
+
+
+POST http://localhost:4000/guestHouse
+
+
+###
+    
+GET  http://localhost:4000/guestHouse
+
+###
+
+POST http://localhost:4000/admin/bookingApproval
+Content-Type: application/json
+
+{
+    "booking" : "65423106353bc29f92ed90ce",
+    "status" : "accept",
+    "roomAllotted" : ["3", "3"],
+    "guestHouseAllotted" : ["1" , "2"]
+}
 
 
 ###

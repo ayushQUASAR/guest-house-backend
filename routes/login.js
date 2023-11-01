@@ -122,18 +122,18 @@ router.delete("/", async (req,res) => {
 })
 
 
-router.delete("/:email", async (req,res) => {
-const email = req.params.email;
-try{
-    await Login.deleteOne({email});
+// router.delete("/:email", async (req,res) => {
+// const email = req.params.email;
+// try{
+//     await Login.deleteOne({email});
 
-    res.json({message: `${email} successfully logged out...`})
-}
-catch(err) {
-    console.log({message: err.message});
-    res.status(500).json({message: err.message})
-}
-})
+//     res.json({message: `${email} successfully logged out...`})
+// }
+// catch(err) {
+//     console.log({message: err.message});
+//     res.status(500).json({message: err.message})
+// }
+// })
 
 
 module.exports = router;
