@@ -5,9 +5,9 @@ const axios = require("axios")
 
 const router = express.Router();
 const Booking = require("../../models/booking/booking");
-const RejectedBooking = require('../../models/booking/rejectedBooking');
 const RegisteredUser = require('../../models/registeredUsers');
 const guestHouse = require('../../models/guestHouse');
+
 
 
 router.use("/register", require("./bookingForm"));
@@ -47,15 +47,14 @@ catch(err) {
 router.get('/approved/:approvalType', async (req,res) => {
     const approvalType = req.params.approvalType;
 try{
-    if(approvalType === 'pending' || approvalType === 'approved') {
+    if(approvalType === 'pending' || approvalType === 'approved' || approvalType === 'cancelled' || approvalType === 'rejected') {
    
         const booking = await Booking.find({status: approvalType});
         res.status(200).json(booking);  
   }
-    else if (approvalType === 'rejected') {
-          const booking = await RejectedBooking.find({});
-          res.status(200).json(booking);
-    }
+  
+
+   
   }
     catch(err) {
       console.log(err.message);
@@ -69,11 +68,21 @@ try{
 router.delete("/:id", async (req,res) => {
   const id = req.params.id;
 try {
-  const y = await Booking.findOneAndDelete({_id: id});
+  const y = await Booking.findByIdAndUpdate(id, {
+    status: 'cancelled'
+  }, {
+    new: true
+  });
+
+  
+  // make booking status cancelled
 
 console.log(y);
 // update the info in guesthouse collection
-if(y.status=== 'approved') {
+
+res.json({message: "Booking Cancelled Successfully..."});
+
+
   const rooms = y.roomAllotted;
   const guestHouses = y.guestHouseAllotted;
 
@@ -86,10 +95,10 @@ if(y.status=== 'approved') {
         $set : incObject
        })
   }
-}
 
 
-    // update the Registered user's booking history
+
+    // update the Registered user's booking history if booking cancelled
         const registeredUsers = await RegisteredUser.find({}).populate('user');
       const user =   registeredUsers.filter((user) => user.user.email === y.roomBooker.email);
 
@@ -102,7 +111,6 @@ if(y.status=== 'approved') {
   });
 
 
-  res.json({message: "Booking Cancelled Successfully..."});
 }
 
 catch(err) {

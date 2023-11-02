@@ -4,7 +4,7 @@ const axios = require('axios');
 
 const BookingApproval = require("../../models/booking/bookingApproval");
 const Booking = require("../../models/booking/booking");
-const RejectedBooking = require("../../models/booking/rejectedBooking");
+
 
 const router = express.Router();
 
@@ -73,6 +73,8 @@ router.post("/", async (req,res) => {
 
     await approvalDetails.populate('booking');
     console.log(approvalDetails);
+
+
     await Promise.all([
                axios.put(`http://localhost:4000/guestHouse/room/allot`, {
                   roomAllotted: actualData.roomAllotted,
@@ -114,14 +116,11 @@ router.post("/", async (req,res) => {
 
    // if not approved => remove from booking and add to rejected 
    else if(actualData.status === "reject") {
-          const deletedBooking = await Booking.deleteOne({_id: actualData.booking});
-          
-          //add to rejected booking
-          const rejectedBooking = new RejectedBooking({
-            booking: actualData.booking,
+         await Booking.updateOne({
+            _id: actualData.booking
+          }, {
+            status: "rejected"
           });
-
-          await rejectedBooking.save();
 
           res.json({message: `Booking ${actualData.booking} rejected successfully`});   
    }

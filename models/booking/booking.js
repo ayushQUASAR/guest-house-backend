@@ -65,7 +65,7 @@ const bookingSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        enum: ['approved', 'pending'],
+        enum: ['approved', 'pending', 'cancelled', 'rejected', 'checkedOut'],
         default: 'pending'
     },
    
@@ -73,9 +73,9 @@ const bookingSchema = new mongoose.Schema({
          type: String,
     },
 
+
    guestHouseSelected :{
         type: [Number],
-
    },
 
    roomSelected :{

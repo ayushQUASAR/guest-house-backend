@@ -92,19 +92,8 @@ router.post("/", async (req,res) => {
               throw new Error("rejected user could not be added");
             }
 
-
-
-             const deleted_user = await User.deleteOne({_id: newApproval.user});
-             if(deleted_user!== null) {
-              console.log("User deleted successfully");
-                // res.status(200).json({message: "User deleted successfully"});
-
                 res.json({message: `${x[0].name} rejection confirmed..`});
-             }
-             else {
-              console.log("user could not be deleted");
-              // res.json({message: "user could not be deleted.."});
-             }
+            
         }
 
 
