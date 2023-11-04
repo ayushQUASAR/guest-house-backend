@@ -33,7 +33,7 @@ GET http://localhost:4000/users/approved/registered
 
 ###
 
-GET http://localhost:4000/users/65440d3641afe49f90c5ae96/bookingHistory
+GET http://localhost:4000/users/6544eaf29f7b2044679fcd4e/bookingHistory
 
 
 ###
@@ -70,6 +70,7 @@ Content-Type: application/json
 GET http://localhost:4000/login/admin
 
 ###
+
 
 
 GET http://localhost:4000/login
@@ -169,4 +170,4 @@ Content-Type: application/json
 ###
 
 
-GET  http://localhost:4000/booking/approved/cancelled
+GET  http://localhost:4000/booking/approved/approved

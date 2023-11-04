@@ -34,15 +34,19 @@ router.post("/", async (req,res) => {
    
    // info regarding approval
    
-   const actualData = data.status === 'reject' ? {
-    booking: data.booking,
-    // accept or reject
-    status: 'reject'
-   } : {
-     booking : data.booking,
-     status: 'accept',
-     roomAllotted: data.roomAllotted,
-     guestHouseAllotted: data.guestHouseAllotted
+   // const actualData = data.status === 'reject' ? {
+   //  booking: data.booking,
+   //  // accept or reject
+   //  status: 'reject'
+   // } : {
+   //   booking : data.booking,
+   //   status: 'accept',
+   //   roomAllotted: data.roomAllotted,
+   //   guestHouseAllotted: data.guestHouseAllotted
+   // }
+   const actualData = {
+      booking: data.booking,
+      status: data.status
    }
 ;
 // create new instance of booking approval model
@@ -76,14 +80,14 @@ router.post("/", async (req,res) => {
 
 
     await Promise.all([
-               axios.put(`http://localhost:4000/guestHouse/room/allot`, {
-                  roomAllotted: actualData.roomAllotted,
-                  guestHouseAllotted: actualData.guestHouseAllotted
-              }, {
-                 headers : {
-                    "Content-Type" : "application/json"
-                 }
-              }),
+            //    axios.put(`http://localhost:4000/guestHouse/room/allot`, {
+            //       roomAllotted: actualData.roomAllotted,
+            //       guestHouseAllotted: actualData.guestHouseAllotted
+            //   }, {
+            //      headers : {
+            //         "Content-Type" : "application/json"
+            //      }
+            //   }),
               axios.post('http://localhost:4000/email/booking/sendApprovalNotification', {
                booking: approvalDetails, 
         }, {

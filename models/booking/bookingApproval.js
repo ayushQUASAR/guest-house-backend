@@ -14,14 +14,14 @@ status: {
    enum: ["accept", "reject"]
 },
 
-roomAllotted: {
-   type: [Number],
-   default: [-1,-1],
-},
-guestHouseAllotted:{
-   type:  [Number],
-   default: [-1,-1]
-}
+// roomAllotted: {
+//    type: [Number],
+//    default: [-1,-1],
+// },
+// guestHouseAllotted:{
+//    type:  [Number],
+//    default: [-1,-1]
+// }
 });
 
 

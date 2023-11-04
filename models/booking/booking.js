@@ -5,7 +5,7 @@ const bookingSchema = new mongoose.Schema({
     
     kind :{
      type:String,
-     required: true,
+    //  required: true,
      enum:["official", "unofficial"]
     }, 
 
@@ -75,12 +75,11 @@ const bookingSchema = new mongoose.Schema({
 
 
    guestHouseSelected :{
-        type: [Number],
+        type: Number
    },
 
-   roomSelected :{
-         type: [Number],
-         
+   roomsSelected :{
+         type: Number
    },
 
    roomAllotted: {

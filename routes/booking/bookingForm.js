@@ -25,7 +25,7 @@ router.post("/",  async (req,res) => {
 
                 
          const actualData = {
-    kind: data.visitType,
+    // kind: data.visitType,
     purpose: data.purpose,
     name: `${data.firstName} ${data.lastName}`,
     designation: data.designation,
@@ -33,7 +33,7 @@ router.post("/",  async (req,res) => {
     phone: data.phNumber,
     email: data.email,
     guestHouseSelected :data.guestHouseSelected,
-    roomSelected: data.roomSelected,
+    roomsSelected: data.roomsSelected,
     companions: companions,
     startDate: data.arrivalDate,
     // startTime: data.arrivalTime,
@@ -42,12 +42,12 @@ router.post("/",  async (req,res) => {
     bookingFor: data.bookingFor,
      roomBooker: {
       // random fields
-        name: "hey",
-        designation:"testing",
-        dept: "this",
-        phone: "923452355",
-        email: "dhimanmridul91@gmail.com",
-        address: "Baijnath, Himachal",
+        name: `${data.PersonfirstName} ${data.PersonlastName}`,
+        designation:data.Persondesignation,
+        dept: data.Persondepartment,
+        phone: data.PersonphNumber,
+        email: data.Personemail,
+        address: data.Personaddress
     }
     }
     const newBooking = new Booking(actualData);
@@ -69,7 +69,7 @@ const user = registeredUsers.filter((user) => user.user.email === actualData.roo
 await RegisteredUser.updateOne({
   _id: user[0]._id
 },
-{
+{ 
   $push : {bookingHistory : newBooking._id}
 }
 )
