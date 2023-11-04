@@ -42,12 +42,12 @@ console.log(req.body);
     // bookingFor: data.bookingFor,
      roomBooker: {
       // random fields
-        name: data.roomBooker.name,
+        name: data.PersonName,
         // designation:data.Persondesignation,
         // dept: data.Persondepartment,
-        phone: data.roomBooker.phone,
-        email: data.roomBooker.email,
-        address: data.roomBooker.address
+        phone: data.PersonPhone,
+        email: data.PersonEmail,
+        address: data.PersonAddress
     }
     }
     const newBooking = new Booking(actualData);
