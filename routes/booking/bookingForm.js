@@ -9,7 +9,7 @@ const RegisteredUser = require('../../models/registeredUsers');
 
 
 router.post("/",  async (req,res) => {
-
+console.log(req.body);
 
     const data = req.body;
 
