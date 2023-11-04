@@ -81,7 +81,7 @@ await RegisteredUser.updateOne({
 
 
 //###Task 3: send the email to admin, regarding the booking form, work in bookingEmail.js
-await axios.post("http://localhost:4000/email/booking/adminNotification", {
+await axios.post("https://guest-house-back.onrender.com/email/booking/adminNotification", {
       actualData
     }
       , {

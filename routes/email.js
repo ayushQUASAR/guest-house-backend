@@ -30,7 +30,7 @@ const emailHTMLTemplate = ({email}) =>  `
  `;
 
  const emailVerificationHTMLTemplate = ({email,token}) =>  {
-    const verificationLink = `http://localhost:4000/email/${email}/verify/${token}`;
+    const verificationLink = `https://guest-house-back.onrender.com/email/${email}/verify/${token}`;
 
   return  `<h3> Hi ${email},</h3> <br/>
     <p>We just need to verify your email address before you can access the <u>ONLINE BOOKING</u>.</p>
@@ -129,7 +129,7 @@ const token = req.body.token;
 try {
 await transporter.sendMail(mailOptions);
 
-res.redirect(`http://localhost:4000/email/verificationSuccess/${email}`);
+res.redirect(`https://guest-house-back.onrender.com/email/verificationSuccess/${email}`);
 
 }
 catch(err) {
@@ -151,7 +151,7 @@ if(output=== null )
  {
     throw new Error("user could not be updated");
  }  
-res.redirect(`http://localhost:4000/email/verificationSuccess/${id}`);
+res.redirect(`https://guest-house-back.onrender.com/email/verificationSuccess/${id}`);
 }
 catch(err) {
     res.status(500).json({message: err.message})

@@ -65,8 +65,8 @@ router.post("/", async (req,res) => {
                 //item to be updated
                 {
                   status: 'approved',
-                  roomAllotted: actualData.roomAllotted,
-                  guestHouseAllotted: actualData.guestHouseAllotted
+                  // roomAllotted: actualData.roomAllotted,
+                  // guestHouseAllotted: actualData.guestHouseAllotted
                 } 
                 );   
                 
@@ -88,7 +88,7 @@ router.post("/", async (req,res) => {
             //         "Content-Type" : "application/json"
             //      }
             //   }),
-              axios.post('http://localhost:4000/email/booking/sendApprovalNotification', {
+              axios.post('https://guest-house-back.onrender.com/email/booking/sendApprovalNotification', {
                booking: approvalDetails, 
         }, {
            headers: {

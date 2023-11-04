@@ -164,9 +164,9 @@ const token = jwt.sign({email: data.Email}, process.env.JWT_SECRET);
             res.json({ message: msg });
 
             await Promise.all([
-                axios.get(`http://localhost:4000/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
+                axios.get(`https://guest-house-back.onrender.com/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
     
-                axios.post(`http://localhost:4000/email/sendVerificationEmail`, { 
+                axios.post(`https://guest-house-back.onrender.com/email/sendVerificationEmail`, { 
                     email: actualData.email,
                     token: token
                 },
