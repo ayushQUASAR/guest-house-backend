@@ -99,15 +99,15 @@ const bookingSchema = new mongoose.Schema({
         },
         designation:{
             type: String, 
-            required: true
+            // required: true
         },
         dept: {
             type: String,
-            required: true
+            // required: true
         },
         phone: {
             type: String,
-            required: true
+            // required: true
         },
         email: {
             type: String,
@@ -115,7 +115,7 @@ const bookingSchema = new mongoose.Schema({
         },
         address: {
             type: String,
-             required: true,
+            //  required: true,
         }
     }
 });

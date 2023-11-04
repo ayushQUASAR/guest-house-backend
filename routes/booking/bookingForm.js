@@ -39,15 +39,15 @@ router.post("/",  async (req,res) => {
     // startTime: data.arrivalTime,
     endDate: data.departureDate,
     // endTime: data.departureTime,
-    bookingFor: data.bookingFor,
+    // bookingFor: data.bookingFor,
      roomBooker: {
       // random fields
-        name: `${data.PersonfirstName} ${data.PersonlastName}`,
-        designation:data.Persondesignation,
-        dept: data.Persondepartment,
-        phone: data.PersonphNumber,
-        email: data.Personemail,
-        address: data.Personaddress
+        name: data.roomBooker.name,
+        // designation:data.Persondesignation,
+        // dept: data.Persondepartment,
+        phone: data.roomBooker.phone,
+        email: data.roomBooker.email,
+        address: data.roomBooker.address
     }
     }
     const newBooking = new Booking(actualData);
