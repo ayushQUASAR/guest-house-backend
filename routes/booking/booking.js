@@ -52,7 +52,7 @@ try{
         const booking = await Booking.find({status: approvalType});
         res.status(200).json(booking);  
   }
-  
+
 
    
   }
@@ -61,6 +61,9 @@ try{
       res.status(500).json({message: err.message})
     }
 });
+
+
+
 
 
 

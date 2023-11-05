@@ -76,8 +76,7 @@ GET http://localhost:4000/login
 
 ### 
 
-
-GET http://localhost:4000/users/approved/pending
+GET http://localhost:4000/users/approved/pending/length
 
 
 ### 

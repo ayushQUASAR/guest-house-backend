@@ -164,6 +164,16 @@ router.get('/approved/pending', async (req,res) => {
    }
 });
 
+router.get("/approved/pending/length", async (req,res) => {
+    try {
+    let count =  await PendingUser.count({});
+    res.status(200).json(count);
+    }
+    catch(err) {
+        console.log({message: err.message});
+        res.status(500).json({message: err.message});
+    }
+})
 
 
 router.delete("/approved/pending", async (req,res) => {
