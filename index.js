@@ -26,29 +26,43 @@ const app = express();
 // mongoose.connect("mongodb+srv://user:user@cluster0.5rmy7ke.mongodb.net/guest-house");
 mongoose.connect('mongodb+srv://user:user@cluster0.uunf6ts.mongodb.net/?retryWrites=true&w=majority');
 const db = mongoose.connection;
-db.once('open', ()=>{
+db.once('open', () => {
     console.log("Database connected")
 });
-db.on("error", (err)=> {
-   console.log({database_message: err.message})
-} );
-const port  = process.env.PORT || 3000;
+db.on("error", (err) => {
+    console.log({ database_message: err.message })
+});
+const port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+}));
 //body parsing
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
     secret: 'your secret key',
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     cookie: { secure: false }
-  }));
+}));
 
-app.get("/", (req,res)=> {
+app.get("/", (req, res) => {
     res.send("Hello World");
 })
+
+// for session checking
+app.get('/check-session', (req, res) => {
+    if (req.session.user) {
+        res.send({ loggedIn: true, user: req.session.user, isAdmin: req.session.isAdmin });
+        console.log("loggedIn is true");
+    } else {
+        res.send({ loggedIn: false });
+        console.log("loggedIn is false");
+    }
+});
 
 //listening on port 3000
 app.use("/register", registerRoute);
@@ -63,6 +77,6 @@ app.use("/admin/bookingApproval", bookingApprovalRoute);
 app.use("/guestHouse", guestHouseRoute);
 
 
-app.listen(port, ()=> {
+app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
