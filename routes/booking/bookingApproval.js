@@ -81,7 +81,7 @@ router.post("/", async (req,res) => {
 
     await Promise.all([
             //    axios.put(`http://localhost:4000/guestHouse/room/allot`, {
-            //       roomAllotted: actualData.roomAllotted,
+            //       roomsAllotted: actualData.roomsAllotted,
             //       guestHouseAllotted: actualData.guestHouseAllotted
             //   }, {
             //      headers : {

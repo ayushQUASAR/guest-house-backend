@@ -42,7 +42,7 @@ catch(err) {
 router.get("/:id", async (req, res) => {
     const userId = req.params.id;
     try {
-         const user = await User.find({_id: userId}).populate('reference');
+         const user = await User.find({_id: userId}).populate('reference').populate('idProof');
       
 
          const ref = await Ref.find({_id: user[0].reference._id}).populate('refTo');
@@ -70,7 +70,10 @@ module.exports = router;
 router.get('/approved/registered', async (req,res) => {
     try {
         const users =  await RegisteredUser.find({}).populate('user').populate('bookingHistory');
+
+
             // console.log(users);
+
             res.status(200).json(users);
         
    }
