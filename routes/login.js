@@ -98,6 +98,8 @@ router.post("/", async (req,res) => {
            else{
             let  user1 = await User.find({email: user[0].email});
             console.log(`${user[0].isAdmin ? "Admin" : "User"} login successful`);
+            req.session.user = user1;
+            req.session.isAdmin = user[0].isAdmin;
             res.status(200).json({message: `${user[0].isAdmin ? "Admin" : "User"} login successful`, isAdmin: user[0].isAdmin,id: user[0].isAdmin ? user[0]._id:  user1[0]._id});
            }
           }

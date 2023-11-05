@@ -36,7 +36,10 @@ const emailHTMLTemplate = ({email}) =>  `
     <p>We just need to verify your email address before you can access the <u>ONLINE BOOKING</u>.</p>
     
     <p>Verify your email address: ${verificationLink}</p>
-    <br/>
+    <br />
+    
+    <p>For instant approval, contact ADMIN_EMAIL_HERE</p>
+    <br />
     
     <p>Thanks! - The NITJ Guest House Online Booking team </p>`;
  }
