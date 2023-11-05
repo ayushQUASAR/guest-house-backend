@@ -70,16 +70,18 @@ router.get("/:id", async (req,res) => {
 router.put("/room/allot", async (req,res) => {
     const data = req.body;
     try {
-          const guestHouses = data.guestHouseAllotted;
-          const rooms = data.roomAllotted;
+        //integer
+          const guestHouseId = data.guestHouseAllotted;
+          // array 
+          const rooms = data.roomsAllotted;
 
 
-        for(let i = 0;i<=1;i++) {
+        for(let i = 0;i<=rooms.length;i++) {
             // rooms ka index true kr diya 
             const incObject = {};
             incObject[`rooms.${rooms[i]-1}`] = true;
              await guestHouse.updateOne({
-                   guestHouseId: guestHouses[i]
+                   guestHouseId: guestHouseId
              }, {
               $set:  incObject
              });

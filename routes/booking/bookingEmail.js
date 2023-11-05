@@ -94,7 +94,6 @@ router.post("/adminNotification/", async (req, res) => {
 const userApprovalNotificationTemplate = ({guestHouseDetails, roomsDetails}) => `
 <h3>Hi,</h3> 
 <p>Your booking has been approved...</p>
-<hr>
 <p>${roomsDetails.length} rooms are allotted to you in Guest House ${guestHouseDetails}</p>
 <p>Please login to your account for more details.</p>
 `;

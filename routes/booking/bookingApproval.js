@@ -80,14 +80,14 @@ router.post("/", async (req,res) => {
 
 
     await Promise.all([
-            //    axios.put(`http://localhost:4000/guestHouse/room/allot`, {
-            //       roomsAllotted: actualData.roomsAllotted,
-            //       guestHouseAllotted: actualData.guestHouseAllotted
-            //   }, {
-            //      headers : {
-            //         "Content-Type" : "application/json"
-            //      }
-            //   }),
+               axios.put(`https://guest-house-back.onrender.com/guestHouse/room/allot`, {
+                  roomsAllotted: actualData.roomsAllotted,
+                  guestHouseAllotted: actualData.guestHouseAllotted
+              }, {
+                 headers : {
+                    "Content-Type" : "application/json"
+                 }
+              }),
               axios.post('https://guest-house-back.onrender.com/email/booking/sendApprovalNotification', {
                booking: approvalDetails, 
         }, {
