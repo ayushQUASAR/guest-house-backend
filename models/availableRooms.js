@@ -6,7 +6,7 @@ const schema = new mongoose.Schema({
         type:  mongoose.Schema.Types.ObjectId,
         ref: 'Room'
     }
-});
+}, { timestamps: true });
 
 const AvailableRoom = new mongoose.model("AvailableRoom", schema);
 

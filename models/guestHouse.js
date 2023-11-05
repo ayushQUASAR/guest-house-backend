@@ -31,7 +31,7 @@ roomType: {
     default: "Non AC",
 }
 
-});
+}, { timestamps: true });
 
 //based on id (guest house schema will get )
 guestHouseSchema.pre('save', function (next) {

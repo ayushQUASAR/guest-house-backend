@@ -15,7 +15,7 @@ isAdmin : {
     required: true,
     default: false,
 }
-});
+}, { timestamps: true });
 
 
 const Login = new mongoose.model("Login", loginSchema);

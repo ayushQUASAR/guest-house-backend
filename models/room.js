@@ -20,7 +20,7 @@ const roomSchema = new mongoose.Schema({
         type: Number,
         required: true,
      }
-});
+}, { timestamps: true });
 
 
 const Room = new mongoose.model("Room", roomSchema);

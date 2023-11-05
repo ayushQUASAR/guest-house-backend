@@ -27,7 +27,7 @@ const refSchema  = new mongoose.Schema({
             ref: 'User',
             default : [],
         }
-});
+}, { timestamps: true });
 
 const Ref = new mongoose.model("Reference", refSchema);
 

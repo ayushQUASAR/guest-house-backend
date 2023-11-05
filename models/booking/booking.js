@@ -117,7 +117,7 @@ const bookingSchema = new mongoose.Schema({
             //  required: true,
         }
     }
-});
+}, { timestamps: true });
 
 const Booking = new mongoose.model("Booking", bookingSchema);
 module.exports = Booking;

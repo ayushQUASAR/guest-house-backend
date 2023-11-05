@@ -21,7 +21,7 @@ roomsAllotted: {
 guestHouseAllotted:{
    type:  Number
 }
-});
+}, { timestamps: true });
 
 
 

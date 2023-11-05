@@ -23,7 +23,7 @@ const alumniSchema = new mongoose.Schema({
         type: String,
         required: true,
     }
-});
+}, { timestamps: true });
 
 const Alumni = new mongoose.model("alumni", alumniSchema);
 

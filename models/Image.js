@@ -18,7 +18,7 @@ const ImageSchema = new mongoose.Schema({
             enum:["image/png", "image/jpeg", "image/jpg", "application/pdf"]
         }
   
-});
+}, { timestamps: true });
 
 const Image = new mongoose.model("Image", ImageSchema);
 

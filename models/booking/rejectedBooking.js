@@ -6,7 +6,7 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'Booking',
     }
-});
+}, { timestamps: true });
 
 const RejectedBooking = new mongoose.model("RejectedBooking", schema);
 

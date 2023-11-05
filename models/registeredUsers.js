@@ -12,7 +12,7 @@ const schema = new mongoose.Schema({
         default:[],
         ref: 'Booking'
     }
-});
+}, { timestamps: true });
 
 const RegisteredUser = new mongoose.model("RegisteredUser", schema);
 

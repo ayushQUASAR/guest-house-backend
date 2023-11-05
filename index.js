@@ -17,6 +17,7 @@ const emailRoute = require("./routes/email")
 const bookingRoute = require("./routes/booking/booking");
 const bookingApprovalRoute = require("./routes/booking/bookingApproval");
 const guestHouseRoute = require("./routes/guestHouse")
+// const sessionRoute = require('./routes/session');
 
 
 //configuring packages
@@ -73,6 +74,7 @@ app.use("/email", emailRoute);
 app.use("/booking", bookingRoute);
 app.use("/admin/bookingApproval", bookingApprovalRoute);
 app.use("/guestHouse", guestHouseRoute);
+// app.use("/check-session", sessionRoute);
 
 
 app.listen(port, () => {

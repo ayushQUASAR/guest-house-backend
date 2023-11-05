@@ -17,7 +17,7 @@ const facultySchema = new mongoose.Schema({
         type: String,
         required: true,
     }
-})
+}, { timestamps: true })
 
 const Faculty = new mongoose.model("faculty", facultySchema);
 

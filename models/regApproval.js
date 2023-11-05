@@ -19,7 +19,7 @@ const approveRegSchema = new mongoose.Schema({
         enum:["accept", "reject"]
     },
     
-});
+}, { timestamps: true });
 
 
 const RegApproval  = new mongoose.model("RegApproval", approveRegSchema);
