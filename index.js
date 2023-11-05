@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require('express-session');
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const multer = require("multer");
@@ -38,6 +39,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+app.use(session({
+    secret: 'your secret key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+  }));
 
 app.get("/", (req,res)=> {
     res.send("Hello World");
