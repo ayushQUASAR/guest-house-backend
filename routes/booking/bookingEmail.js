@@ -91,15 +91,18 @@ router.post("/adminNotification/", async (req, res) => {
 
 });
 
-const userApprovalNotificationTemplate = () => `
+const userApprovalNotificationTemplate = ({guestHouseDetails, roomsDetails}) => `
 <h3>Hi,</h3> 
 <p>Your booking has been approved...</p>
+<hr>
+<p>${roomsDetails.length} rooms are allotted to you in Guest House ${guestHouseDetails}</p>
 <p>Please login to your account for more details.</p>
 `;
 
 router.post("/sendApprovalNotification", async (req, res) => {
 const bookingDetails = req.body.booking;
-  
+  const guestHouseDetails = bookingDetails.booking.guestHouseAllotted;
+  const roomsDetails = bookingDetails.booking.roomsAllotted;
     //send alerts to user and visitor regarding the booking confirmation
     const mailList = [bookingDetails.booking.email, bookingDetails.booking.roomBooker.email];
     const mailOptions = {
@@ -109,7 +112,7 @@ const bookingDetails = req.body.booking;
         },
         to: mailList, // we need to change here to user email
         subject: "Regarding approval for guest house",
-        html: userApprovalNotificationTemplate(),
+        html: userApprovalNotificationTemplate({guestHouseDetails, roomsDetails}),
     };
 
     try {

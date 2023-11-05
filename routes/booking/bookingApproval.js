@@ -34,20 +34,20 @@ router.post("/", async (req,res) => {
    
    // info regarding approval
    
-   // const actualData = data.status === 'reject' ? {
-   //  booking: data.booking,
-   //  // accept or reject
-   //  status: 'reject'
-   // } : {
-   //   booking : data.booking,
-   //   status: 'accept',
-   //   roomAllotted: data.roomAllotted,
-   //   guestHouseAllotted: data.guestHouseAllotted
-   // }
-   const actualData = {
-      booking: data.booking,
-      status: data.status
+   const actualData = data.status === 'reject' ? {
+    booking: data.booking,
+    // accept or reject
+    status: 'reject'
+   } : {
+     booking : data.booking,
+     status: 'accept',
+     roomsAllotted: data.roomsAllotted,
+     guestHouseAllotted: data.guestHouseAllotted
    }
+   // const actualData = {
+   //    booking: data.booking,
+   //    status: data.status
+   // }
 ;
 // create new instance of booking approval model
    const newBookingApproval = new BookingApproval(actualData);
@@ -65,15 +65,15 @@ router.post("/", async (req,res) => {
                 //item to be updated
                 {
                   status: 'approved',
-                  // roomAllotted: actualData.roomAllotted,
-                  // guestHouseAllotted: actualData.guestHouseAllotted
+                  roomsAllotted: actualData.roomsAllotted,
+                  guestHouseAllotted: actualData.guestHouseAllotted
                 } 
                 );   
                 
 
+                res.json({message: `Booking ${actualData.booking} approved successfully`});
          
                 
-                res.json({message: `Booking ${actualData.booking} approved successfully`});
 
     await approvalDetails.populate('booking');
     console.log(approvalDetails);

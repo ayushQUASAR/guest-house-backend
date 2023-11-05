@@ -82,16 +82,15 @@ const bookingSchema = new mongoose.Schema({
          type: Number
    },
 
-   roomAllotted: {
+   roomsAllotted: {
            type: [Number],
            default : []
    },
   
    guestHouseAllotted: {
-          type: [Number],
-          default: [],
-
+          type: Number
    },
+   
     roomBooker: {
         name: {
             type: String,

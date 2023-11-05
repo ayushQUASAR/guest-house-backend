@@ -18,8 +18,6 @@ const bookingApprovalRoute = require("./routes/booking/bookingApproval");
 const guestHouseRoute = require("./routes/guestHouse")
 
 
-
-
 //configuring packages
 const app = express();
 // mongoose.connect("mongodb+srv://user:user@cluster0.5rmy7ke.mongodb.net/guest-house");
