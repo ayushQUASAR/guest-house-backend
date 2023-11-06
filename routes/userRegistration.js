@@ -59,9 +59,13 @@ router.post("/", upload.single('idProof'),async (req,res)=> {
     if (!req.file) {
         return res.status(400).json({ error: 'File not provided or does not meet requirements.' });
       }
-    console.log("this is file",req.file);
+    // console.log("this is file",req.file);
+
+    const [extra, ext] = req.file.filename.split('.');
     const idProof = new Image({
-    data: fs.readFileSync(path.join(process.cwd()+"/uploads/" + req.file.filename)),
+    // data: fs.readFileSync(path.join(process.cwd()+"/uploads/" + req.file.filename)),
+    data : `https://guest-house-back.onrender.com/images/${req.file.filename}`,
+    contentType: ext === 'pdf' ? "application/pdf" : `image/${ext}`
     });
 
     const refType = data.selectedOption;

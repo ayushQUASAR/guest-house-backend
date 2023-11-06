@@ -24,12 +24,13 @@ const guestHouseRoute = require("./routes/guestHouse")
 const app = express();
 // mongoose.connect("mongodb+srv://user:user@cluster0.5rmy7ke.mongodb.net/guest-house");
 mongoose.connect('mongodb+srv://user:user@cluster0.uunf6ts.mongodb.net/?retryWrites=true&w=majority');
+// mongoose.connect("mongodb://127.0.0.1:27017/guestHouse");
 const db = mongoose.connection;
 db.once('open', () => {
     console.log("Database connected")
 });
 db.on("error", (err) => {
-    console.log({ database_message: err.message })
+    console.log({ database_message: err.message });
 });
 const port = process.env.PORT || 3000;
 
@@ -76,6 +77,7 @@ app.use("/admin/bookingApproval", bookingApprovalRoute);
 app.use("/guestHouse", guestHouseRoute);
 // app.use("/check-session", sessionRoute);
 
+app.use("/images", require("./routes/images"));
 
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);

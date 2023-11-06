@@ -23,7 +23,7 @@ GET http://localhost:4000/users
 
 ###
 
-GET http://localhost:4000/users/6545eecab7f0c070a5456b17
+GET http://localhost:4000/users/65490307b69c78423f779fe6
 
 ### 
 
@@ -141,7 +141,6 @@ GET http://localhost:4000/booking
 
 
 ###
-
 
 
 POST http://localhost:4000/guestHouse
