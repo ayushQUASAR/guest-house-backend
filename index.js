@@ -64,6 +64,17 @@ app.get('/check-session', (req, res) => {
     }
 });
 
+// for logout
+app.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            res.send({ message: 'Error logging out' });
+        } else {
+            res.send({ message: 'Logged out successfully' });
+        }
+    });
+});
+
 //listening on port 3000
 app.use("/register", registerRoute);
 app.use("/admin/approveRegistration", approveRegistrationRoute);
