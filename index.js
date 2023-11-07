@@ -22,6 +22,7 @@ const guestHouseRoute = require("./routes/guestHouse")
 
 //configuring packages
 const app = express();
+app.enable('trust proxy');
 // mongoose.connect("mongodb+srv://user:user@cluster0.5rmy7ke.mongodb.net/guest-house");
 mongoose.connect('mongodb+srv://user:user@cluster0.uunf6ts.mongodb.net/?retryWrites=true&w=majority');
 // mongoose.connect("mongodb://127.0.0.1:27017/guestHouse");
@@ -46,7 +47,10 @@ app.use(session({
     secret: 'your secret key',
     resave: true,
     saveUninitialized: true,
-    cookie: { secure: false }
+    cookie: { 
+        secure: true,
+        sameSite: 'none'
+     }
 }));
 
 app.get("/", (req, res) => {
