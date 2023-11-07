@@ -47,10 +47,10 @@ app.use(session({
     secret: 'your secret key',
     resave: true,
     saveUninitialized: true,
-    cookie: { 
-        secure: true,
-        sameSite: 'none'
-     }
+    cookie: {
+        secure: false,
+        sameSite: 'lax'
+    }
 }));
 
 app.get("/", (req, res) => {
