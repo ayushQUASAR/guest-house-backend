@@ -88,10 +88,10 @@ router.get('/approved/registered', async (req,res) => {
 router.get("/:id/bookingHistory", async (req,res) => {
     const userId = req.params.id;
     try {
-      const response =  await axios.get(`http://localhost:4000/users/${userId}`);
+      const response =  await axios.get(`https://guest-house-back.onrender.com/users/${userId}`);
 
       
-      const registeredUsers = await axios.get('http://localhost:4000/users/approved/registered');
+      const registeredUsers = await axios.get('https://guest-house-back.onrender.com/users/approved/registered');
 
       const arr = registeredUsers.data;
     //   console.log(arr);
