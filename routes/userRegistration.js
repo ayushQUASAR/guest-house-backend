@@ -71,6 +71,7 @@ router.post("/", upload.single('idProof'),async (req,res)=> {
     const refType = data.selectedOption;
     const refName = `${data.RefFirstName} ${data.RefLastName}`;
     const refPhone = data.RefPhoneNumber;
+    console.log(data.selectedOption);
 
     let refTo = refType === "student" ? new Student({
         name: refName,

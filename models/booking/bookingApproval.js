@@ -7,6 +7,7 @@ booking: {
 type: mongoose.Schema.Types.ObjectId,
 required: true,
 ref:'Booking',
+unique: true,
 },
 status: {
    type: String,
