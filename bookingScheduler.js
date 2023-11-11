@@ -1,11 +1,13 @@
 const cron = require("node-cron");
 const Booking = require("./models/booking/booking");
 const guestHouse = require("./models/guestHouse");
+const axios = require('axios');
+
 
 const cronJobForBookingCompletion =  () => {
     cron.schedule("0 0 * * *", async () => {
 
-
+console.log("hello from cron job on ", new Date());
         //1. update the status to Checked Out
         //2. change the guestHouse to default
         const currentDate = new Date();
