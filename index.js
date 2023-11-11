@@ -93,6 +93,7 @@ app.use("/guestHouse", guestHouseRoute);
 // app.use("/check-session", sessionRoute);
 
 app.use("/images", require("./routes/images"));
+app.use("/calendar", require("./routes/calendar"));
 
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
