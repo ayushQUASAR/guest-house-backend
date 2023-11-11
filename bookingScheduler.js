@@ -36,7 +36,10 @@ console.log("hello from cron job on ", new Date());
       }
     } 
 
-    await axios.get("https://guest-house-back.onrender.com/calendar/create");
+    await Promise.all([
+        axios.delete("https://guest-house-back.onrender.com/calendar"),
+        axios.get("https://guest-house-back.onrender.com/calendar/create"),
+    ]);
         
     }
         catch(err) {
