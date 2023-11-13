@@ -1,5 +1,7 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
+const dotenv = require('dotenv');
+dotenv.config();
 
 const User = require("../models/user/user");
 const bookingEmailRoute = require('./booking/bookingEmail');
@@ -19,6 +21,8 @@ const transportOptions = {
         pass: "lwidtbnghfrtcgcv",
     }
 }
+
+
 
 
 const transporter = nodemailer.createTransport(transportOptions);
@@ -82,6 +86,27 @@ const emailHTMLTemplate = ({email}) =>  `
 <a href="#">Click here to approve</a>
 `;
 
+
+const updatePasswordTemplate = ({email, token}) => {
+
+    const verificationLink = `https://guest-house-back.onrender.com/login/forgot-password/verify/${token}`;
+    return `
+    
+Hi ${email},
+<br/>
+<br/>
+For your account security, please update your password by clicking on the link below:
+<br/>
+${verificationLink}
+<br/>
+This link is valid for 3 hours. Reach out to us at ADMIN_EMAIL_HERE, if you encounter any issues.
+<br/>
+<br/>
+Best Regards,
+Online Guest House Room Allottment Team.
+    `
+}
+
 router.get("/", async (req,res) => {
     const mailOptions = {
         from: {
@@ -111,6 +136,28 @@ router.get("/verificationSuccess/:id",  (req, res)=> {
 res.send(`<h1>${req.params.id} successfully verified</h1>`);
 });
 
+
+router.get("/forgot-password/:email/token/:token", async (req,res) => {
+const email = req.params.email;
+const token = req.params.token;
+console.log(email, token);
+const mailOptions = {
+    from: {
+       name:"donotreply",
+       address:"mrimann96@gmail.com",
+    },
+    to: email,
+    subject: "Urgent: Reset Your Password Now",
+    html : updatePasswordTemplate({email,token})
+};
+
+try {
+    await transporter.sendMail(mailOptions);
+    }
+    catch(err) {
+    res.json({message: err.message})
+    }
+})
 
 
 

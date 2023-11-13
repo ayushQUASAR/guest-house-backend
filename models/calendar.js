@@ -13,7 +13,7 @@ const calendarSchema = new mongoose.Schema({
         type: Number,
         default : 0
     }
-})
+}, {timestamps:true})
 
 const Calendar = new mongoose.model("Calendar", calendarSchema);
 

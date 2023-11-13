@@ -120,7 +120,6 @@ router.delete("/", async (req,res) => {
     } 
     catch(err) {
         res.json({message: err.message});
-
     }
 })
 

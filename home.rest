@@ -167,3 +167,27 @@ Content-Type: application/json
 
 
 GET  http://localhost:4000/booking/approved/approved
+
+
+### 
+
+
+POST http://localhost:4000/login/forgot-password
+Content-Type: application/json
+
+{
+    "email" : "mriduld.cs.21@nitj.ac.in"
+}
+
+
+###
+
+
+POST http://localhost:4000/login/update-password 
+Content-Type: application/json
+
+{
+    "isAdmin" : "true",
+    "email": "mriduld.cs.21@nitj.ac.in",
+    "password" : "nitj"
+}

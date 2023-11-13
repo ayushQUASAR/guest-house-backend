@@ -1,6 +1,8 @@
 const express =  require("express");
 const bcrypt = require("bcrypt")
 const dotenv = require("dotenv");
+const axios = require('axios');
+const jwt = require("jsonwebtoken");
 
 
 
@@ -137,5 +139,79 @@ router.delete("/", async (req,res) => {
 // }
 // })
 
+
+router.post("/forgot-password", async (req,res) => {
+const email = req.body.email;
+try {
+   const user = await Login.find({email: email});
+   
+   if(user.length === 0) {
+    res.status(401).json({message: "email does not matches"});
+   }
+  
+const token = jwt.sign({email : email}, process.env.JWT_SECRET, {expiresIn: '3h'})
+
+res.json({message: "successful work till this point"});
+await axios.get(`https://guest-house-back.onrender.com/email/forgot-password/${encodeURIComponent(email)}/token/${encodeURIComponent(token)}`);
+
+}
+
+catch(err) {
+res.json({message: err.message})
+}
+
+});
+
+
+router.get("/forgot-password/verify/:token",  (req,res) => {
+    const token = req.params.token;
+   try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    // res.send(`${payload.email} verified successfully...`);
+    res.writeHead(302, {
+        Location: 'http://localhost:5173/update-password'
+    });
+
+
+    res.end();
+   }
+   catch(err) {
+    res.json({message :err.message})
+   }
+
+});
+
+router.post("/update-password", async (req,res) =>{
+    const details = req.body;
+    
+    try {
+      const user =  await Login.find({email: details.email});
+      if(user.length === 0 ) {
+        res.json({message : "email does not matches"});
+      }
+
+      const hashedPassword = await bcrypt.hash(details.password, 10);
+
+      await Login.updateOne({
+        email: details.email
+      }, {
+        password: hashedPassword
+      });
+
+      res.json({message: "Password updated successfully"});
+
+      if(!details.isAdmin) {
+        await User.update({
+            email: details.email
+        }, {
+            password: hashedPassword
+        }
+        );
+      }
+    }
+    catch(err) {
+        res.json({message: err.message})
+    }
+})
 
 module.exports = router;
