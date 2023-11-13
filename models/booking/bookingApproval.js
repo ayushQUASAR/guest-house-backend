@@ -23,7 +23,7 @@ guestHouseAllotted:{
    type:  Number
 },
 paymentDeadline: {
-   type: String
+   type: Number
 },
 }, { timestamps: true });
 

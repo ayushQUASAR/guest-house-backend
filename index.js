@@ -24,6 +24,8 @@ const guestHouseRoute = require("./routes/guestHouse")
 const cronJobForBookingCompletion = require("./bookingScheduler");
 cronJobForBookingCompletion();
 
+const cronJobForPaymentDeadline = require("./paymentDeadlineScheduler");
+cronJobForPaymentDeadline();
 
 //configuring packages
 const app = express();
