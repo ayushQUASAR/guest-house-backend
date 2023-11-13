@@ -42,7 +42,8 @@ router.post("/", async (req,res) => {
      booking : data.booking,
      status: 'accept',
      roomsAllotted: data.roomsAllotted,
-     guestHouseAllotted: data.guestHouseAllotted
+     guestHouseAllotted: data.guestHouseAllotted,
+      paymentDeadline: data.paymentDeadline
    }
    // const actualData = {
    //    booking: data.booking,
