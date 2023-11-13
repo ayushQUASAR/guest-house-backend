@@ -21,7 +21,10 @@ roomsAllotted: {
 },
 guestHouseAllotted:{
    type:  Number
-}
+},
+paymentDeadline: {
+   type: String
+},
 }, { timestamps: true });
 
 
