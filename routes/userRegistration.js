@@ -23,27 +23,27 @@ const PendingUser = require('../models/pendingUsers');
 const RegisteredUser = require('../models/registeredUsers');
 
 const storage = multer.diskStorage({
-    destination: (req,file, cb) => {
+    destination: (req, file, cb) => {
         cb(null, 'uploads');
     },
-    filename: (req,file,cb) => {
+    filename: (req, file, cb) => {
         const [name, ext] = file.mimetype.split("/");
         cb(null, `${name}-${Date.now()}.${ext}`);
     }
 });
 
 const upload = multer({
-    storage:storage,
-    fileFilter:(req,file,cb) => {
+    storage: storage,
+    fileFilter: (req, file, cb) => {
         if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'application/pdf') {
             cb(null, true);
-          }
-          else {
+        }
+        else {
             cb(null, new Error("Invalid file type. Supported types: PNG, JPEG, JPG, PDF."));
-          }
+        }
     },
 
-    limits: {fileSize: 1000000},
+    limits: { fileSize: 1000000 },
 });
 
 
@@ -54,20 +54,20 @@ router.get("/", (req, res) => {
     res.write("hello from register");
     console.log(process.cwd());
 });
-router.post("/", upload.single('idProof'),async (req,res)=> {
-// router.post("/", async (req, res) => {
+router.post("/", upload.single('idProof'), async (req, res) => {
+    // router.post("/", async (req, res) => {
     const data = req.body;
 
     if (!req.file) {
         return res.status(400).json({ error: 'File not provided or does not meet requirements.' });
-      }
+    }
     // console.log("this is file",req.file);
 
     const [extra, ext] = req.file.filename.split('.');
     const idProof = new Image({
-    // data: fs.readFileSync(path.join(process.cwd()+"/uploads/" + req.file.filename)),
-    data : `https://guest-house-back.onrender.com/images/${req.file.filename}`,
-    contentType: ext === 'pdf' ? "application/pdf" : `image/${ext}`
+        // data: fs.readFileSync(path.join(process.cwd()+"/uploads/" + req.file.filename)),
+        data: `http://localhost:3000/images/${req.file.filename}`,
+        contentType: ext === 'pdf' ? "application/pdf" : `image/${ext}`
     });
 
     const refType = data.selectedOption;
@@ -86,9 +86,9 @@ router.post("/", upload.single('idProof'),async (req,res)=> {
         branch: data.AlumniBranch,
         currentJob: data.ALumniJobProfile,
         phone: refPhone,
-    }): new Faculty({
+    }) : new Faculty({
         name: refName,
-        email:data.FacultyEmail,
+        email: data.FacultyEmail,
         dept: data.Department,
         phone: refPhone,
     });
@@ -105,29 +105,29 @@ router.post("/", upload.single('idProof'),async (req,res)=> {
 
     try {
 
-         //check if user is already registered or not....
-  const email = data.Email;
- const alreadyAUser =  await User.find({email: email});
+        //check if user is already registered or not....
+        const email = data.Email;
+        const alreadyAUser = await User.find({ email: email });
 
- if(alreadyAUser.length!= 0) {
-    // find in pending user
-  const pendingUsers = await PendingUser.find({}).populate("user");
-  console.log(pendingUsers);
-const filteredPendingUser = pendingUsers.filter((x) => x.user.email === email);
+        if (alreadyAUser.length != 0) {
+            // find in pending user
+            const pendingUsers = await PendingUser.find({}).populate("user");
+            console.log(pendingUsers);
+            const filteredPendingUser = pendingUsers.filter((x) => x.user.email === email);
 
-if(filteredPendingUser.length != 0) {
-   return res.json({message: `User with this email ID  already sent for approval. Try with approved account or wait for approval.`});  
-}
+            if (filteredPendingUser.length != 0) {
+                return res.json({ message: `User with this email ID  already sent for approval. Try with approved account or wait for approval.` });
+            }
 
-const registeredUsers = await RegisteredUser.find({}).populate("user");
-const filteredRegisteredUsers = registeredUsers.filter((x) => x.user.email === email);
-if(filteredRegisteredUsers != 0) {
-   return res.json({message : "Email ID Already registered. Try Login with same email. "});
-}
+            const registeredUsers = await RegisteredUser.find({}).populate("user");
+            const filteredRegisteredUsers = registeredUsers.filter((x) => x.user.email === email);
+            if (filteredRegisteredUsers != 0) {
+                return res.json({ message: "Email ID Already registered. Try Login with same email. " });
+            }
 
-return res.json({message: `Approval Rejected for email ID: ${email} by the Admin. Try registering with another email. `})
+            return res.json({ message: `Approval Rejected for email ID: ${email} by the Admin. Try registering with another email. ` })
 
- }
+        }
 
 
         let refToFinal = await refTo.save();
@@ -139,7 +139,7 @@ return res.json({message: `Approval Rejected for email ID: ${email} by the Admin
 
         const finalRef = await reference.save();
 
-        if(finalRef === null) {
+        if (finalRef === null) {
             throw new Error("finalRef not added");
         }
 
@@ -147,17 +147,17 @@ return res.json({message: `Approval Rejected for email ID: ${email} by the Admin
         const proof = await idProof.save();
 
 
-        if(proof === null) {
+        if (proof === null) {
             throw new Error("id proof not added");
         }
 
 
-        const hashedPassword = await bcrypt.hash(data.Password,10);
-        if(hashedPassword === null) {
+        const hashedPassword = await bcrypt.hash(data.Password, 10);
+        if (hashedPassword === null) {
             throw new Error("hash could not be created");
         }
 
-const token = jwt.sign({email: data.Email}, process.env.JWT_SECRET);
+        const token = jwt.sign({ email: data.Email }, process.env.JWT_SECRET);
 
 
         const actualData = {
@@ -172,7 +172,7 @@ const token = jwt.sign({email: data.Email}, process.env.JWT_SECRET);
             verificationToken: token,
         };
 
-         
+
         const newUser = new User(actualData);
 
         const x = await newUser.save();
@@ -181,14 +181,14 @@ const token = jwt.sign({email: data.Email}, process.env.JWT_SECRET);
             throw new Error("user could not be added to database");
         }
         else {
-             
-            const pendingUser = new PendingUser({user: newUser._id});
-           const newPendingUser = await pendingUser.save();
+
+            const pendingUser = new PendingUser({ user: newUser._id });
+            const newPendingUser = await pendingUser.save();
 
 
-           if(newPendingUser === null) {
-             throw new Error("Pending user not created");
-           }
+            if (newPendingUser === null) {
+                throw new Error("Pending user not created");
+            }
 
 
             const msg = `user with id: ${newUser._id} created successfully`;
@@ -196,21 +196,21 @@ const token = jwt.sign({email: data.Email}, process.env.JWT_SECRET);
             res.json({ message: msg });
 
             await Promise.all([
-                axios.get(`https://guest-house-back.onrender.com/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
-    
-                axios.post(`https://guest-house-back.onrender.com/email/sendVerificationEmail`, { 
+                axios.get(`http://localhost:3000/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
+
+                axios.post(`http://localhost:3000/email/sendVerificationEmail`, {
                     name: actualData.name,
                     email: actualData.email,
                     token: token
                 },
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }),
-    
-               ]);
-       
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }),
+
+            ]);
+
         }
 
     }
@@ -218,9 +218,9 @@ const token = jwt.sign({email: data.Email}, process.env.JWT_SECRET);
         console.log({ message: err.message });
         res.json({ message: err.message });
     }
-    
-    
-    
+
+
+
 
 });
 

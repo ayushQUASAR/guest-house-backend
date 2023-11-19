@@ -19,11 +19,11 @@ Content-Type: application/json
 ###
 
 
-GET https://guest-house-back.onrender.com/users
+GET http://localhost:3000/users
 
 ###
 
-GET https://guest-house-back.onrender.com/users/654912862c2e98419f66742d
+GET http://localhost:3000/users/654912862c2e98419f66742d
 
 ### 
 
@@ -32,7 +32,7 @@ GET http://localhost:4000/users/approved/registered
 
 ###
 
-GET https://guest-house-back.onrender.com/users/654912862c2e98419f66742d/bookingHistory
+GET http://localhost:3000/users/654912862c2e98419f66742d/bookingHistory
 
 
 ###
