@@ -111,8 +111,8 @@ Content-Type: application/json
     "purpose": "Seminar conduction",
     "firstName" : "Vikas",
     "lastName" : "Jaglan",
-     "guestHouseSelected": ["1", "1"],
-     "roomSelected" : ["8", "9"],
+     "guestHouseSelected": "1",
+     "roomsSelected" : "2",
     "designation": "Professor at IIT Roorkee",
     "address": "Benaras, UP",
     "phNumber": "12345678",
@@ -123,14 +123,8 @@ Content-Type: application/json
       "bookingFor": "myself",
       "arrivalDate" : "2023-11-01",
       "departureDate" : "2023-11-03",
-    "roomBooker" : {
-        "name": "Mridul",
-        "designation":"Student at Nitj",
-        "dept": "CSE",
-        "phone": "923452355",
-        "email": "dhimanmridul91@gmail.com",
-        "address": "Baijnath, Himachal"
-    }
+        "isAdmin" : "true",
+        "AdminEmail": "mriduld.cs.21@nitj.ac.in"
 }
 
 
@@ -143,7 +137,7 @@ GET http://localhost:4000/booking
 ###
 
 
-POST https://guest-house-back.onrender.com/guestHouse
+POST http://localhost:4000/guestHouse
 
 
 ###
@@ -156,10 +150,10 @@ POST http://localhost:4000/admin/bookingApproval
 Content-Type: application/json
 
 {
-    "booking" : "65440ea741afe49f90c5aea9",
+    "booking" : "6559ae6485522d45e4d41a89",
     "status" : "accept",
-    "roomAllotted" : ["3", "3"],
-    "guestHouseAllotted" : ["1" , "2"]
+    "roomsAllotted" : ["8", "9"],
+    "guestHouseAllotted" : "1"
 }
 
 
@@ -170,6 +164,7 @@ GET  http://localhost:4000/booking/approved/approved
 
 
 ### 
+
 
 
 POST http://localhost:4000/login/forgot-password

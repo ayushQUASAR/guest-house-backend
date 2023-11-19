@@ -9,7 +9,7 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
-
+require("dotenv").config();
 
 
 const Image = require("../models/Image");
@@ -20,6 +20,7 @@ const Alumni = require("../models/user/alumni");
 const Faculty = require("../models/user/faculty");
 const Other = require("../models/user/other");
 const PendingUser = require('../models/pendingUsers');
+const RegisteredUser = require('../models/registeredUsers');
 
 const storage = multer.diskStorage({
     destination: (req,file, cb) => {
@@ -56,6 +57,7 @@ router.get("/", (req, res) => {
 router.post("/", upload.single('idProof'),async (req,res)=> {
 // router.post("/", async (req, res) => {
     const data = req.body;
+
     if (!req.file) {
         return res.status(400).json({ error: 'File not provided or does not meet requirements.' });
       }
@@ -102,6 +104,31 @@ router.post("/", upload.single('idProof'),async (req,res)=> {
 
 
     try {
+
+         //check if user is already registered or not....
+  const email = data.Email;
+ const alreadyAUser =  await User.find({email: email});
+
+ if(alreadyAUser.length!= 0) {
+    // find in pending user
+  const pendingUsers = await PendingUser.find({}).populate("user");
+  console.log(pendingUsers);
+const filteredPendingUser = pendingUsers.filter((x) => x.user.email === email);
+
+if(filteredPendingUser.length != 0) {
+   return res.json({message: `User with this email ID  already sent for approval. Try with approved account or wait for approval.`});  
+}
+
+const registeredUsers = await RegisteredUser.find({}).populate("user");
+const filteredRegisteredUsers = registeredUsers.filter((x) => x.user.email === email);
+if(filteredRegisteredUsers != 0) {
+   return res.json({message : "Email ID Already registered. Try Login with same email. "});
+}
+
+return res.json({message: `Approval Rejected for email ID: ${email} by the Admin. Try registering with another email. `})
+
+ }
+
 
         let refToFinal = await refTo.save();
 
@@ -172,6 +199,7 @@ const token = jwt.sign({email: data.Email}, process.env.JWT_SECRET);
                 axios.get(`https://guest-house-back.onrender.com/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
     
                 axios.post(`https://guest-house-back.onrender.com/email/sendVerificationEmail`, { 
+                    name: actualData.name,
                     email: actualData.email,
                     token: token
                 },

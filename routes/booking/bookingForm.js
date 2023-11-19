@@ -40,17 +40,30 @@ console.log(req.body);
     endDate: data.departureDate,
     // endTime: data.departureTime,
     // bookingFor: data.bookingFor,
-     roomBooker: {
-      // random fields
+     roomBooker: !data.isAdmin ? {
+        isAdmin: false,
         name: data.PersonName,
         // designation:data.Persondesignation,
         // dept: data.Persondepartment,
         phone: data.PersonPhone,
         email: data.PersonEmail,
         address: data.PersonAddress
+    } : {
+       isAdmin: true,
+       email: data.AdminEmail
     }
     }
-    const newBooking = new Booking(actualData);
+
+//     let adminBookingData = {
+//       ...actualData,
+//       roomBooker: {
+//         isAdmin: true,
+//         email: data.AdminEmail
+//       }
+// }
+
+  // const finalData = data.isAdmin ? actualData : adminBookingData;
+const newBooking = new Booking(actualData);
          await newBooking.save();
 
 
@@ -64,31 +77,28 @@ console.log(req.body);
 //   $push : {bookingHistory: newBooking._id}
 // });
 
-const registeredUsers = await RegisteredUser.find({}).populate('user');
-const user = registeredUsers.filter((user) => user.user.email === actualData.roomBooker.email);
-await RegisteredUser.updateOne({
-  _id: user[0]._id
-},
-{ 
-  $push : {bookingHistory : newBooking._id}
-}
-)
-
-
-// const xx = await x.findOne();
-
-
-
-
-//###Task 3: send the email to admin, regarding the booking form, work in bookingEmail.js
-await axios.post("https://guest-house-back.onrender.com/email/booking/adminNotification", {
-      actualData
-    }
-      , {
-      headers :{
-        "Content-Type" : "application/json"
+if(!newBooking.roomBooker.isAdmin) {
+      const registeredUsers = await RegisteredUser.find({}).populate('user');
+      const user = registeredUsers.filter((user) => user.user.email === actualData.roomBooker.email);
+      await RegisteredUser.updateOne({
+        _id: user[0]._id
+      },
+      { 
+        $push : {bookingHistory : newBooking._id}
       }
-});
+      )
+      
+      //###Task 3: send the email to admin, regarding the booking form, work in bookingEmail.js
+      await axios.post("https://guest-house-back.onrender.com/email/booking/adminNotification", {
+            actualData
+          }
+            , {
+            headers :{
+              "Content-Type" : "application/json"
+            }
+      });
+  
+}
 
 
     }

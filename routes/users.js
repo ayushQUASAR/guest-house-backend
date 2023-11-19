@@ -127,7 +127,7 @@ res.status(500).json({message: err.message});
 
 router.get("/approved/rejected", async (req,res) => {
     try {
-        const users =  await RejectedUser.find({});
+        const users =  await RejectedUser.find({}).populate("user");
                  console.log(users);
                res.status(200).json(users);
         

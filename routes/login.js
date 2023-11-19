@@ -48,6 +48,8 @@ catch(err) {
 }
 });
 
+
+
 router.get("/admin/:id", async (req,res) => {
     const  id = req.params.id;
 try {
@@ -102,6 +104,8 @@ router.post("/", async (req,res) => {
             console.log(`${user[0].isAdmin ? "Admin" : "User"} login successful`);
             req.session.user = user1;
             req.session.isAdmin = user[0].isAdmin;
+
+
             res.status(200).json({message: `${user[0].isAdmin ? "Admin" : "User"} login successful`, isAdmin: user[0].isAdmin,id: user[0].isAdmin ? user[0]._id:  user1[0]._id});
            }
           }

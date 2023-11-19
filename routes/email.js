@@ -33,10 +33,10 @@ const emailHTMLTemplate = ({email}) =>  `
 <p> wassup </p>
  `;
 
- const emailVerificationHTMLTemplate = ({email,token}) =>  {
+ const emailVerificationHTMLTemplate = ({name, email,token}) =>  {
     const verificationLink = `https://guest-house-back.onrender.com/email/${email}/verify/${token}`;
 
-  return  `<h3> Hi ${email},</h3> <br/>
+  return  `<h3> Hi ${name},</h3> <br/>
     <p>We just need to verify your email address before you can access the <u>ONLINE BOOKING</u>.</p>
     
     <p>Verify your email address: ${verificationLink}</p>
@@ -87,7 +87,7 @@ const emailHTMLTemplate = ({email}) =>  `
 `;
 
 
-const updatePasswordTemplate = ({email, token}) => {
+const updatePasswordTemplate = ({ email, token}) => {
 
     const verificationLink = `https://guest-house-back.onrender.com/login/forgot-password/verify/${token}`;
     return `
@@ -99,7 +99,7 @@ For your account security, please update your password by clicking on the link b
 <br/>
 ${verificationLink}
 <br/>
-This link is valid for 3 hours. Reach out to us at ADMIN_EMAIL_HERE, if you encounter any issues.
+This link is valid for 3 hours. Reach out to us at mriduld.cs.21@nitj.ac.in, if you encounter any issues.
 <br/>
 <br/>
 Best Regards,
@@ -165,6 +165,7 @@ try {
 router.post("/sendVerificationEmail/", async (req,res) => {
    const email= req.body.email;
 const token = req.body.token;
+const name = req.body.name;
 
    const mailOptions = {
     from: {
@@ -173,7 +174,7 @@ const token = req.body.token;
     },
     to: email,
     subject: "Confirm Your Email Address",
-    html : emailVerificationHTMLTemplate({email, token})
+    html : emailVerificationHTMLTemplate({name, email, token})
 };
 
 try {

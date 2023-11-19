@@ -90,11 +90,15 @@ const bookingSchema = new mongoose.Schema({
    guestHouseAllotted: {
           type: Number
    },
-   
+ 
     roomBooker: {
+        isAdmin : {
+          type: Boolean, 
+          default: false,
+        },
         name: {
             type: String,
-             required: true
+            //  required: true
         },
         designation:{
             type: String, 
