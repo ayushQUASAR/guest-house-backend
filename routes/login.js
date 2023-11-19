@@ -25,7 +25,7 @@ try {
     }
 
     const adminLogin = new Login({
-        email: "mriduld.cs.21@nitj.ac.in",
+        email: "avirals.cs.22@nitj.ac.in",
         password: hashedPassword,
         isAdmin: true
     });

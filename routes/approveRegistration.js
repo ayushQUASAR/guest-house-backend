@@ -8,6 +8,16 @@ const Ref = require("../models/user/ref");
 const Login = require("../models/login");
 const PendingUser = require("../models/pendingUsers");
 
+router.delete("/", async (req,res) => {
+  try {
+         await RegApproval.deleteMany({});
+         res.json({message: "Registration Approvals Deleted Successfully"});
+  }
+  catch(err) {
+res.json({message: err.message})
+  }
+})
+
 router.post("/", async (req,res) => {
       const approvalInfo = req.body;
   console.log(approvalInfo);
