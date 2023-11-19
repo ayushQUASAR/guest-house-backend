@@ -116,16 +116,16 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             const filteredPendingUser = pendingUsers.filter((x) => x.user.email === email);
 
             if (filteredPendingUser.length != 0) {
-                return res.json({ message: `User with this email ID  already sent for approval. Try with approved account or wait for approval.` });
+                return res.json({ message: `User with this email ID  already sent for approval. Try with approved account or wait for approval.` , status: "pending"});
             }
 
             const registeredUsers = await RegisteredUser.find({}).populate("user");
             const filteredRegisteredUsers = registeredUsers.filter((x) => x.user.email === email);
             if (filteredRegisteredUsers != 0) {
-                return res.json({ message: "Email ID Already registered. Try Login with same email. " });
+                return res.json({ message: "Email ID Already registered. Try Login with same email. ", status: "accepted" });
             }
 
-            return res.json({ message: `Approval Rejected for email ID: ${email} by the Admin. Try registering with another email. ` })
+            return res.json({ message: `Approval Rejected for email ID: ${email} by the Admin. Try registering with another email. `, status: "rejected" })
 
         }
 
