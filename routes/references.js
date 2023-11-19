@@ -24,6 +24,16 @@ router.get("/", async (req, res) => {
 
 })
 
+router.delete("/", async (req,res) => {
+    try {
+           await Ref.deleteMany({});
+           res.json({message: "references Deleted Successfully"});
+    }
+    catch(err) {
+ res.json({message: err.message})
+    }
+ })
+
 
 router.get("/type/:id", async (req, res) => {
     const type = req.params.id;
@@ -44,5 +54,22 @@ router.get("/type/:id", async (req, res) => {
 
 })
 
+
+router.delete("/type/:id", async (req,res) => {
+    let type = req.params.id;
+   
+    try {
+        let ref = type === 'student' ? await Student.deleteMany({})
+        : type === 'faculty' ? await Faculty.deleteMany({})
+        : await Alumni.deleteMany({});
+           
+        res.status(200).send({message : `Reference type: ${type} deleted successfully`});
+     }
+
+    catch(err) {
+        console.log({message: err.message});
+        res.status(500).json({message: err.message});
+    }
+ })
 
 module.exports = router;

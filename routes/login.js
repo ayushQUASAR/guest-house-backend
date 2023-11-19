@@ -24,11 +24,11 @@ router.get("/admin", async (req, res) => {
             throw new Error("hash could not be created");
         }
 
-        const adminLogin = new Login({
-            email: "mriduld.cs.21@nitj.ac.in",
-            password: hashedPassword,
-            isAdmin: true
-        });
+    const adminLogin = new Login({
+        email: "avirals.cs.22@nitj.ac.in",
+        password: hashedPassword,
+        isAdmin: true
+    });
 
 
 

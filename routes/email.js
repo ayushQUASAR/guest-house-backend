@@ -42,7 +42,7 @@ const emailVerificationHTMLTemplate = ({ name, email, token }) => {
     <p>Verify your email address: ${verificationLink}</p>
     <br />
     
-    <p>For instant approval, contact ADMIN_EMAIL_HERE</p>
+    <p>For instant approval, contact avirals.cs.22@nitj.ac.in</p>
     <br />
     
     <p>Thanks! - The NITJ Guest House Online Booking team </p>`;
@@ -99,7 +99,7 @@ For your account security, please update your password by clicking on the link b
 <br/>
 ${verificationLink}
 <br/>
-This link is valid for 3 hours. Reach out to us at mriduld.cs.21@nitj.ac.in, if you encounter any issues.
+This link is valid for 3 hours. Reach out to us at avirals.cs.22@nitj.ac.in, if you encounter any issues.
 <br/>
 <br/>
 Best Regards,
