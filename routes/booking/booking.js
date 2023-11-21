@@ -55,16 +55,22 @@ try{
             // booked room in that guest house 
            const bookings =   await Booking.find({status: "approved", guestHouseSelected: guestHouse}, {startDate: 1, endDate: 1, name: 1, email: 1, roomsAllotted: 1 });
           
-           const finalBooking = bookings.map((booking) => {
-            let newBooking  = {
-              checkInDate: booking.startDate,
-              checkOutDate: booking.endDate,
-              name: booking.name,
-              email: booking.email,
-              rooms: booking.roomsAllotted
-            }
+           const finalBooking = [];
+           bookings.forEach((booking) => {
+         
 
-            return newBooking;
+            for(let roomId of booking.roomsAllotted) {
+              let newBooking  = {
+                checkInDate: booking.startDate,
+                checkOutDate: booking.endDate,
+                name: booking.name,
+                email: booking.email,
+                  roomId
+              }
+
+              finalBooking.push(newBooking);
+            }
+            
            })
 
            return res.status(200).json(finalBooking);
