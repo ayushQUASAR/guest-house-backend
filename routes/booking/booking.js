@@ -49,7 +49,6 @@ router.get('/approved/:approvalType', async (req,res) => {
 try{
     if(approvalType === 'pending' || approvalType === 'approved' || approvalType === 'cancelled' || approvalType === 'rejected') {
         if(approvalType === 'approved') {
-          console.log("idhar error aa rha");
           if(req.query) {
             const {guestHouse} = req.query;
             // booked room in that guest house 
