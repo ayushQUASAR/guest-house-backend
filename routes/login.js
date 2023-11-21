@@ -145,6 +145,7 @@ router.delete("/", async (req, res) => {
 
 
 router.post("/forgot-password", async (req, res) => {
+    console.log()
     const email = req.body.email;
     try {
         const user = await Login.find({ email: email });
@@ -155,7 +156,7 @@ router.post("/forgot-password", async (req, res) => {
 
         const token = jwt.sign({ email: email }, process.env.JWT_SECRET, { expiresIn: '3h' })
 
-        res.json({ message: "successful work till this point" });
+        res.json({ message: "Check Mail to update password..." });
         await axios.get(`http://localhost:3000/email/forgot-password/${encodeURIComponent(email)}/token/${encodeURIComponent(token)}`);
 
     }
@@ -178,6 +179,7 @@ router.get("/forgot-password/verify/:token", (req, res) => {
 
 
         res.end();
+
     }
     catch (err) {
         res.json({ message: err.message })
@@ -204,14 +206,14 @@ router.post("/update-password", async (req, res) => {
 
         res.json({ message: "Password updated successfully" });
 
-        if (!details.isAdmin) {
-            await User.update({
-                email: details.email
-            }, {
-                password: hashedPassword
-            }
-            );
-        }
+        // if (!details.isAdmin) {
+        //     await User.update({
+        //         email: details.email
+        //     }, {
+        //         password: hashedPassword
+        //     }
+        //     );
+        // }
     }
     catch (err) {
         res.json({ message: err.message })

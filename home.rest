@@ -28,7 +28,7 @@ GET http://localhost:3000/users/654912862c2e98419f66742d
 ### 
 
 
-GET http://localhost:4000/users/approved/registered
+GET http://localhost:3000/users/approved/registered
 
 ###
 
@@ -131,7 +131,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:4000/booking 
+GET http://localhost:3000/booking 
 
 
 ###
@@ -182,7 +182,6 @@ POST http://localhost:4000/login/update-password
 Content-Type: application/json
 
 {
-    "isAdmin" : "true",
     "email": "mriduld.cs.21@nitj.ac.in",
     "password" : "nitj"
 }

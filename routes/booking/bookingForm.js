@@ -77,7 +77,7 @@ router.post("/", async (req, res) => {
     //   $push : {bookingHistory: newBooking._id}
     // });
 
-    if (!newBooking.roomBooker.isAdmin) {
+    if (!data.isAdmin) {
       const registeredUsers = await RegisteredUser.find({}).populate('user');
       const user = registeredUsers.filter((user) => user.user.email === actualData.roomBooker.email);
       await RegisteredUser.updateOne({

@@ -48,7 +48,30 @@ router.get('/approved/:approvalType', async (req,res) => {
     const approvalType = req.params.approvalType;
 try{
     if(approvalType === 'pending' || approvalType === 'approved' || approvalType === 'cancelled' || approvalType === 'rejected') {
-   
+        if(approvalType === 'approved') {
+          console.log("idhar error aa rha");
+          if(req.query) {
+            const {guestHouse} = req.query;
+            // booked room in that guest house 
+           const bookings =   await Booking.find({status: "approved", guestHouseSelected: guestHouse}, {startDate: 1, endDate: 1, name: 1, email: 1, roomsAllotted: 1 });
+          
+           const finalBooking = bookings.map((booking) => {
+            let newBooking  = {
+              checkInDate: booking.startDate,
+              checkOutDate: booking.endDate,
+              name: booking.name,
+              email: booking.email,
+              rooms: booking.roomsAllotted
+            }
+
+            return newBooking;
+           })
+
+           return res.status(200).json(finalBooking);
+                         
+          }
+         
+        }
         const booking = await Booking.find({status: approvalType});
         res.status(200).json(booking);  
   }
