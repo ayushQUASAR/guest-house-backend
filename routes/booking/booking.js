@@ -117,14 +117,14 @@ res.json({message: "Booking Cancelled Successfully..."});
   const rooms = y.roomsAllotted;
   const guestHouses = y.guestHouseAllotted;
 
-  for(let i = 0;i<=rooms.length;i++) {
-    const incObject = {};
-    incObject[`rooms.${rooms[i]-1}`] = false;
-       await guestHouse.updateOne({
-        guestHouseId: guestHouses
-       }, {
-        $set : incObject
-       })
+  for(let i = 0;i<rooms.length;i++) {
+       const incObject = {};
+       incObject[`rooms.${rooms[i]-1}`] = true;
+        await guestHouse.updateOne({
+              guestHouseId: guestHouses
+        }, {
+         $set:  incObject
+        });
   }
 
 
