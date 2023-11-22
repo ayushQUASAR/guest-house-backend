@@ -102,8 +102,7 @@ router.post("/", async (req,res) => {
               throw new Error("rejected user could not be added");
             }
 
-                res.json({message: `${x[0].name} rejection confirmed..`});
-            
+                res.json({message: `${x[0].name} rejection confirmed..`});  
         }
 
 

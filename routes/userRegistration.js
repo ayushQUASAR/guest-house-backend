@@ -125,7 +125,11 @@ router.post("/", upload.single('idProof'), async (req, res) => {
                 return res.json({ message: "Email ID Already registered. Try Login with same email. ", status: "accepted" });
             }
 
-            return res.json({ message: `Approval Rejected for email ID: ${email} by the Admin. Try registering with another email. `, status: "rejected" })
+            // return  res.json({ message: `Approval Rejected for email ID: ${email} by the Admin. Try registering with another email. `, status: "rejected" })
+          
+              // user is rejected user
+                 await User.deleteOne({email: email});
+
 
         }
 
