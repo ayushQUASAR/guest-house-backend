@@ -14,6 +14,11 @@ isAdmin : {
     type: Boolean,
     required: true,
     default: false,
+},
+isMainAdmin:  {
+    type: Boolean,
+    required: true,
+    default: false,
 }
 }, { timestamps: true });
 

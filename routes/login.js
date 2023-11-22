@@ -25,11 +25,11 @@ router.get("/admin", async (req, res) => {
         }
 
     const adminLogin = new Login({
-        email: "avirals.cs.22@nitj.ac.in",
+        email: process.env.ADMIN_EMAIL,
         password: hashedPassword,
+        isMainAdmin: true,
         isAdmin: true
     });
-
 
 
         const AdminUser = await adminLogin.save();
@@ -47,6 +47,39 @@ router.get("/admin", async (req, res) => {
         res.json({ message: err.message });
     }
 });
+
+
+router.post("/admin", async (req,res) => {
+    const data = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+
+        if (hashedPassword === null) {
+            throw new Error("hash could not be created");
+        }
+
+    const adminLogin = new Login({
+        email: data.email,
+        password: hashedPassword,
+        isAdmin: true
+    });
+
+
+        const AdminUser = await adminLogin.save();
+        if (AdminUser === null) {
+            throw new Error("admin not created");
+        }
+
+        //created new user
+        console.log("admin created successfully");
+        res.status(201).json({ message: "admin created successfully" });
+
+    }
+
+    catch (err) {
+        res.json({ message: err.message });
+    }
+})
 
 
 
@@ -77,7 +110,9 @@ router.get("/", async (req, res) => {
     catch (err) {
         res.json({ message: err.message })
     }
-})
+});
+
+
 
 
 router.post("/", async (req, res) => {
@@ -106,9 +141,17 @@ router.post("/", async (req, res) => {
                 console.log(`${user[0].isAdmin ? "Admin" : "User"} login successful`);
                 req.session.user = user1;
                 req.session.isAdmin = user[0].isAdmin;
+               const obj = { message: `${user[0].isAdmin ? "Admin" : "User"} login successful`, isAdmin: user[0].isAdmin, id: user[0].isAdmin ? user[0]._id : user1[0]._id };
 
+                    
+               if(user[0].isMainAdmin) {
+                        obj["isMainAdmin"] = true;
+               }
 
-                res.status(200).json({ message: `${user[0].isAdmin ? "Admin" : "User"} login successful`, isAdmin: user[0].isAdmin, id: user[0].isAdmin ? user[0]._id : user1[0]._id });
+     
+                res.status(200).json(obj);
+
+               
             }
         }
     }

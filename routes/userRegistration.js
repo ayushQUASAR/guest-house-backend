@@ -22,6 +22,7 @@ const Other = require("../models/user/other");
 const PendingUser = require('../models/pendingUsers');
 const RegisteredUser = require('../models/registeredUsers');
 
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads');
