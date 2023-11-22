@@ -89,15 +89,17 @@ router.post("/", async (req, res) => {
         console.log(user);
         if (user.length === 0) {
             console.log("email does not matches");
-            res.status(401).json({ message: "email does not matches" });
+            // res.status(401).json({ message: "email does not matches" });
+            throw new Error("Username or password invalid.");
         }
         else {
             const result = await bcrypt.compare(loginData.Password, user[0].password);
             // const result = loginData.Password === user.password;
 
             if (result === false) {
-                console.log(`not valid ${user[0].isAdmin ? "admin" : "user"}`);
-                res.status(403).json({ message: `not valid ${user[0].isAdmin ? "admin" : "user"}` });
+                // console.log(`not valid ${user[0].isAdmin ? "admin" : "user"}`);
+                // res.status(403).json({ message: `not valid ${user[0].isAdmin ? "admin" : "user"}` });
+                throw new Error("Username or password invalid.");
             }
             else {
                 let user1 = await User.find({ email: user[0].email });

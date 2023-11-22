@@ -57,11 +57,14 @@ try {
     for(let i = 0;i<data.length;i++) {
     
         let item = data[i];
+        console.log(item.roomsAllotted);
    const repeatedItem = item.guestHouseAllotted === 1 ? {
     acBooked : item.roomsAllotted.length
+} : item.guestHouseAllotted === 2 ?  {
+    nonAc1Booked: item.roomsAllotted.length
 } : {
-    nonAcBooked: item.roomsAllotted.length
-};
+    nonAc2Booked: item.roomsAllotted.length
+}
         let start_date = new Date(item.startDate);
         let end_date = new Date(item.endDate);
         while(start_date<=end_date) {
