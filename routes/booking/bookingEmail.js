@@ -110,6 +110,7 @@ const bookingDetails = req.body.booking;
             address: "mrimann96@gmail.com",
         },
         to: mailList, // we need to change here to user email
+        cc: process.env.ADMIN_EMAIL, // replace with the admin's email
         subject: "Regarding approval for guest house",
         html: userApprovalNotificationTemplate({guestHouseDetails, roomsDetails}),
     };
