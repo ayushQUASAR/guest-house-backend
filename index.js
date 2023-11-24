@@ -66,6 +66,7 @@ app.get("/", (req, res) => {
 
 // for session checking
 app.get('/check-session', (req, res) => {
+    // console.log(req.session);
     if (req.session.user) {
         res.send({ loggedIn: true, user: req.session.user, isAdmin: req.session.isAdmin });
         console.log("loggedIn is true");

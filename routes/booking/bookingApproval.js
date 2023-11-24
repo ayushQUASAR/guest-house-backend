@@ -37,7 +37,8 @@ router.post("/", async (req, res) => {
    const actualData = data.status === 'reject' ? {
       booking: data.booking,
       // accept or reject
-      status: 'reject'
+      status: 'reject',
+      rejectionReason: data.reason,
    } : {
       booking: data.booking,
       status: 'accept',

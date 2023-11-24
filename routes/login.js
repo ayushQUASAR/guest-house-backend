@@ -61,7 +61,8 @@ router.post("/admin", async (req,res) => {
     const adminLogin = new Login({
         email: data.email,
         password: hashedPassword,
-        isAdmin: true
+        isAdmin: true,
+        isMainAdmin: data.isMainAdmin
     });
 
 
@@ -127,7 +128,7 @@ router.post("/", async (req, res) => {
             // res.status(401).json({ message: "email does not matches" });
             throw new Error("Username or password invalid.");
         }
-        else {
+      
             const result = await bcrypt.compare(loginData.Password, user[0].password);
             // const result = loginData.Password === user.password;
 
@@ -147,12 +148,8 @@ router.post("/", async (req, res) => {
                if(user[0].isMainAdmin) {
                         obj["isMainAdmin"] = true;
                }
-
-     
+                  
                 res.status(200).json(obj);
-
-               
-            }
         }
     }
     catch (err) {

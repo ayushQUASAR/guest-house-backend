@@ -21,7 +21,7 @@ rooms: {
 
 roomPrice:{
     type : Number,
-    default: 1200
+    default: 300
 },
 
 
@@ -37,7 +37,7 @@ roomType: {
 guestHouseSchema.pre('save', function (next) {
     if(this.guestHouseId === 1) {
         this.noOfRooms = 10;
-        this.roomPrice = 1200;
+        this.roomPrice = 1000;
         this.roomType = 'AC';
         this.rooms = new Array(10).fill(false);
     }

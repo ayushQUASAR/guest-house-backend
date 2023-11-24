@@ -25,6 +25,7 @@ guestHouseAllotted:{
 paymentDeadline: {
    type: Number
 },
+rejectionReason: String
 }, { timestamps: true });
 
 

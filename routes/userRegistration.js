@@ -117,7 +117,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             const filteredPendingUser = pendingUsers.filter((x) => x.user.email === email);
 
             if (filteredPendingUser.length != 0) {
-                return res.json({ message: `User with this email ID  already sent for approval. Try with approved account or wait for approval.` , status: "pending"});
+                return res.json({ message: `Verify User using the email verification link...` , status: "pending"});
             }
 
             const registeredUsers = await RegisteredUser.find({}).populate("user");
@@ -128,8 +128,8 @@ router.post("/", upload.single('idProof'), async (req, res) => {
 
             // return  res.json({ message: `Approval Rejected for email ID: ${email} by the Admin. Try registering with another email. `, status: "rejected" })
           
-              // user is rejected user
-                 await User.deleteOne({email: email});
+              // user is rejected user: now that is not the case...
+                //  await User.deleteOne({email: email});
 
 
         }

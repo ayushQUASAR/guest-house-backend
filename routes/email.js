@@ -5,6 +5,9 @@ dotenv.config();
 
 const User = require("../models/user/user");
 const bookingEmailRoute = require('./booking/bookingEmail');
+const Login = require("../models/login");
+const PendingUser = require("../models/pendingUsers");
+const RegisteredUser = require("../models/registeredUsers");
 
 const router = express.Router();
 
@@ -132,8 +135,30 @@ router.get("/", async (req, res) => {
 
 
 
-router.get("/verificationSuccess/:id", (req, res) => {
-    res.send(`<h1>${req.params.id} successfully verified</h1>`);
+router.get("/verificationSuccess/:id", async (req, res) => {
+try {
+    
+    res.write(`<h1>${req.params.id} successfully verified</h1>`);
+    const [user] =  await User.find({email: req.params.id});
+    const newLogin = new Login({
+        email: user.email,
+        password: user.password
+    });
+
+    const y = new RegisteredUser({
+        user: user._id
+      });   
+
+      await Promise.all([
+        newLogin.save(),
+        PendingUser.deleteOne({user: user._id}),
+        y.save()
+      ]);
+
+}
+catch(err) {
+    res.json({message: err.message});
+}
 });
 
 
