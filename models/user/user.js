@@ -15,7 +15,7 @@ name: {
 },
 phone: {
 type:String,
-required: true,
+required: false,
 },
 email: {
     type: String,
@@ -28,7 +28,7 @@ city: {
 },
 address: {
     type: String,
-required: true,
+required: false,
 },
 govtID: {
     type: String, 

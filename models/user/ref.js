@@ -13,13 +13,13 @@ const refSchema  = new mongoose.Schema({
     // },
       refTo : {
         type:  mongoose.Schema.Types.ObjectId,
-        required: true,
+        required: false,
         refPath: 'refType'
     },
         refType : {
             type: String,
-            required: true,
-            enum: ['student', 'alumni','other','faculty'],
+            required: false,
+            enum: ['student', 'alumni','other','faculty', ''],
         }, 
        
         refFrom : {
