@@ -200,21 +200,40 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             console.log(msg);
             res.json({ message: msg });
 
-            await Promise.all([
-                axios.get(`http://localhost:3000/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
+            if(email.endsWith("@nitj.ac.in")) {
+                await Promise.all([
+    
+                    axios.post(`http://localhost:3000/email/sendVerificationEmail`, {
+                        name: actualData.name,
+                        email: actualData.email,
+                        token: token
+                    },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }),
+    
+                ]);
+            }
 
-                axios.post(`http://localhost:3000/email/sendVerificationEmail`, {
-                    name: actualData.name,
-                    email: actualData.email,
-                    token: token
-                },
-                    {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }),
-
-            ]);
+            else {
+                await Promise.all([
+                    axios.get(`http://localhost:3000/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
+    
+                    axios.post(`http://localhost:3000/email/sendVerificationEmail`, {
+                        name: actualData.name,
+                        email: actualData.email,
+                        token: token
+                    },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }),
+    
+                ]);
+            }
 
         }
 
