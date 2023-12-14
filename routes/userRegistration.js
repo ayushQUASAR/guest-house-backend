@@ -220,7 +220,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             else {
                 await Promise.all([
                     axios.get(`http://localhost:3000/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
-    
+
                     axios.post(`http://localhost:3000/email/sendVerificationEmail`, {
                         name: actualData.name,
                         email: actualData.email,

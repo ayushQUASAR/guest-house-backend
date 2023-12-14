@@ -140,21 +140,25 @@ try {
     
     res.write(`<h1>${req.params.id} successfully verified</h1>`);
     const [user] =  await User.find({email: req.params.id});
-    const newLogin = new Login({
-        email: user.email,
-        password: user.password
-    });
 
-    const y = new RegisteredUser({
-        user: user._id
-      });   
-
-      await Promise.all([
-        newLogin.save(),
-        PendingUser.deleteOne({user: user._id}),
-        y.save()
-      ]);
-
+    if(user.emailVerified) {
+        const newLogin = new Login({
+            email: user.email,
+            password: user.password
+        });
+    
+        const y = new RegisteredUser({
+            user: user._id
+          });   
+    
+          await Promise.all([
+            newLogin.save(),
+            PendingUser.deleteOne({user: user._id}),
+            y.save()
+          ]);
+    
+    }
+   
 }
 catch(err) {
     res.json({message: err.message});
