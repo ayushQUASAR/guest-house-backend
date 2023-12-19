@@ -15,6 +15,8 @@ const cronJobForBookingCompletion = () => {
 
             const checkedOutBookings = await Booking.find({ status: "approved", endDate: { $lt: currentDate } });
 
+// console.log("bookingScheduler.js" + checkedOutBookings);
+
             for (const booking of checkedOutBookings) {
                 await Booking.updateOne({
                     _id: booking._id
