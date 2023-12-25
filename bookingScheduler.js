@@ -5,7 +5,7 @@ const axios = require('axios');
 
 
 const cronJobForBookingCompletion = () => {
-    cron.schedule("0 0 * * *", async () => {
+    cron.schedule("0 * * * *", async () => {
 
         console.log("hello from cron job on ", new Date());
         //1. update the status to Checked Out

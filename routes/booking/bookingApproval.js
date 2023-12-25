@@ -96,7 +96,8 @@ router.post("/", async (req, res) => {
                headers: {
                   "Content-Type": 'application/json'
                }
-            })
+            }),
+            // axios.get("http://localhost:3000/calendar/create"),
          ])
 
          //### Task 4: Room providing logic
