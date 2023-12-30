@@ -69,7 +69,7 @@ try {
 }
         let start_date = new Date(item.startDate);
         let end_date = new Date(item.endDate);
-        while(start_date<=end_date) {
+        while(start_date<end_date) {
            // find date in array 
            const calendarDates = await Calendar.find({});
    
