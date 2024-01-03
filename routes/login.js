@@ -18,7 +18,7 @@ const User = require("../models/user/user");
 
 router.get("/admin", async (req, res) => {
     try {
-        const admin = await Login.find({});
+        const admin = await Login.find({isAdmin: true});
         if (admin.length === 0) {
             res.status(404).json({ message: "no admin found, matching that id" });
         }
@@ -81,6 +81,23 @@ router.get("/admin/:id", async (req, res) => {
     catch (err) {
         res.status(500).json({ message: err.message });
     }
+});
+
+router.delete("/admin/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+
+        const admin = await Login.findOne({ _id: id });
+        if (!admin) {
+            return res.status(404).json({ message: "No admin found with that id" });
+        }
+
+        await Login.deleteOne({ _id: id });
+        res.status(200).json({ message: "Admin deleted successfully" });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    } 
 });
 
 router.get("/", async (req, res) => {
