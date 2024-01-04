@@ -117,7 +117,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             const filteredPendingUser = pendingUsers.filter((x) => x.user.email === email);
 
             if (filteredPendingUser.length != 0) {
-                return res.json({ message: `Verify User using the email verification link...` , status: "pending"});
+                return res.json({ message: `Verify User using the email verification link...`, status: "pending" });
             }
 
             const registeredUsers = await RegisteredUser.find({}).populate("user");
@@ -127,9 +127,9 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             }
 
             // return  res.json({ message: `Approval Rejected for email ID: ${email} by the Admin. Try registering with another email. `, status: "rejected" })
-          
-              // user is rejected user: now that is not the case...
-                //  await User.deleteOne({email: email});
+
+            // user is rejected user: now that is not the case...
+            //  await User.deleteOne({email: email});
 
 
         }
@@ -201,9 +201,9 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             console.log(msg);
             res.json({ message: msg });
 
-            if(email.endsWith("@nitj.ac.in")) {
+            if (email.endsWith("@nitj.ac.in")) {
                 await Promise.all([
-    
+
                     axios.post(`http://localhost:3000/email/sendVerificationEmail`, {
                         name: actualData.name,
                         email: actualData.email,
@@ -214,7 +214,17 @@ router.post("/", upload.single('idProof'), async (req, res) => {
                                 'Content-Type': 'application/json'
                             }
                         }),
-    
+
+                    axios.post(`http://localhost:3000/admin/approveRegistration`, {
+                        id: newUser._id,
+                        status: "accepted"
+                    },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+
                 ]);
             }
 
@@ -232,7 +242,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
                                 'Content-Type': 'application/json'
                             }
                         }),
-    
+
                 ]);
             }
 

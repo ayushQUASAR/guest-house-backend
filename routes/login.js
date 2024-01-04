@@ -18,33 +18,16 @@ const User = require("../models/user/user");
 
 router.get("/admin", async (req, res) => {
     try {
-        const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASS, 10);
-
-        if (hashedPassword === null) {
-            throw new Error("hash could not be created");
+        const admin = await Login.find({isAdmin: true});
+        if (admin.length === 0) {
+            res.status(404).json({ message: "no admin found, matching that id" });
         }
 
-    const adminLogin = new Login({
-        email: process.env.ADMIN_EMAIL,
-        password: hashedPassword,
-        isMainAdmin: true,
-        isAdmin: true
-    });
-
-
-        const AdminUser = await adminLogin.save();
-        if (AdminUser === null) {
-            throw new Error("admin not created");
-        }
-
-        //created new user
-        console.log("admin created successfully");
-        res.status(201).json({ message: "admin created successfully" });
+        res.status(200).json(admin);
 
     }
-
     catch (err) {
-        res.json({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
 });
 
@@ -98,6 +81,23 @@ router.get("/admin/:id", async (req, res) => {
     catch (err) {
         res.status(500).json({ message: err.message });
     }
+});
+
+router.delete("/admin/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+
+        const admin = await Login.findOne({ _id: id });
+        if (!admin) {
+            return res.status(404).json({ message: "No admin found with that id" });
+        }
+
+        await Login.deleteOne({ _id: id });
+        res.status(200).json({ message: "Admin deleted successfully" });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    } 
 });
 
 router.get("/", async (req, res) => {
