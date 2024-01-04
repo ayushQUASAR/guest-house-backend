@@ -64,7 +64,25 @@ router.get("/:id", async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 })
-module.exports = router;
+
+
+router.delete("/:id", async (req, res) => {
+    const userId = req.params.id;
+    try {
+
+        const user = await User.findOne({ _id: userId });
+        if (!user) {
+            return res.status(404).json({ message: "No user found with that id" });
+        }
+
+        await User.deleteOne({ _id: userId });
+        res.status(200).json({ message: "User deleted successfully" });
+
+    } catch (err) {
+        console.log({ message: err.message })
+        res.status(500).json({ message: err.message })
+    }
+});
 
 
 router.get('/approved/registered', async (req, res) => {
@@ -189,3 +207,4 @@ router.delete("/approved/pending", async (req, res) => {
 
 });
 
+module.exports = router;
