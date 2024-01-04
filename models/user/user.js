@@ -4,11 +4,7 @@ const Image = require('../Image');
 
 
 const userSchema = new mongoose.Schema({
-    // _id: {
-    //     type:  mongoose.Schema.Types.ObjectId,
-    //     required: true,
-    //     unique: true,
-    // },
+  
 name: {
     type: String,
     required: true,
@@ -64,6 +60,11 @@ emailVerified: {
     type: Boolean,
     required: true,
     default: false,
+},
+registerOption: {
+   type:  Number,
+   required: true,
+   default: 1
 }
 }, { timestamps: true });
 

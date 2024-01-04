@@ -175,6 +175,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             idProof: proof._id,
             reference: finalRef._id,
             verificationToken: token,
+            registerOption: data.registerOption
         };
 
 

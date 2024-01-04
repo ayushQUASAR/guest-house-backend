@@ -41,22 +41,18 @@ router.delete("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     const userId = req.params.id;
-    try {
-        const user = await User.find({ _id: userId }).populate('reference').populate('idProof');
+    try {   
+        
+        const user = await User.find({ _id: userId }).populate('idProof').populate('reference');
 
-
-        const ref = await Ref.find({ _id: user[0].reference._id }).populate('refTo');
-
-        //    console.log({user: user[0], referenceDetails: ref[0]});
-
-        res.json({ userDetails: user[0], referenceDetails: ref[0] })
-
-        // const finalUser = {
-        //     ...user[0],
-        //     reference: ref[0],
-        // }
-        // console.log(finalUser);
-        // console.log(ref);
+        if(user.registerOption === 1) {
+              return res.json({ userDetails: user[0] })
+        }
+        
+       else if(user.registerOption === 2) {
+            const ref = await Ref.find({ _id: user[0].reference._id }).populate('refTo');
+           return res.json({  userDetails: user[0], referenceDetails: ref[0] })
+        }
 
     }
     catch (err) {
