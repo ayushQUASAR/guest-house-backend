@@ -135,18 +135,21 @@ router.post("/", upload.single('idProof'), async (req, res) => {
         }
 
 
-        let refToFinal = await refTo.save();
+   
+            let refToFinal = await refTo.save();
 
-        const reference = new Ref({
-            refType: data.selectedOption,
-            refTo: refToFinal._id,
-        });
-
-        const finalRef = await reference.save();
-
-        if (finalRef === null) {
-            throw new Error("finalRef not added");
-        }
+            const reference = new Ref({
+                refType: data.selectedOption,
+                refTo: refToFinal._id,
+            });
+    
+            const finalRef = await reference.save();
+    
+            if (finalRef === null) {
+                throw new Error("finalRef not added");
+            }
+        
+       
 
 
         const proof = await idProof.save();
@@ -164,19 +167,31 @@ router.post("/", upload.single('idProof'), async (req, res) => {
 
         const token = jwt.sign({ email: data.Email }, process.env.JWT_SECRET);
 
-
-        const actualData = {
-            name: `${data.Firstname} ${data.Lastname}`,
+        const nonCollegeUserData = {
             phone: data.Phnnumber,
-            email: data.Email,
             address: data.Address,
-            password: hashedPassword,
             refInfo: data.selectedOption,
-            idProof: proof._id,
             reference: finalRef._id,
+        }
+
+        console.log("reference id: ", finalRef._id);
+        
+
+        const commonUserData = {
+            name: `${data.Firstname} ${data.Lastname}`,
+            email: data.Email,
+            password: hashedPassword,
+            idProof: proof._id,
             verificationToken: token,
-            registerOption: data.registerOption
-        };
+            registerOption: data.registerOption, 
+        }
+
+        const actualData = data.registerOption === 1 ?  {
+           ...commonUserData
+        } : {
+            ...commonUserData,
+            ...nonCollegeUserData
+        }
 
 
         const newUser = new User(actualData);
