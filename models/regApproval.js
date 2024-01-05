@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
 const express =require('express');
-
+const User = require("./user/user");
 
 
 const approveRegSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required:true,
        
         
