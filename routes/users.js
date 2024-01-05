@@ -45,9 +45,6 @@ router.get("/:id", async (req, res) => {
     try {   
         
         const [user] = await User.find({ _id: userId }).populate('idProof').populate('reference');
-
-    
-
         if(user.registerOption === 1) {
             user.reference = null;
               return res.json({ userDetails: user });
@@ -88,10 +85,6 @@ router.delete("/:id", async (req, res) => {
 router.get('/approved/registered', async (req, res) => {
     try {
         const users = await RegisteredUser.find({}).populate('user').populate('bookingHistory');
-
-
-        // console.log(users);
-
         res.status(200).json(users);
 
     }
@@ -107,13 +100,9 @@ router.get("/:id/bookingHistory", async (req, res) => {
     const userId = req.params.id;
     try {
         const response = await axios.get(`http://localhost:3000/users/${userId}`);
-
-
         const registeredUsers = await axios.get('http://localhost:3000/users/approved/registered');
 
         const arr = registeredUsers.data;
-        //   console.log(arr);
-
         const a = arr.filter((user) => user.user._id === userId);
         const finalArr = {
             ...response.data,

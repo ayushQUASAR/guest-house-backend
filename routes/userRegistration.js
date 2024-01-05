@@ -174,7 +174,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             reference: finalRef._id,
         }
 
-        console.log("reference id: ", finalRef._id);
+        // console.log("reference id: ", finalRef._id);
         
 
         const commonUserData = {
@@ -194,8 +194,8 @@ router.post("/", upload.single('idProof'), async (req, res) => {
         }
 
 
+        // save user to database
         const newUser = new User(actualData);
-
         const x = await newUser.save();
 
         if (x === null) {
@@ -232,7 +232,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
 
                     axios.post(`http://localhost:3000/admin/approveRegistration`, {
                         id: newUser._id,
-                        status: "accepted"
+                        status: "accept"
                     },
                         {
                             headers: {
