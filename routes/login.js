@@ -148,6 +148,9 @@ router.post("/", async (req, res) => {
                if(user[0].isMainAdmin) {
                         obj["isMainAdmin"] = true;
                }
+               else {
+                     obj["isMainAdmin"] = false;
+               }
                   
                 res.status(200).json(obj);
         }
