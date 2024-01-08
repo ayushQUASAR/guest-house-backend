@@ -25,16 +25,16 @@ DELETE http://localhost:3000/users
 
 ###
 
-GET http://localhost:3000/users/654912862c2e98419f66742d
+GET http://localhost:3000/users/659bf94df3fba23f2b5b7da2
 
 ### 
 
 
-GET http://localhost:3000/users/approved/registered
+DELETE http://localhost:3000/users/approved/registered
 
 ###
 
-GET http://localhost:3000/users/654912862c2e98419f66742d/bookingHistory
+GET http://localhost:3000/users/659bf94df3fba23f2b5b7da2/bookingHistory
 
 
 ###

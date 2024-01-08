@@ -231,7 +231,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
                         }),
 
                     axios.post(`http://localhost:3000/admin/approveRegistration`, {
-                        id: newUser._id,
+                        user : newUser._id,
                         status: "accept"
                     },
                         {

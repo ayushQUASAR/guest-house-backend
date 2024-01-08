@@ -31,8 +31,8 @@ cronJobForPaymentDeadline();
 const app = express();
 app.enable('trust proxy');
 // mongoose.connect("mongodb+srv://user:user@cluster0.5rmy7ke.mongodb.net/guest-house");
-mongoose.connect('mongodb+srv://user:user@cluster0.uunf6ts.mongodb.net/?retryWrites=true&w=majority');
-// mongoose.connect("mongodb://127.0.0.1:27017/guestHouse");
+// mongoose.connect('mongodb+srv://user:user@cluster0.uunf6ts.mongodb.net/?retryWrites=true&w=majority');
+mongoose.connect("mongodb://127.0.0.1:27017/guestHouse");
 const db = mongoose.connection;
 db.once('open', () => {
     console.log("Database connected")
