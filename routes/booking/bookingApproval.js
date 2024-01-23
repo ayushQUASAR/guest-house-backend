@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
    try {
-      const approvals = await BookingApproval.find({});
+      const approvals = await BookingApproval.find({}).populate("booking", "startDate endDate");
       res.json(approvals);
    }
    catch (err) {
@@ -39,12 +39,16 @@ router.post("/", async (req, res) => {
       // accept or reject
       status: 'reject',
       rejectionReason: data.reason,
+      startDate: data.booking.startDate,
+      endDate: data.booking.endDate
    } : {
       booking: data.booking,
       status: 'accept',
       roomsAllotted: data.roomsAllotted,
       guestHouseAllotted: data.guestHouseAllotted,
-      paymentDeadline: data.paymentDeadline
+      paymentDeadline: data.paymentDeadline,
+      startDate: data.booking.startDate,
+      endDate: data.booking.endDate
    }
       // const actualData = {
       //    booking: data.booking,
@@ -84,7 +88,9 @@ router.post("/", async (req, res) => {
          await Promise.all([
             axios.put(`http://localhost:3000/guestHouse/room/allot`, {
                roomsAllotted: actualData.roomsAllotted,
-               guestHouseAllotted: actualData.guestHouseAllotted
+               guestHouseAllotted: actualData.guestHouseAllotted,
+               startDate: actualData.startDate,
+               endDate: actualData.endDate
             }, {
                headers: {
                   "Content-Type": "application/json"
