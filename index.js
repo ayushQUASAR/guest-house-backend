@@ -35,7 +35,7 @@ mongoose.connect('mongodb+srv://user:user@cluster0.uunf6ts.mongodb.net/?retryWri
 // mongoose.connect("mongodb://127.0.0.1:27017/guestHouse");
 
 // new clean database
-mongoose.connect('mongodb+srv://user:user@cluster0.uunf6ts.mongodb.net/guest-house');
+// mongoose.connect('mongodb+srv://user:user@cluster0.uunf6ts.mongodb.net/guest-house');
 
 const db = mongoose.connection;
 db.once('open', () => {
