@@ -50,12 +50,7 @@ router.post("/", async (req, res) => {
       startDate: data.booking.startDate,
       endDate: data.booking.endDate
    }
-      // const actualData = {
-      //    booking: data.booking,
-      //    status: data.status
-      // }
-      ;
-   // create new instance of booking approval model
+  
    const newBookingApproval = new BookingApproval(actualData);
 
    try {
@@ -106,25 +101,7 @@ router.post("/", async (req, res) => {
             // axios.get("http://localhost:3000/calendar/create"),
          ])
 
-         //### Task 4: Room providing logic
-         // const [booking] = await Booking.updateOne(
-         //    {_id: actualData.booking},
-         //    {
-
-         //    }
-         //    );
-
-
-
-
-         //### Task 5: Send approval and room details to user as well as visitor using email...
-
-
-         // console.log(approvalDetails);
-
-
-
-
+  
       }
 
       // if not approved => remove from booking and add to rejected 

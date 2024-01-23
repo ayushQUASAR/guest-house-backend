@@ -1,12 +1,10 @@
-const express = require('express');
+const express = require("express");
 const axios = require("axios");
-
 
 const router = express.Router();
 
 const Booking = require("../../models/booking/booking");
-const RegisteredUser = require('../../models/registeredUsers');
-
+const RegisteredUser = require("../../models/registeredUsers");
 
 router.post("/", async (req, res) => {
   console.log(req.body);
@@ -14,18 +12,15 @@ router.post("/", async (req, res) => {
   const data = req.body;
 
   try {
-
     //###Task 1:  fill the actualData according to fields from frontend
 
-    ///## including the room selection details 
+    ///## including the room selection details
     let companions = [];
     if (data.companion1) companions.push(data.companion1);
     if (data.companion2) companions.push(data.companion2);
     if (data.companion3) companions.push(data.companion3);
 
-
     const actualData = {
-      // kind: data.visitType,
       purpose: data.purpose,
       name: `${data.firstName} ${data.lastName}`,
       designation: data.designation,
@@ -36,77 +31,78 @@ router.post("/", async (req, res) => {
       roomsSelected: data.roomsSelected,
       companions: companions,
       startDate: data.arrivalDate,
-      // startTime: data.arrivalTime,
       endDate: data.departureDate,
-      // endTime: data.departureTime,
-      // bookingFor: data.bookingFor,
-      roomBooker: !data.isAdmin ? {
-        isAdmin: false,
-        name: data.PersonName,
-        // designation:data.Persondesignation,
-        // dept: data.Persondepartment,
-        phone: data.PersonPhone,
-        email: data.PersonEmail,
-        address: data.PersonAddress
-      } : {
-        isAdmin: true,
-        email: data.AdminEmail
-      }
-    }
+      roomBooker: !Boolean(data.isAdmin)
+        ? {
+            isAdmin: false,
+            name: data.PersonName,
+            dept: data.PersonDept,
+            phone: data.PersonPhone,
+            email: data.PersonEmail,
+            address: data.PersonAddress,
+          }
+        : {
+            isAdmin: true,
+            email: data.AdminEmail,
+          },
+    };
 
-    //     let adminBookingData = {
-    //       ...actualData,
-    //       roomBooker: {
-    //         isAdmin: true,
-    //         email: data.AdminEmail
-    //       }
-    // }
-
-    // const finalData = data.isAdmin ? actualData : adminBookingData;
     const newBooking = new Booking(actualData);
     await newBooking.save();
 
-
-    res.status(200).json({ message: `New booking ${newBooking._id} created successfully...` });
-    //###Task 2: add the booking id to the booking history of Registered User...
-    // Here, you need to find the Registered User using roomBooker's email and then update it's booking history.
-    // const x = await RegisteredUser.updateOne({
-    //   'user.email' : actualData.roomBooker.email
-    // }, 
-    // {
-    //   $push : {bookingHistory: newBooking._id}
-    // });
+    res
+      .status(200)
+      .json({
+        message: `New booking ${newBooking._id} created successfully...`,
+      });
 
     if (!data.isAdmin) {
-      const registeredUsers = await RegisteredUser.find({}).populate('user');
-      const user = registeredUsers.filter((user) => user.user.email === actualData.roomBooker.email);
-      await RegisteredUser.updateOne({
-        _id: user[0]._id
-      },
+      const registeredUsers = await RegisteredUser.find({}).populate("user");
+      const user = registeredUsers.filter(
+        (user) => user.user.email === actualData.roomBooker.email
+      );
+      await RegisteredUser.updateOne(
         {
-          $push: { bookingHistory: newBooking._id }
+          _id: user[0]._id,
+        },
+        {
+          $push: { bookingHistory: newBooking._id },
         }
-      )
+      );
 
-      //###Task 3: send the email to admin, regarding the booking form, work in bookingEmail.js
-      await axios.post("http://localhost:3000/email/booking/adminNotification", {
-        actualData
-      }
-        , {
-          headers: {
-            "Content-Type": "application/json"
+      const isStudent = data.PersonDept;
+      if (!isStudent) {
+        await axios.post(
+          "http://localhost:3000/email/booking/adminNotification",
+          {
+            actualData,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-        });
+        );
+      }
 
+      if (isStudent) {
+        await axios.post(
+          "http://localhost:3000/email/booking/hod",
+          {
+            bookingId: newBooking._id,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
     }
-
-
-  }
-
-  catch (err) {
+  } catch (err) {
     console.log({ message: err.message });
     res.status(500).json({ message: err.message });
   }
-})
+});
 
 module.exports = router;
