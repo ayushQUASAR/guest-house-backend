@@ -246,7 +246,7 @@ router.get("/adminNotification/:name/:email/:phone/:address/:refInfo/:refName/:r
             name: "donotreply",
             address: "mrimann96@gmail.com",
         },
-        to: "mriduld.cs.21@nitj.ac.in",
+        to: "avirals.cs.22@nitj.ac.in",
         subject: "New user registration",
         html: adminNotificationTemplate({ name, email, phone, address, refInfo, refName, refPhone }),
     };

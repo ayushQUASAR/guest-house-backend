@@ -130,6 +130,16 @@ router.delete("/approved/registered", async (req, res) => {
 
 });
 
+router.delete("/approved/registered/:id", async (req,res) => {
+    const id = req.params.id;
+    try {
+        await RegisteredUser.deleteOne({_id: id});
+        res.json(`registered user with id ${id} deleted successfully.`)
+    } catch (error) {
+        res.json({registered_user_error: error.message})
+    }
+})
+
 
 
 router.get("/approved/rejected", async (req, res) => {

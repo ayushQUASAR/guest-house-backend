@@ -15,13 +15,11 @@ Content-Type: application/json
 
 ###
 
-
 GET http://localhost:3000/users
 
 ###
 
 DELETE http://localhost:3000/users
-
 
 ###
 
@@ -29,8 +27,18 @@ GET http://localhost:3000/users/659bf94df3fba23f2b5b7da2
 
 ### 
 
+ 
+GET http://localhost:3000/users/approved/registered
+
+
+###
+
 
 DELETE http://localhost:3000/users/approved/registered
+
+###
+
+DELETE http://localhost:3000/users/approved/registered/659bf94df3fba23f2b5b7daa
 
 ###
 
@@ -73,7 +81,12 @@ GET http://localhost:4000/login/admin
 ###
 
 
-GET http://localhost:4000/login
+GET http://localhost:3000/login
+
+
+###
+
+DELETE http://localhost:3000/login
 
 
 ### 
@@ -105,35 +118,16 @@ GET http://localhost:4000/email
 ###
 
 
-POST  http://localhost:4000/booking/register 
-Content-Type: application/json
-
-{
-    "visitType": "official",
-    "purpose": "Seminar conduction",
-    "firstName" : "Vikas",
-    "lastName" : "Jaglan",
-     "guestHouseSelected": "1",
-     "roomsSelected" : "2",
-    "designation": "Professor at IIT Roorkee",
-    "address": "Benaras, UP",
-    "phNumber": "12345678",
-    "email": "chakshud21@gmail.com",
-    "companion1": "Dr. Subramanium",
-    "companion2" : "Dr. Srinivasan",
-    "companion3" : "Dr. Venky Nair",
-      "bookingFor": "myself",
-      "arrivalDate" : "2023-11-01",
-      "departureDate" : "2023-11-03",
-        "isAdmin" : "true",
-        "AdminEmail": "mriduld.cs.21@nitj.ac.in"
-}
 
 
 
 ###
 
 GET http://localhost:3000/booking 
+
+###
+ 
+DELETE http://localhost:3000/booking 
 
 
 ###
@@ -186,4 +180,43 @@ Content-Type: application/json
 {
     "email": "mriduld.cs.21@nitj.ac.in",
     "password" : "nitj"
+}
+
+###
+
+POST http://localhost:3000/email/booking/hod
+Content-Type: application/json
+
+{
+    "name": "Mridul Dhiman",
+    "roll": "21103096"
+}
+
+###
+ 
+POST  http://localhost:3000/booking/register 
+Content-Type: application/json
+
+{
+    "visitType": "official",
+    "purpose": "Seminar conduction",
+    "firstName" : "Vikas",
+    "lastName" : "Jaglan",
+     "guestHouseSelected": "1",
+     "roomsSelected" : "2",
+    "designation": "Professor at IIT Roorkee",
+    "address": "Benaras, UP",
+    "phNumber": "12345678",
+    "email": "chakshud21@gmail.com",
+    "companion1": "Dr. Subramanium",
+    "companion2" : "Dr. Srinivasan",
+    "companion3" : "Dr. Venky Nair",
+      "bookingFor": "myself",
+      "arrivalDate" : "2024-11-01",
+      "departureDate" : "2024-11-03",
+        "isAdmin" : false,
+      "isStudent" : "true",
+      "PersonDept": "CSE",
+      "PersonName": "Demo Person",
+        "PersonEmail": "mriduld.cs.21@nitj.ac.in"
 }
