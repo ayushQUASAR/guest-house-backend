@@ -17,6 +17,7 @@ const emailRoute = require("./routes/email")
 const bookingRoute = require("./routes/booking/booking");
 const bookingApprovalRoute = require("./routes/booking/bookingApproval");
 const guestHouseRoute = require("./routes/guestHouse")
+const refundRoute = require("./routes/refund/refund");
 // const sessionRoute = require('./routes/session');
 
 
@@ -102,6 +103,7 @@ app.use("/email", emailRoute);
 app.use("/booking", bookingRoute);
 app.use("/admin/bookingApproval", bookingApprovalRoute);
 app.use("/guestHouse", guestHouseRoute);
+app.use("/refund", refundRoute);
 // app.use("/check-session", sessionRoute);
 
 app.use("/images", require("./routes/images"));
