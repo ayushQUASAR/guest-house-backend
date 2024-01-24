@@ -46,9 +46,10 @@ db.on("error", (err) => {
     console.log({ database_message: err.message });
 });
 const port = process.env.PORT || 3000;
-const origins = 'http://localhost:5173' || "https://guest-house-system.vercel.app/";
+const origins = ['http://localhost:5173',"https://guest-house-system.vercel.app/"];
 app.use(cors({
     origin: origins,
+    default: "http://localhost:5173",
     credentials: true,
 }));
 //body parsing
