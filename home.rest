@@ -127,7 +127,7 @@ GET http://localhost:3000/booking
 
 ###
  
-DELETE http://localhost:3000/booking 
+DELETE http://localhost:3000/booking/65affb3701f71b8c485011a2
 
 
 ###
@@ -155,7 +155,7 @@ Content-Type: application/json
 
 ###
 
-GET  http://localhost:3000/booking/approved/rejected
+GET  http://localhost:3000/booking/approved/upcoming
 
 
 ### 

@@ -139,7 +139,8 @@ res.json({message: "Booking Cancelled Successfully..."});
 
 
     // update the Registered user's booking history if booking cancelled
-        const registeredUsers = await RegisteredUser.find({}).populate('user');
+    if(!y.roomBooker.isAdmin) {
+      const registeredUsers = await RegisteredUser.find({}).populate('user');
       const user =   registeredUsers.filter((user) => user.user.email === y.roomBooker.email);
 
 
@@ -149,6 +150,8 @@ res.json({message: "Booking Cancelled Successfully..."});
           bookingHistory: id,
       },
   });
+    }
+        
 
 
 }
