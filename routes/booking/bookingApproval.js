@@ -1,9 +1,14 @@
+require("dotenv").config();
+
 const express = require("express");
+
+
 const axios = require('axios');
 
 
 const BookingApproval = require("../../models/booking/bookingApproval");
 const Booking = require("../../models/booking/booking");
+
 
 
 const router = express.Router();
@@ -81,7 +86,7 @@ router.post("/", async (req, res) => {
 
 
          await Promise.all([
-            axios.put(`http://localhost:3000/guestHouse/room/allot`, {
+            axios.put(`${process.env.REMOTE_URL}/guestHouse/room/allot`, {
                roomsAllotted: actualData.roomsAllotted,
                guestHouseAllotted: actualData.guestHouseAllotted,
                startDate: actualData.startDate,
@@ -91,7 +96,7 @@ router.post("/", async (req, res) => {
                   "Content-Type": "application/json"
                }
             }),
-            axios.post('http://localhost:3000/email/booking/sendApprovalNotification', {
+            axios.post(`${process.env.REMOTE_URL}/email/booking/sendApprovalNotification`, {
                booking: approvalDetails,
             }, {
                headers: {

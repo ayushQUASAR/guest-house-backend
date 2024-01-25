@@ -99,8 +99,8 @@ router.get('/approved/registered', async (req, res) => {
 router.get("/:id/bookingHistory", async (req, res) => {
     const userId = req.params.id;
     try {
-        const response = await axios.get(`http://localhost:3000/users/${userId}`);
-        const registeredUsers = await axios.get('http://localhost:3000/users/approved/registered');
+        const response = await axios.get(`${process.env.REMOTE_URL}/users/${userId}`);
+        const registeredUsers = await axios.get(`${process.env.REMOTE_URL}/users/approved/registered`);
 
         const arr = registeredUsers.data;
         const a = arr.filter((user) => user.user._id === userId);

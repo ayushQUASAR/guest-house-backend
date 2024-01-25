@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
@@ -9,7 +10,6 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
-require("dotenv").config();
 
 
 const Image = require("../models/Image");
@@ -67,7 +67,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
     const [extra, ext] = req.file.filename.split('.');
     const idProof = new Image({
         // data: fs.readFileSync(path.join(process.cwd()+"/uploads/" + req.file.filename)),
-        data: `http://localhost:3000/images/${req.file.filename}`,
+        data: `${process.env.REMOTE_URL}/images/${req.file.filename}`,
         contentType: ext === 'pdf' ? "application/pdf" : `image/${ext}`
     });
 
@@ -219,7 +219,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             if (email.endsWith("@nitj.ac.in")) {
                 await Promise.all([
 
-                    axios.post(`http://localhost:3000/email/sendVerificationEmail`, {
+                    axios.post(`${process.env.REMOTE_URL}/email/sendVerificationEmail`, {
                         name: actualData.name,
                         email: actualData.email,
                         token: token
@@ -230,7 +230,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
                             }
                         }),
 
-                    axios.post(`http://localhost:3000/admin/approveRegistration`, {
+                    axios.post(`${process.env.REMOTE_URL}/admin/approveRegistration`, {
                         user : newUser._id,
                         status: "accept"
                     },
@@ -245,9 +245,9 @@ router.post("/", upload.single('idProof'), async (req, res) => {
 
             else {
                 await Promise.all([
-                    axios.get(`http://localhost:3000/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
+                    axios.get(`${process.env.REMOTE_URL}/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
 
-                    axios.post(`http://localhost:3000/email/sendVerificationEmail`, {
+                    axios.post(`${process.env.REMOTE_URL}/email/sendVerificationEmail`, {
                         name: actualData.name,
                         email: actualData.email,
                         token: token

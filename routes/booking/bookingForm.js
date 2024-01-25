@@ -72,9 +72,8 @@ router.post("/", async (req, res) => {
 
       const isStudent = data.PersonDept;
       if (!isStudent) {
-        await axios.post(
-          "http://localhost:3000/email/booking/adminNotification",
-          {
+        await axios.post(`${process.env.REMOTE_URL}/email/booking/adminNotification`,
+       {
             actualData,
           },
           {
@@ -86,8 +85,7 @@ router.post("/", async (req, res) => {
       }
 
       if (isStudent) {
-        await axios.post(
-          "http://localhost:3000/email/booking/hod",
+        await axios.post(`${process.env.REMOTE_URL}/email/booking/hod`,
           {
             bookingId: newBooking._id,
           },

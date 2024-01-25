@@ -37,7 +37,7 @@ const emailHTMLTemplate = ({ email }) => `
  `;
 
 const emailVerificationHTMLTemplate = ({ name, email, token }) => {
-    const verificationLink = `http://localhost:3000/email/${email}/verify/${token}`;
+    const verificationLink = `${process.env.REMOTE_URL}/email/${email}/verify/${token}`;
 
     return `<h3> Hi ${name},</h3> <br/>
     <p>We just need to verify your email address before you can access the <u>ONLINE BOOKING</u>.</p>
@@ -92,7 +92,7 @@ const adminNotificationTemplate = ({ name, email, phone, address, refInfo, refNa
 
 const updatePasswordTemplate = ({ email, token }) => {
 
-    const verificationLink = `http://localhost:3000/login/forgot-password/verify/${token}`;
+    const verificationLink = `${process.env.REMOTE_URL}/login/forgot-password/verify/${token}`;
     return `
     
 Hi ${email},
@@ -209,7 +209,7 @@ router.post("/sendVerificationEmail/", async (req, res) => {
     try {
         await transporter.sendMail(mailOptions);
 
-        res.redirect(`http://localhost:3000/email/verificationSuccess/${email}`);
+        res.redirect(`${process.env.REMOTE_URL}/email/verificationSuccess/${email}`);
 
     }
     catch (err) {
@@ -230,7 +230,7 @@ router.get("/:id/verify/:token", async (req, res) => {
         if (output === null) {
             throw new Error("user could not be updated");
         }
-        res.redirect(`http://localhost:3000/email/verificationSuccess/${id}`);
+        res.redirect(`${process.env.REMOTE_URL}/email/verificationSuccess/${id}`);
     }
     catch (err) {
         res.status(500).json({ message: err.message })

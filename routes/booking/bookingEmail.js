@@ -1,4 +1,5 @@
 //email related to bookings will be handled here...
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const nodemailer = require("nodemailer");
@@ -126,16 +127,20 @@ router.post("/sendApprovalNotification", async (req, res) => {
   }
 });
 
+
+
 const hodBookingRequestTemplate = ({ dept, email, bookingId }) => `
 <h3>Dear Sir/Madam, </h3>
 <p>A NITJ Student with email ID: <u>${email}</u> of ${dept.toUpperCase()} dept. is trying to book room(s) in one of the Guesthouses of NITJ.
 <br/>Click below, to accept or reject the booking request: </p>
 <div>
 <button style="padding:0.5rem 1rem;cursor:pointer;border-radius:4px;border:none;outline:none;background:blueviolet;">
-<a style="cursor:pointer;text-decoration:none;color:white;" href="http://localhost:3000/email/booking/hod?status=accepted&bookingId=${bookingId}">Accept</a>
+<a style="cursor:pointer;text-decoration:none;color:white;"
+ href="${process.env.REMOTE_URL}/email/booking/hod?status=accepted&bookingId=${bookingId}">Accept</a>
 </button>
 <button style="padding:0.5rem 1rem;cursor:pointer;border-radius:4px;border:none;outline:none;background:red;">
-<a style="cursor:pointer;text-decoration:none;color:white;" href="http://localhost:3000/email/booking/hod?status=rejected&bookingId=${bookingId}">Reject</a>
+<a style="cursor:pointer;text-decoration:none;color:white;" 
+href="${process.env.REMOTE_URL}/email/booking/hod?status=rejected&bookingId=${bookingId}">Reject</a>
 </button>
 </div>
 <br/>
@@ -234,7 +239,7 @@ router.get("/hod", async (req, res) => {
         res.json("Notification sent to corresponding user and admin regarding booking status...");
         await Promise.all([
           axios.post(
-            "http://localhost:3000/email/booking/adminNotification",
+            `${process.env.REMOTE_URL}/email/booking/adminNotification`,
             {
               ...existingBooking,
             },
@@ -245,14 +250,14 @@ router.get("/hod", async (req, res) => {
             }
           ),
           axios.get(
-            `http://localhost:3000/email/booking/hod/verification/${existingBooking.roomBooker.email}?status=accepted`
+            `${process.env.REMOTE_URL}/email/booking/hod/verification/${existingBooking.roomBooker.email}?status=accepted`
           ),
         ]);
       }
       if (status === "rejected") {
         res.json("Notification sent to corresponding user regarding the booking status...")
         await axios.get(
-          `http://localhost:3000/email/booking/hod/verification/${existingBooking.roomBooker.email}?status=rejected`
+          `${process.env.REMOTE_URL}/email/booking/hod/verification/${existingBooking.roomBooker.email}?status=rejected`
         );
       }
     }
