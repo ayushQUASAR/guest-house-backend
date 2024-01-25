@@ -46,13 +46,20 @@ catch(err) {
 // GET pending or registered or rejected booking 
 router.get('/approved/:approvalType', async (req,res) => {
     const approvalType = req.params.approvalType;
+
+    const possibleBookingOptions = ['pending', 'approved', "cancelled", "rejected", "upcoming"]
 try{
-    if(approvalType === 'pending' || approvalType === 'approved' || approvalType === 'cancelled' || approvalType === 'rejected') {
-        if(approvalType === 'approved') {
+    if(approvalType === 'pending' || approvalType === 'approved' || approvalType === 'cancelled' || approvalType === 'rejected' || approvalType === 'upcoming') {
+        if(approvalType === 'upcoming') {
           if(req.query) {
             const {guestHouse} = req.query;
             // booked room in that guest house 
-           const bookings =   await Booking.find({status: "approved", guestHouseSelected: guestHouse}, {startDate: 1, endDate: 1, name: 1, email: 1, roomsAllotted: 1 });
+            const currentDate = new Date();
+           const bookings =   await Booking.find({
+            status: "approved",
+             guestHouseSelected: guestHouse,
+             startDate: {$gte: currentDate }
+            },  {startDate: 1, endDate: 1, name: 1, email: 1, roomsAllotted: 1 });
           
            const finalBooking = [];
            bookings.forEach((booking) => {
@@ -77,12 +84,14 @@ try{
           }
          
         }
+
+
         const booking = await Booking.find({status: approvalType});
         res.status(200).json(booking);  
   }
-
-
-   
+else {
+  throw new Error("arrival type not allowed");
+}
   }
     catch(err) {
       console.log(err.message);

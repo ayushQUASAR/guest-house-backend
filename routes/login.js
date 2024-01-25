@@ -138,7 +138,9 @@ router.post("/", async (req, res) => {
                 throw new Error("Username or password invalid.");
             }
             else {
+                
                 let user1 = await User.find({ email: user[0].email });
+                console.log(user1);
                 console.log(`${user[0].isAdmin ? "Admin" : "User"} login successful`);
                 req.session.user = user1;
                 req.session.isAdmin = user[0].isAdmin;

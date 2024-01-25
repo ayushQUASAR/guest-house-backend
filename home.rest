@@ -155,8 +155,7 @@ Content-Type: application/json
 
 ###
 
-
-GET  http://localhost:4000/booking/approved/approved
+GET  http://localhost:3000/booking/approved/rejected
 
 
 ### 
