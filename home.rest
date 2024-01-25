@@ -18,7 +18,7 @@ Content-Type: application/json
 GET http://localhost:3000/users
 
 ###
-
+ 
 DELETE http://localhost:3000/users
 
 ###
@@ -28,13 +28,13 @@ GET http://localhost:3000/users/659bf94df3fba23f2b5b7da2
 ### 
 
  
-GET http://localhost:3000/users/approved/registered
+GET http://localhost:3000/users/approved/pending
 
 
 ###
 
-
-DELETE http://localhost:3000/users/approved/registered
+ 
+DELETE http://localhost:3000/users/approved/pending
 
 ###
 
@@ -44,11 +44,6 @@ DELETE http://localhost:3000/users/approved/registered/659bf94df3fba23f2b5b7daa
 
 GET http://localhost:3000/users/659bf94df3fba23f2b5b7da2/bookingHistory
 
-
-###
-
-
-GET http://localhost:4000/users/approved/rejected
 
 ###
 
@@ -80,7 +75,7 @@ GET http://localhost:4000/login/admin
 
 ###
 
-
+ 
 GET http://localhost:3000/login
 
 
@@ -113,17 +108,21 @@ GET http://localhost:4000/references/type/alumni
 
 ###
 
-GET http://localhost:4000/email
+GET http://localhost:3000/email
 
 ###
-
-
 
 
 
 ###
 
 GET http://localhost:3000/booking 
+
+
+###
+
+
+DELETE http://localhost:3000/booking
 
 ###
  
@@ -192,7 +191,7 @@ Content-Type: application/json
 }
 
 ###
- 
+  
 POST  http://localhost:3000/booking/register 
 Content-Type: application/json
 
@@ -214,8 +213,8 @@ Content-Type: application/json
       "arrivalDate" : "2024-11-01",
       "departureDate" : "2024-11-03",
         "isAdmin" : false,
-      "isStudent" : "true",
-      "PersonDept": "CSE",
+    //   "isStudent" : "true",
+     "PersonDept": "CSE",
       "PersonName": "Demo Person",
         "PersonEmail": "mriduld.cs.21@nitj.ac.in"
 }

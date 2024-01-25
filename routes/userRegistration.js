@@ -214,12 +214,16 @@ router.post("/", upload.single('idProof'), async (req, res) => {
 
             const msg = `user with id: ${newUser._id} created successfully`;
             console.log(msg);
+
+            if(Number(data.registerOption) === 1 && !email.endsWith("@nitj.ac.in")) {
+                throw new Error("Student/Faculty must have official email.");
+            }
             res.json({ message: msg });
 
-            if (email.endsWith("@nitj.ac.in")) {
-                await Promise.all([
-
-                    axios.post(`${process.env.REMOTE_URL}/email/sendVerificationEmail`, {
+            // console.log(data.registerOption);
+            if (Number(data.registerOption) === 1 && email.endsWith("@nitj.ac.in")) {
+                console.log("this is working");
+                  await  axios.post(`${process.env.REMOTE_URL}/email/sendVerificationEmail`, {
                         name: actualData.name,
                         email: actualData.email,
                         token: token
@@ -228,22 +232,11 @@ router.post("/", upload.single('idProof'), async (req, res) => {
                             headers: {
                                 'Content-Type': 'application/json'
                             }
-                        }),
-
-                    axios.post(`${process.env.REMOTE_URL}/admin/approveRegistration`, {
-                        user : newUser._id,
-                        status: "accept"
-                    },
-                        {
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
                         })
-
-                ]);
+                      return;
             }
 
-            else {
+            else if(Number(data.registerOption) === 2) {
                 await Promise.all([
                     axios.get(`${process.env.REMOTE_URL}/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
 
@@ -259,6 +252,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
                         }),
 
                 ]);
+                return;
             }
 
         }

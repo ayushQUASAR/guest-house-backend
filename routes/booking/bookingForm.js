@@ -48,12 +48,12 @@ router.post("/", async (req, res) => {
     };
 
     const newBooking = new Booking(actualData);
-    await newBooking.save();
+    const finalBooking = await newBooking.save();
 
     res
       .status(200)
       .json({
-        message: `New booking ${newBooking._id} created successfully...`,
+        message: `New booking ${finalBooking._id} created successfully...`,
       });
 
     if (!data.isAdmin) {
@@ -66,7 +66,7 @@ router.post("/", async (req, res) => {
           _id: user[0]._id,
         },
         {
-          $push: { bookingHistory: newBooking._id },
+          $push: { bookingHistory: finalBooking._id },
         }
       );
 
@@ -87,7 +87,7 @@ router.post("/", async (req, res) => {
       if (isStudent) {
         await axios.post(`${process.env.REMOTE_URL}/email/booking/hod`,
           {
-            bookingId: newBooking._id,
+            bookingId: finalBooking._id,
           },
           {
             headers: {

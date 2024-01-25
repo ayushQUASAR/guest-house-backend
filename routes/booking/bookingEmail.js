@@ -65,7 +65,7 @@ const adminNotificationTemplate = ({ actualData }) => `
 <a href="#">Click here to approve this booking</a>
 `;
 
-router.post("/adminNotification/", async (req, res) => {
+router.post("/adminNotification", async (req, res) => {
   const actualData = req.body._doc;
   console.log(actualData);
   // send alerts to admin regarding the data being send

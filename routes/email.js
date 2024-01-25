@@ -1,7 +1,7 @@
+require('dotenv').config();
 const express = require("express");
 const nodemailer = require("nodemailer");
-const dotenv = require('dotenv');
-dotenv.config();
+
 
 const User = require("../models/user/user");
 const bookingEmailRoute = require('./booking/bookingEmail');
@@ -135,13 +135,18 @@ router.get("/", async (req, res) => {
 
 
 
-router.get("/verificationSuccess/:id", async (req, res) => {
+router.get("/verificationSuccess/:id/:option", async (req, res) => {
 try {
     
-    res.write(`<h1>${req.params.id} successfully verified</h1>`);
+
+  
+    const option = req.params.option;
+    
+    const info = Number(option) === 1 ? " Now you can login to the dashboard with the valid credentials" : " Please wait for registration approval by admin.";
+    res.write(`<h1>${req.params.id} successfully verified.</h1> <p>${info}</p>`);
     const [user] =  await User.find({email: req.params.id});
 
-    if(user.emailVerified) {
+    if(user.emailVerified && Number(option) === 1) {
         const newLogin = new Login({
             email: user.email,
             password: user.password
@@ -191,7 +196,9 @@ router.get("/forgot-password/:email/token/:token", async (req, res) => {
 
 
 
-router.post("/sendVerificationEmail/", async (req, res) => {
+router.post("/sendVerificationEmail", async (req, res) => {
+    console.log("sending verification mail");
+    console.log(req.body);
     const email = req.body.email;
     const token = req.body.token;
     const name = req.body.name;
@@ -209,7 +216,7 @@ router.post("/sendVerificationEmail/", async (req, res) => {
     try {
         await transporter.sendMail(mailOptions);
 
-        res.redirect(`${process.env.REMOTE_URL}/email/verificationSuccess/${email}`);
+        // res.redirect(`${process.env.REMOTE_URL}/email/verificationSuccess/${email}`);
 
     }
     catch (err) {
@@ -226,11 +233,13 @@ router.get("/:id/verify/:token", async (req, res) => {
         if (user === null) {
             throw new Error(`Email:  ${id} can't be verified`);
         }
-        const output = await User.updateOne({ email: id }, { emailVerified: true });
-        if (output === null) {
-            throw new Error("user could not be updated");
-        }
-        res.redirect(`${process.env.REMOTE_URL}/email/verificationSuccess/${id}`);
+
+            const output = await User.updateOne({ email: id }, { emailVerified: true });
+            if (output === null) {
+                throw new Error("user could not be updated");
+            }
+      
+        res.redirect(`${process.env.REMOTE_URL}/email/verificationSuccess/${id}/${user[0].registerOption}`);
     }
     catch (err) {
         res.status(500).json({ message: err.message })
