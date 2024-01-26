@@ -122,6 +122,10 @@ router.get("/:id/bookingHistory/:type", async (req,res) => {
  try {
     // user mil gya 
     const email = existingUser.email;
+    if(type === 'all') {
+        const allBookings = await Booking.find({"roomBooker.email": email});
+        return res.json(allBookings);
+    }
 
     if(type === 'upcoming') {
         const currentDate = new Date();
