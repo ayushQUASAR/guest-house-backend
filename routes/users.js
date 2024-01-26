@@ -9,7 +9,8 @@ const User = require('../models/user/user');
 const RegisteredUser = require("../models/registeredUsers");
 const RejectedUser = require("../models/rejectedUsers");
 const PendingUser = require("../models/pendingUsers");
-const Ref = require("../models/user/ref");
+const Ref =require("../models/user/ref");
+const Booking = require("../models/booking/booking");
 
 router.get("/", async (req, res) => {
     try {
@@ -45,14 +46,20 @@ router.get("/:id", async (req, res) => {
     try {   
         
         const [user] = await User.find({ _id: userId }).populate('idProof').populate('reference');
-        if(user.registerOption === 1) {
+        console.log(user);
+        if(Number(user.registerOption) === 1) {
+            console.log("user no. 1");
             user.reference = null;
               return res.json({ userDetails: user });
         }
         
-     
+
+        if(Number(user.registerOption) === 2) {
+            console.log("user no. 2");
             const [ref] = await Ref.find({ _id: user.reference._id }).populate('refTo');
            return res.json({  userDetails: user, referenceDetails: ref })
+        }
+     
         
 
     }
@@ -95,6 +102,41 @@ router.get('/approved/registered', async (req, res) => {
 });
 
 
+router.get("/:id/bookingHistory/:type", async (req,res) => {
+    // id => email 
+    // booking -> roomBooker.mail
+    
+ const userId = req.params.id;
+ const type = req.params.type;
+
+ if(!userId) {
+    throw new Error("User id not valid");
+ }
+
+ const existingUser = await User.findById(userId);
+ if(!existingUser) {
+    throw new Error("User id not valid");
+ }
+
+
+ try {
+    // user mil gya 
+    const email = existingUser.email;
+
+    if(type === 'upcoming') {
+        const currentDate = new Date();
+        const upcomingBookings = await Booking.find({"roomBooker.email": email, status: {$in: ['pending', 'approved']}, startDate: {$gte: currentDate } });
+
+       return res.json(upcomingBookings);
+    }
+    const userBookings = await Booking.find({"roomBooker.email": email, status: type});
+    return res.json(userBookings)
+ } catch (error) {
+    res.json({message: error.message})
+ }
+})
+
+
 //get booking history
 router.get("/:id/bookingHistory", async (req, res) => {
     const userId = req.params.id;
@@ -103,7 +145,7 @@ router.get("/:id/bookingHistory", async (req, res) => {
         const registeredUsers = await axios.get(`${process.env.REMOTE_URL}/users/approved/registered`);
 
         const arr = registeredUsers.data;
-        const a = arr.filter((user) => user.user._id === userId);
+        const a = arr.filter((user) => user.user?._id === userId);
         const finalArr = {
             ...response.data,
             bookingHistory: a[0].bookingHistory,

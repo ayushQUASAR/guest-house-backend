@@ -15,20 +15,21 @@ Content-Type: application/json
 
 ###
 
+
 GET http://localhost:3000/users
 
 ###
  
-DELETE http://localhost:3000/users
+# DELETE http://localhost:3000/users
 
 ###
 
-GET http://localhost:3000/users/659bf94df3fba23f2b5b7da2
+GET http://localhost:3000/users/65964a872e3fe6c5bf10e326
 
 ### 
 
  
-GET http://localhost:3000/users/approved/pending
+GET http://localhost:3000/users/approved/registered
 
 
 ###
@@ -42,7 +43,7 @@ DELETE http://localhost:3000/users/approved/registered/659bf94df3fba23f2b5b7daa
 
 ###
 
-GET http://localhost:3000/users/659bf94df3fba23f2b5b7da2/bookingHistory
+GET http://localhost:3000/users/65964a872e3fe6c5bf10e326/bookingHistory/upcoming
 
 
 ###
