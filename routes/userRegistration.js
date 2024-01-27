@@ -215,13 +215,16 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             const msg = `user with id: ${newUser._id} created successfully`;
             console.log(msg);
 
-            if((Number(data.registerOption) === 1 || Number(data.registerOption) === 2) && !email.endsWith("@nitj.ac.in")) {
+            const isNitUser = Number(data.registerOption) === 1 || Number(data.registerOption) === 2;
+            console.log("isNitUser: ",isNitUser);
+
+            if(isNitUser && !email.endsWith("@nitj.ac.in")) {
                 throw new Error("Student/Faculty must have official email.");
             }
             res.json({ message: msg });
 
             // console.log(data.registerOption);
-            if ((Number(data.registerOption) === 1 || Number(data.registerOption === 2)) && email.endsWith("@nitj.ac.in")) {
+            if (isNitUser && email.endsWith("@nitj.ac.in")) {
                 console.log("this is working");
                   await  axios.post(`${process.env.REMOTE_URL}/email/sendVerificationEmail`, {
                         name: actualData.name,

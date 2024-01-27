@@ -21,7 +21,7 @@ GET http://localhost:3000/users
 
 ###
 
-DELETE http://localhost:3000/users/65b4b8e3eb277b3bd68b5828
+DELETE http://localhost:3000/users/65b4c44e3644dc3060187ace
 
 ###
 
@@ -30,13 +30,13 @@ GET http://localhost:3000/users/65964a872e3fe6c5bf10e326
 ### 
 
  
-GET http://localhost:3000/users/approved/registered
+GET http://localhost:3000/users/approved/pending
 
 
 ###
 
   
-DELETE http://localhost:3000/users/approved/pending/65b4b8e3eb277b3bd68b5828
+DELETE http://localhost:3000/users/approved/pending/65b4c44e3644dc3060187ad0
 
 ###
 
