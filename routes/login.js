@@ -177,6 +177,18 @@ router.delete("/", async (req, res) => {
 })
 
 
+router.delete("/:id", async (req, res) => {
+    try {
+        const deletedLogins = await Login.deleteOne({_id: req.params.id});
+
+        res.status(200).json({ message: "Login Deleted successfully" });
+
+    }
+    catch (err) {
+        res.json({ message: err.message })
+    }
+})
+
 // router.delete("/:email", async (req,res) => {
 // const email = req.params.email;
 // try{
@@ -265,6 +277,7 @@ router.post("/update-password", async (req, res) => {
     catch (err) {
         res.json({ message: err.message })
     }
-})
+});
+
 
 module.exports = router;

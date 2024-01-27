@@ -215,13 +215,13 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             const msg = `user with id: ${newUser._id} created successfully`;
             console.log(msg);
 
-            if(Number(data.registerOption) === 1 && !email.endsWith("@nitj.ac.in")) {
+            if((Number(data.registerOption) === 1 || Number(data.registerOption) === 2) && !email.endsWith("@nitj.ac.in")) {
                 throw new Error("Student/Faculty must have official email.");
             }
             res.json({ message: msg });
 
             // console.log(data.registerOption);
-            if (Number(data.registerOption) === 1 && email.endsWith("@nitj.ac.in")) {
+            if ((Number(data.registerOption) === 1 || Number(data.registerOption === 2)) && email.endsWith("@nitj.ac.in")) {
                 console.log("this is working");
                   await  axios.post(`${process.env.REMOTE_URL}/email/sendVerificationEmail`, {
                         name: actualData.name,
@@ -236,7 +236,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
                       return;
             }
 
-            else if(Number(data.registerOption) === 2) {
+            else if(Number(data.registerOption) === 3) {
                 await Promise.all([
                     axios.get(`${process.env.REMOTE_URL}/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
 

@@ -18,9 +18,10 @@ Content-Type: application/json
 
 GET http://localhost:3000/users
 
+
 ###
- 
-# DELETE http://localhost:3000/users
+
+DELETE http://localhost:3000/users/65b4b8e3eb277b3bd68b5828
 
 ###
 
@@ -34,8 +35,8 @@ GET http://localhost:3000/users/approved/registered
 
 ###
 
- 
-DELETE http://localhost:3000/users/approved/pending
+  
+DELETE http://localhost:3000/users/approved/pending/65b4b8e3eb277b3bd68b5828
 
 ###
 
@@ -82,7 +83,7 @@ GET http://localhost:3000/login
 
 ###
 
-DELETE http://localhost:3000/login
+DELETE http://localhost:3000/login/659e2d87170421910768586e
 
 
 ### 

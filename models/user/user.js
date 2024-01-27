@@ -64,7 +64,7 @@ emailVerified: {
 registerOption: {
    type:  Number,
    required: true,
-   default: 1
+
 }
 }, { timestamps: true });
 

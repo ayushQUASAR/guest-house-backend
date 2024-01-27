@@ -186,6 +186,17 @@ router.delete("/approved/registered/:id", async (req,res) => {
     }
 })
 
+router.delete("/approved/pending/:id", async (req,res) => {
+    const id = req.params.id;
+    try {
+        await PendingUser.deleteOne({_id: id});
+        res.json(`pending user with id ${id} deleted successfully.`)
+    } catch (error) {
+        res.json({registered_user_error: error.message})
+    }
+})
+
+
 
 
 router.get("/approved/rejected", async (req, res) => {
@@ -251,5 +262,8 @@ router.delete("/approved/pending", async (req, res) => {
     }
 
 });
+
+
+
 
 module.exports = router;

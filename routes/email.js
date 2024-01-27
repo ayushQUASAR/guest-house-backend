@@ -142,11 +142,11 @@ try {
   
     const option = req.params.option;
     
-    const info = Number(option) === 1 ? " Now you can login to the dashboard with the valid credentials" : " Please wait for registration approval by admin.";
+    const info = (Number(option) === 1 || Number(option) === 2) ? " Now you can login to the dashboard with the valid credentials" : " Please wait for registration approval by admin.";
     res.write(`<h1>${req.params.id} successfully verified.</h1> <p>${info}</p>`);
     const [user] =  await User.find({email: req.params.id});
 
-    if(user.emailVerified && Number(option) === 1) {
+    if(user.emailVerified && (Number(option) === 1 || Number(option) === 2) ) {
         const newLogin = new Login({
             email: user.email,
             password: user.password
