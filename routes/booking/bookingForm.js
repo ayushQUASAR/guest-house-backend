@@ -32,6 +32,8 @@ router.post("/", async (req, res) => {
       companions: companions,
       startDate: data.arrivalDate,
       endDate: data.departureDate,
+      startTime: data.startTime,
+      endTime: data.endTime,
       roomBooker: !Boolean(data.isAdmin)
         ? {
             isAdmin: false,
