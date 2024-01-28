@@ -94,15 +94,15 @@ GET http://localhost:3000/login
 
 
 ### create admin
-
+ 
 POST http://localhost:3000/login/admin
 Content-Type: application/json
 
 {
-    "email": "ghadmin@nitj.ac.in",
+    "email": "avirals.cs.22@nitj.ac.in",
     "password": "1234",
     "isAdmin": true,
-    "isMainAdmin": "true"
+    "isMainAdmin": "false"
 }
 
 
@@ -171,8 +171,8 @@ DELETE http://localhost:3000/booking/65affb3701f71b8c485011a2
 
 ###
 
-
-POST http://localhost:4000/guestHouse
+ 
+POST http://localhost:3000/guestHouse
 
 
 ###

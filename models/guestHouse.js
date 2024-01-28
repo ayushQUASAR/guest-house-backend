@@ -45,14 +45,14 @@ guestHouseSchema.pre('save', function (next) {
     if(this.guestHouseId === 2) {
         this.noOfRooms = 12;
         this.roomPrice = 300;
-        this.roomType = 'Non AC';
+        this.roomType = 'AC';
         this.rooms = new Array(12).fill(false);
     }
 
     if(this.guestHouseId === 3) {
         this.noOfRooms = 8;
         this.roomPrice = 300;
-        this.roomType = "Non AC";
+        this.roomType = "AC";
         this.rooms = new Array(8).fill(false);
     }
 
