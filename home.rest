@@ -18,10 +18,13 @@ Content-Type: application/json
 
 GET http://localhost:3000/users
 
+###
+
+DELETE http://localhost:3000/users
 
 ###
 
-DELETE http://localhost:3000/users/65b4c63e3644dc3060187ae1
+DELETE http://localhost:3000/users/65b4c876e99f5693bb700f7a
 
 ###
 
@@ -30,13 +33,22 @@ GET http://localhost:3000/users/65964a872e3fe6c5bf10e326
 ### 
 
  
-GET http://localhost:3000/users/approved/pending
+GET http://localhost:3000/users/approved/registered
+
+###
+
+GET http://localhost:3000/users/approved/registered
+
+###
+
+
+DELETE http://localhost:3000/users/approved/pending
 
 
 ###
 
   
-DELETE http://localhost:3000/users/approved/pending/65b4c63f3644dc3060187ae3
+DELETE http://localhost:3000/users/approved/pending/65b56c16d56a83e936fcdd82
 
 ###
 
@@ -81,9 +93,26 @@ GET http://localhost:4000/login/admin
 GET http://localhost:3000/login
 
 
+### create admin
+
+POST http://localhost:3000/login/admin
+Content-Type: application/json
+
+{
+    "email": "ghadmin@nitj.ac.in",
+    "password": "1234",
+    "isAdmin": true,
+    "isMainAdmin": "true"
+}
+
+
 ###
 
-DELETE http://localhost:3000/login/659e2d87170421910768586e
+DELETE http://localhost:3000/login
+
+###
+
+DELETE http://localhost:3000/login/65b5481704a523b0b6075dd1
 
 
 ### 
@@ -94,6 +123,10 @@ GET http://localhost:4000/users/approved/pending/length
 ### 
 
 GET http://localhost:4000/references
+
+###
+
+DELETE http://localhost:3000/admin/bookingApproval
 
 ###
 
@@ -118,7 +151,12 @@ GET http://localhost:3000/email
 
 ###
 
+
 GET http://localhost:3000/booking 
+
+### 
+
+GET http://localhost:3000/booking/approved/approved
 
 
 ###
@@ -139,7 +177,7 @@ POST http://localhost:4000/guestHouse
 
 ###
     
-GET  http://localhost:4000/guestHouse
+GET  http://localhost:3000/guestHouse
 
 ###
 
@@ -216,7 +254,8 @@ Content-Type: application/json
       "departureDate" : "2024-11-03",
         "isAdmin" : false,
     //   "isStudent" : "true",
-     "PersonDept": "CSE",
+    #  "PersonDept": "CSE",
+    "Person"
       "PersonName": "Demo Person",
         "PersonEmail": "mriduld.cs.21@nitj.ac.in"
 }

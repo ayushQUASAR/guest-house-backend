@@ -116,8 +116,16 @@ router.post("/", async (req, res) => {
          }, {
             status: "rejected"
          });
+          
 
          res.json({ message: `Booking ${actualData.booking} rejected successfully` });
+         await axios.post(`${process.env.REMOTE_URL}/email/booking/sendRejectionNotification`, {
+            booking: approvalDetails,
+         }, {
+            headers: {
+               "Content-Type": 'application/json'
+            }
+         })
       }
    }
    catch (err) {

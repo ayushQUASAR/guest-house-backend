@@ -47,24 +47,19 @@ catch(err) {
 router.get('/approved/:approvalType', async (req,res) => {
     const approvalType = req.params.approvalType;
 
-    const possibleBookingOptions = ['pending', 'approved', "cancelled", "rejected", "upcoming"]
+    const possibleBookingOptions = ['pending', 'approved', "cancelled", "rejected"];
 try{
-    if(approvalType === 'pending' || approvalType === 'approved' || approvalType === 'cancelled' || approvalType === 'rejected' || approvalType === 'upcoming') {
-        if(approvalType === 'upcoming') {
+    if(approvalType === 'pending' || approvalType === 'approved' || approvalType === 'cancelled' || approvalType === 'rejected') {
+        if(approvalType === 'approved') {
           if(req.query) {
             const {guestHouse} = req.query;
-            // booked room in that guest house 
-            const currentDate = new Date();
            const bookings =   await Booking.find({
             status: "approved",
-             guestHouseSelected: guestHouse,
-             startDate: {$gte: currentDate }
+             guestHouseSelected: guestHouse
             },  {startDate: 1, endDate: 1, name: 1, email: 1, roomsAllotted: 1 });
           
            const finalBooking = [];
            bookings.forEach((booking) => {
-         
-
             for(let roomId of booking.roomsAllotted) {
               let newBooking  = {
                 checkInDate: booking.startDate,
@@ -123,6 +118,7 @@ console.log(y);
 res.json({message: "Booking Cancelled Successfully..."});
 
 
+if(y.status === 'approved') {
   const rooms = y.roomsAllotted;
   const guestHouses = y.guestHouseAllotted;
 
@@ -135,6 +131,8 @@ res.json({message: "Booking Cancelled Successfully..."});
          $set:  incObject
         });
   }
+}
+  
 
 
 

@@ -64,7 +64,12 @@ emailVerified: {
 registerOption: {
    type:  Number,
    required: true,
-
+}, 
+nitUserDept: {
+    type: String
+}, 
+isNitUser : {
+    type: String
 }
 }, { timestamps: true });
 

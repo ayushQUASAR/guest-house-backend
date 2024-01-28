@@ -96,6 +96,12 @@ const bookingSchema = new mongoose.Schema({
           type: Boolean, 
           default: false,
         },
+        isStudent : {
+           type: Boolean
+        },
+        idProof: {
+            type: String
+        },
         name: {
             type: String,
             //  required: true

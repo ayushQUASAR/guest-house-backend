@@ -60,7 +60,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
     const data = req.body;
 
     if (!req.file) {
-        return res.status(400).json({ error: 'File not provided or does not meet requirements.' });
+        return res.status(400).json({ message: 'File not provided or does not meet requirements.' });
     }
     // console.log("this is file",req.file);
 
@@ -71,43 +71,20 @@ router.post("/", upload.single('idProof'), async (req, res) => {
         contentType: ext === 'pdf' ? "application/pdf" : `image/${ext}`
     });
 
-    const refType = data.selectedOption;
-    const refName = `${data.RefFirstName} ${data.RefLastName}`;
-    const refPhone = data.RefPhoneNumber;
-    console.log(data.selectedOption);
-
-    let refTo = refType === "student" ? new Student({
-        name: refName,
-        roll: data.StudentRollNumber,
-        branch: data.StudentBranch,
-        phone: refPhone,
-    }) : refType === "alumni" ? new Alumni({
-        name: refName,
-        batch: data.AlumniBatch,
-        branch: data.AlumniBranch,
-        currentJob: data.ALumniJobProfile,
-        phone: refPhone,
-    }) : new Faculty({
-        name: refName,
-        email: data.FacultyEmail,
-        dept: data.Department,
-        phone: refPhone,
-    });
-
-
-    //: new Other({
-    //     name: refName,
-    //     email:data?.otherEmail,
-    //     dept: data?.otherDept,
-    //     phone: refPhone,
-    // });
-
 
 
     try {
 
         //check if user is already registered or not....
         const email = data.Email;
+
+        const isNitUser = Number(data.registerOption) === 1 || Number(data.registerOption) === 2;
+        console.log("isNitUser: ",isNitUser);
+
+        if(isNitUser && !email.endsWith("@nitj.ac.in")) {
+            return res.status(400).json({message: "Student/Faculty must have official email."});
+        }
+
         const alreadyAUser = await User.find({ email: email });
 
         if (alreadyAUser.length != 0) {
@@ -126,28 +103,52 @@ router.post("/", upload.single('idProof'), async (req, res) => {
                 return res.json({ message: "Email ID Already registered. Try Login with same email. ", status: "accepted" });
             }
 
-            // return  res.json({ message: `Approval Rejected for email ID: ${email} by the Admin. Try registering with another email. `, status: "rejected" })
-
-            // user is rejected user: now that is not the case...
-            //  await User.deleteOne({email: email});
+        
 
 
         }
 
 
-   
-            let refToFinal = await refTo.save();
+        
+        const refName = `${data.RefFirstName} ${data.RefLastName}`;
+        let finalRef = null;
+        
+        if(Number(data.registerOption) === 3)  {   
+    const refType = data.selectedOption;
 
-            const reference = new Ref({
-                refType: data.selectedOption,
-                refTo: refToFinal._id,
-            });
+    const refPhone = data.RefPhoneNumber;
+            let refTo = refType === "student" ? new Student({
+            name: refName,
+            roll: data.StudentRollNumber,
+            branch: data.Department,
+            // phone: refPhone,
+        }) : refType === "alumni" ? new Alumni({
+            name: refName,
+            batch: data.AlumniBatch,
+            branch: data.Department,
+            currentJob: data.ALumniJobProfile,
+            phone: refPhone,
+        }) : new Faculty({
+            name: refName,
+            email: data.FacultyEmail,
+            dept: data.Department,
+            phone: refPhone,
+        });
     
-            const finalRef = await reference.save();
     
-            if (finalRef === null) {
-                throw new Error("finalRef not added");
+                let refToFinal = await refTo.save();
+                const reference = new Ref({
+                    refType: data.selectedOption,
+                    refTo: refToFinal._id,
+                });
+        
+                finalRef = await reference.save();
+        
+                if (finalRef === null) {
+                    throw new Error("finalRef not added");
+                }
             }
+            
         
        
 
@@ -168,26 +169,32 @@ router.post("/", upload.single('idProof'), async (req, res) => {
         const token = jwt.sign({ email: data.Email }, process.env.JWT_SECRET);
 
         const nonCollegeUserData = {
-            phone: data.Phnnumber,
             address: data.Address,
             refInfo: data.selectedOption,
-            reference: finalRef._id,
+            reference: finalRef?._id,
+            isNitUser: false
         }
-
-        // console.log("reference id: ", finalRef._id);
         
-
+        // console.log("reference id: ", finalRef._id);
+        const collegeUserData = {
+            nitUserDept: data.Department,
+            isNitUser: true,
+        }
+         
+        
         const commonUserData = {
             name: `${data.Firstname} ${data.Lastname}`,
+            phone: data.Phnnumber,
             email: data.Email,
             password: hashedPassword,
             idProof: proof._id,
             verificationToken: token,
             registerOption: data.registerOption, 
-        }
+        }   
 
-        const actualData = data.registerOption === 1 ?  {
-           ...commonUserData
+        const actualData = (Number(data.registerOption) === 1 || Number(data.registerOption) === 2) ?  {
+           ...commonUserData,
+           ...collegeUserData
         } : {
             ...commonUserData,
             ...nonCollegeUserData
@@ -215,13 +222,9 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             const msg = `user with id: ${newUser._id} created successfully`;
             console.log(msg);
 
-            const isNitUser = Number(data.registerOption) === 1 || Number(data.registerOption) === 2;
-            console.log("isNitUser: ",isNitUser);
+          
 
-            if(isNitUser && !email.endsWith("@nitj.ac.in")) {
-                throw new Error("Student/Faculty must have official email.");
-            }
-            res.json({ message: msg });
+            res.json({ message: msg, status: "success"});
 
             // console.log(data.registerOption);
             if (isNitUser && email.endsWith("@nitj.ac.in")) {
@@ -241,7 +244,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
 
             else if(Number(data.registerOption) === 3) {
                 await Promise.all([
-                    axios.get(`${process.env.REMOTE_URL}/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}/${encodeURIComponent(refPhone)}`),
+                    axios.get(`${process.env.REMOTE_URL}/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}}`),
 
                     axios.post(`${process.env.REMOTE_URL}/email/sendVerificationEmail`, {
                         name: actualData.name,

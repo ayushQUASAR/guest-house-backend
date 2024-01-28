@@ -45,7 +45,7 @@ const emailVerificationHTMLTemplate = ({ name, email, token }) => {
     <p>Verify your email address: ${verificationLink}</p>
     <br />
     
-    <p>For instant approval, contact avirals.cs.22@nitj.ac.in</p>
+    <p>For instant approval, contact ${process.env.ADMIN_EMAIL}</p>
     <br />
     
     <p>Thanks! - The NITJ Guest House Online Booking team </p>`;
@@ -80,10 +80,7 @@ const adminNotificationTemplate = ({ name, email, phone, address, refInfo, refNa
         <th>Reference Name</th>
         <td>${refName}</td>
     </tr>
-    <tr>
-        <th>Reference Contact Details</th>
-        <td>${refPhone}</td>
-    </tr>
+    
 </table>
 <br/>
 <a href="#">Click here to approve</a>
@@ -102,7 +99,7 @@ For your account security, please update your password by clicking on the link b
 <br/>
 ${verificationLink}
 <br/>
-This link is valid for 3 hours. Reach out to us at avirals.cs.22@nitj.ac.in, if you encounter any issues.
+This link is valid for 3 hours. Reach out to us at ${process.env.ADMIN_EMAIL}, if you encounter any issues.
 <br/>
 <br/>
 Best Regards,
@@ -141,12 +138,12 @@ try {
 
   
     const option = req.params.option;
-    
-    const info = (Number(option) === 1 || Number(option) === 2) ? " Now you can login to the dashboard with the valid credentials" : " Please wait for registration approval by admin.";
+    const isNitUser = (Number(option) === 1 || Number(option) === 2);
+    const info =  isNitUser ? " Now you can login to the dashboard with the valid credentials" : " Please wait for registration approval by admin.";
     res.write(`<h1>${req.params.id} successfully verified.</h1> <p>${info}</p>`);
     const [user] =  await User.find({email: req.params.id});
 
-    if(user.emailVerified && (Number(option) === 1 || Number(option) === 2) ) {
+    if(user.emailVerified && isNitUser ) {
         const newLogin = new Login({
             email: user.email,
             password: user.password
@@ -193,7 +190,43 @@ router.get("/forgot-password/:email/token/:token", async (req, res) => {
     }
 })
 
+router.post("/sendApprovalNotification", async (req,res)=> {
+const status = req.body.status;
+const userId = req.body.userId;
+try {
 
+    const existingUser = await User.findById(userId);
+    if(!existingUser) {
+        throw new Error("User not found");
+    }
+
+    const email = existingUser.email;
+    
+    await transporter.sendMail({
+        from: {
+            name: "donotreply",
+            address: "mrimann96@gmail.com",
+        },
+        to: email,
+        subject: "Registration Approval Status",
+        html: `
+        <h3>Dear Sir/Madam,</h3>
+       ${
+         status === "accept"
+           ? "<p>Your Registration request has been accepted by Guest House Admin. You can now access user dashboard using valid login credentials.</p>"
+           : `<p>Your request has been rejected by Guest House Admin. Contact ${process.env.ADMIN_EMAIL} to get details.</p>`
+       } 
+        Best Regards,
+        Online Guest House Room Alottment Team.
+        `,
+
+    })
+    res.json({message: "mail sent successfully to user regarding registration approval"})
+} catch (error) {
+    console.log(error.message)
+    res.json({message: error.message})
+}
+});
 
 
 router.post("/sendVerificationEmail", async (req, res) => {
@@ -247,17 +280,19 @@ router.get("/:id/verify/:token", async (req, res) => {
 })
 
 
-router.get("/adminNotification/:name/:email/:phone/:address/:refInfo/:refName/:refPhone", async (req, res) => {
-    const { name, email, phone, address, refInfo, refName, refPhone } = req.params;
+
+
+router.get("/adminNotification/:name/:email/:phone/:address/:refInfo/:refName", async (req, res) => {
+    const { name, email, phone, address, refInfo, refName } = req.params;
 
     const mailOptions = {
         from: {
             name: "donotreply",
             address: "mrimann96@gmail.com",
         },
-        to: "avirals.cs.22@nitj.ac.in",
+        to: `${process.env.ADMIN_EMAIL}`,
         subject: "New user registration",
-        html: adminNotificationTemplate({ name, email, phone, address, refInfo, refName, refPhone }),
+        html: adminNotificationTemplate({ name, email, phone, address, refInfo, refName }),
     };
 
     try {

@@ -3,19 +3,19 @@ const mongoose = require("mongoose");
 const facultySchema = new mongoose.Schema({
     name: {
         type: String,
-        required: false,
+        required: true,
     },
     email: {
         type: String,
-        required: false,
+        required: true,
     },
     dept: {
         type: String,
-        required:false,
+        required:true,
     },
     phone: {
         type: String,
-        required: false,
+        required: true,
     }
 }, { timestamps: true })
 

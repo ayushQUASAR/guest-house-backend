@@ -7,6 +7,7 @@ const RejectedUser = require("../models/rejectedUsers");
 const Ref = require("../models/user/ref");
 const Login = require("../models/login");
 const PendingUser = require("../models/pendingUsers");
+const { default: axios } = require("axios");
 
 router.delete("/", async (req, res) => {
   try {
@@ -56,6 +57,7 @@ router.post("/", async (req, res) => {
 
     // delete user from pending user
     await RegApproval.deleteOne({ user: newApproval.user });
+    await PendingUser.deleteOne({user: newApproval.user});
 
     if (newApproval.status === "accept") {
       console.log("this is accepted status");
@@ -116,6 +118,16 @@ router.post("/", async (req, res) => {
       res.json({ message: `${x[0].name} rejection confirmed..` });
     }
 
+
+    // send mail
+    await axios.post(`${process.env.REMOTE_URL}/email/sendApprovalNotification`, {
+      status: newApproval.status,
+      userId: newApproval.user
+    }, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
 
   }
 

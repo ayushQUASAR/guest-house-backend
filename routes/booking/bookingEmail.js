@@ -66,7 +66,8 @@ const adminNotificationTemplate = ({ actualData }) => `
 `;
 
 router.post("/adminNotification", async (req, res) => {
-  const actualData = req.body._doc;
+  // console.log("this is request body: ", req.body);
+  const actualData = req.body.actualData;
   console.log(actualData);
   // send alerts to admin regarding the data being send
   // const { kind, purpose, name, designation, address, phone, email, companions, startDate, startTime, endDate, endTime, bookingFor } = req.params;
@@ -76,7 +77,7 @@ router.post("/adminNotification", async (req, res) => {
       name: "donotreply",
       address: "mrimann96@gmail.com",
     },
-    to: "avirals.cs.22@nitj.ac.in",
+    to: `${process.env.ADMIN_EMAIL}`,
     subject: "New booking form filled for guest house",
     html: adminNotificationTemplate({ actualData }),
   };
@@ -99,6 +100,15 @@ const userApprovalNotificationTemplate = ({
 <p>Please login to your account for more details.</p>
 `;
 
+const userRejectionNotificationTemplate = () => `
+<h3>Dear Sir/Madam.</h3>
+<p> Your Booking Request has been rejected by Guest House Admin.
+<p> For more details, contact ${process.env.ADMIN_EMAIL}
+<br/>
+<p>Dear Regards,</p>
+<p>Guest House Room Allottment Team, NITJ </p>
+`;
+
 router.post("/sendApprovalNotification", async (req, res) => {
   const bookingDetails = req.body.booking;
   const guestHouseDetails = bookingDetails.booking.guestHouseAllotted;
@@ -114,7 +124,6 @@ router.post("/sendApprovalNotification", async (req, res) => {
       address: "mrimann96@gmail.com",
     },
     to: mailList, // we need to change here to user email
-    cc: "avirals.cs.22@nitj.ac.in", // replace with the admin's email
     subject: "Regarding approval for guest house",
     html: userApprovalNotificationTemplate({ guestHouseDetails, roomsDetails }),
   };
@@ -126,6 +135,30 @@ router.post("/sendApprovalNotification", async (req, res) => {
     res.json({ message: err.message });
   }
 });
+            
+
+router.post("/sendRejectionNotification", async (req,res) => {
+  const bookingDetails = req.body.booking;
+  const mailList = [
+    bookingDetails.booking.email,
+    bookingDetails.booking.roomBooker.email,
+  ]
+try {
+  await transporter.sendMail({
+    from: {
+      name: "donotreply",
+      address: "mrimann96@gmail.com",
+    },
+    to: mailList, // we need to change here to user email
+    subject: "Regarding approval for guest house",
+    html: userRejectionNotificationTemplate(),
+  })
+
+  res.json({message: "booking rejection notification sent to emails "})
+} catch (error) {
+  res.json({message: error.message})
+}
+})
 
 
 
@@ -167,7 +200,7 @@ router.post("/hod", async (req, res) => {
         name: "donotreply",
         address: "mrimann96@gmail.com",
       },
-      to: "avirals.cs.22@nitj.ac.in",
+      to: `${process.env.ADMIN_EMAIL}`,
       subject: "Booking request approval",
       html: hodBookingRequestTemplate({ dept, email, bookingId }),
     };

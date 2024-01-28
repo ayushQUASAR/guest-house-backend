@@ -15,10 +15,16 @@ router.post("/", async (req, res) => {
     //###Task 1:  fill the actualData according to fields from frontend
 
     ///## including the room selection details
+    const no_of_companions = Number(data.numCompanions);
     let companions = [];
-    if (data.companion1) companions.push(data.companion1);
-    if (data.companion2) companions.push(data.companion2);
-    if (data.companion3) companions.push(data.companion3);
+    for(let i = 0;i<no_of_companions;i++) {
+      const newComp = `companion${i+1}`;
+
+      if(data[newComp]) companions.push(data[newComp]);
+    }
+    // if (data.companion1) companions.push(data.companion1);
+    // if (data.companion2) companions.push(data.companion2);
+    // if (data.companion3) companions.push(data.companion3);
 
     const actualData = {
       purpose: data.purpose,
@@ -32,13 +38,13 @@ router.post("/", async (req, res) => {
       companions: companions,
       startDate: data.arrivalDate,
       endDate: data.departureDate,
-      startTime: data.startTime,
-      endTime: data.endTime,
-      roomBooker: !Boolean(data.isAdmin)
+      roomBooker: !JSON.parse(data.isAdmin)
         ? {
             isAdmin: false,
             name: data.PersonName,
+            isStudent: data.isStudent,  
             dept: data.PersonDept,
+            idProof: data.PersonID, 
             phone: data.PersonPhone,
             email: data.PersonEmail,
             address: data.PersonAddress,
@@ -58,7 +64,7 @@ router.post("/", async (req, res) => {
         message: `New booking ${finalBooking._id} created successfully...`,
       });
 
-    if (!data.isAdmin) {
+    if (!JSON.parse(data.isAdmin)) {
       const registeredUsers = await RegisteredUser.find({}).populate("user");
       const user = registeredUsers.filter(
         (user) => user.user.email === actualData.roomBooker.email
@@ -72,7 +78,7 @@ router.post("/", async (req, res) => {
         }
       );
 
-      const isStudent = data.PersonDept;
+      const isStudent = JSON.parse(data.isStudent);
       if (!isStudent) {
         await axios.post(`${process.env.REMOTE_URL}/email/booking/adminNotification`,
        {

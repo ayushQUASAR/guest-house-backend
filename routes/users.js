@@ -11,6 +11,7 @@ const RejectedUser = require("../models/rejectedUsers");
 const PendingUser = require("../models/pendingUsers");
 const Ref =require("../models/user/ref");
 const Booking = require("../models/booking/booking");
+const Login = require("../models/login");
 
 router.get("/", async (req, res) => {
     try {
@@ -47,14 +48,15 @@ router.get("/:id", async (req, res) => {
         
         const [user] = await User.find({ _id: userId }).populate('idProof').populate('reference');
         console.log(user);
-        if(Number(user.registerOption) === 1) {
+        const isNitUser = Number(user.registerOption) === 1 || Number(user.registerOption) === 2;
+        if(isNitUser)  {
             console.log("user no. 1");
             user.reference = null;
               return res.json({ userDetails: user });
         }
         
 
-        if(Number(user.registerOption) === 2) {
+        if(!isNitUser) {
             console.log("user no. 2");
             const [ref] = await Ref.find({ _id: user.reference._id }).populate('refTo');
            return res.json({  userDetails: user, referenceDetails: ref })
@@ -72,11 +74,26 @@ router.get("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
     const userId = req.params.id;
+    const {status} = req.query;
     try {
 
         const user = await User.findOne({ _id: userId });
         if (!user) {
             return res.status(404).json({ message: "No user found with that id" });
+        }
+
+        if(status) {
+            if(status === "registered") {
+                    
+                await Promise.all([
+                    RegisteredUser.deleteOne({user : userId}),
+                    Login.deleteOne({email: user.email}),
+                    User.deleteOne({_id: userId})      
+                ])
+                
+                return res.status(200).json({message:"User and registered user deleted successfully"});
+            }
+          
         }
 
         await User.deleteOne({ _id: userId });
@@ -109,17 +126,18 @@ router.get("/:id/bookingHistory/:type", async (req,res) => {
  const userId = req.params.id;
  const type = req.params.type;
 
- if(!userId) {
-    throw new Error("User id not valid");
- }
-
- const existingUser = await User.findById(userId);
- if(!existingUser) {
-    throw new Error("User id not valid");
- }
 
 
  try {
+    if(!userId) {
+        throw new Error("User id not valid");
+     }
+    
+     const existingUser = await User.findById(userId);
+     if(!existingUser) {
+        throw new Error("User id not valid");
+     }
+    
     // user mil gya 
     const email = existingUser.email;
     if(type === 'all') {
