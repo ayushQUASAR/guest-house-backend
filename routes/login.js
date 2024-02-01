@@ -120,7 +120,7 @@ router.post("/", async (req, res) => {
     const loginData = req.body;
     console.log(loginData);
     try {
-        const user = await Login.find({ email: loginData.Email });
+        const user = await Login.find({ email: loginData.Email.toLowerCase() });
 
         console.log(user);
         if (user.length === 0) {
@@ -216,7 +216,7 @@ router.post("/forgot-password", async (req, res) => {
         const token = jwt.sign({ email: email }, process.env.JWT_SECRET, { expiresIn: '3h' })
 
         res.json({ message: "Check Mail to update password..." });
-        await axios.get(`http://localhost:3000/email/forgot-password/${encodeURIComponent(email)}/token/${encodeURIComponent(token)}`);
+        await axios.get(`${process.env.REMOTE_URL}/email/forgot-password/${encodeURIComponent(email)}/token/${encodeURIComponent(token)}`);
 
     }
 
@@ -233,7 +233,7 @@ router.get("/forgot-password/verify/:token", (req, res) => {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
         // res.send(`${payload.email} verified successfully...`);
         res.writeHead(302, {
-            Location: 'http://localhost:5173/update-password'
+            Location: `${process.env.FRONTEND_URL}/update-password`
         });
 
 
