@@ -119,8 +119,11 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
     const loginData = req.body;
     console.log(loginData);
+    const email = loginData.Email;
     try {
-        const user = await Login.find({ email: loginData.Email.toLowerCase() });
+        const user = await Login.find({ email: {
+            $regex : new RegExp(email, "i")
+        } });
 
         console.log(user);
         if (user.length === 0) {
@@ -135,7 +138,8 @@ router.post("/", async (req, res) => {
             if (result === false) {
                 // console.log(`not valid ${user[0].isAdmin ? "admin" : "user"}`);
                 // res.status(403).json({ message: `not valid ${user[0].isAdmin ? "admin" : "user"}` });
-                throw new Error("Username or password invalid.");
+                // throw new Error("Username or password invalid.");
+                throw new Error("Password invalid");
             }
             else {
                 

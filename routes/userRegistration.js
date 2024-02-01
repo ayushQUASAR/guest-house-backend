@@ -76,7 +76,8 @@ router.post("/", upload.single('idProof'), async (req, res) => {
     try {
 
         //check if user is already registered or not....
-        const email = data.Email;
+        const email = data.Email.toLowerCase();
+
 
         const isNitUser = Number(data.registerOption) === 1 || Number(data.registerOption) === 2;
         console.log("isNitUser: ",isNitUser);
@@ -103,8 +104,6 @@ router.post("/", upload.single('idProof'), async (req, res) => {
                 return res.json({ message: "Email ID Already registered. Try Login with same email. ", status: "accepted" });
             }
 
-        
-
 
         }
 
@@ -130,7 +129,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             phone: refPhone,
         }) : new Faculty({
             name: refName,
-            email: data.FacultyEmail,
+            email: data.FacultyEmail.toLowerCase(),
             dept: data.Department,
             phone: refPhone,
         });
@@ -166,7 +165,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
             throw new Error("hash could not be created");
         }
 
-        const token = jwt.sign({ email: data.Email }, process.env.JWT_SECRET);
+        const token = jwt.sign({ email: data.Email.toLowerCase() }, process.env.JWT_SECRET);
 
         const nonCollegeUserData = {
             address: data.Address,
@@ -185,7 +184,7 @@ router.post("/", upload.single('idProof'), async (req, res) => {
         const commonUserData = {
             name: `${data.Firstname} ${data.Lastname}`,
             phone: data.Phnnumber,
-            email: data.Email,
+            email: data.Email.toLowerCase(),
             password: hashedPassword,
             idProof: proof._id,
             verificationToken: token,
