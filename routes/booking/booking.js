@@ -124,7 +124,7 @@ if(y.status === 'approved') {
 
   for(let i = 0;i<rooms.length;i++) {
        const incObject = {};
-       incObject[`rooms.${rooms[i]-1}`] = true;
+       incObject[`rooms.${rooms[i]-1}`] = false;
         await guestHouse.updateOne({
               guestHouseId: guestHouses
         }, {
