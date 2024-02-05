@@ -26,7 +26,7 @@ const adminNotificationTemplate = ({ actualData }) => `
 <table>
     <tr>
         <th>Name</th>
-        <td>${actualData.name}</td>
+        <td>${actualData?.name}</td>
     </tr>
     <tr>
         <th>Phone</th>
@@ -67,6 +67,7 @@ const adminNotificationTemplate = ({ actualData }) => `
 
 router.post("/adminNotification", async (req, res) => {
   // console.log("this is request body: ", req.body);
+  console.log(req.body);
   const actualData = req.body.actualData;
   console.log(actualData);
   // send alerts to admin regarding the data being send
@@ -270,11 +271,12 @@ router.get("/hod", async (req, res) => {
       if (status === "accepted") {
 
         res.json("Notification sent to corresponding user and admin regarding booking status...");
+      
         await Promise.all([
           axios.post(
             `${process.env.REMOTE_URL}/email/booking/adminNotification`,
             {
-              ...existingBooking,
+              actualData: existingBooking,
             },
             {
               headers: {

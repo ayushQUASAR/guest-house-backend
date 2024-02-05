@@ -24,7 +24,7 @@ DELETE http://localhost:3000/users
 
 ###
 
-DELETE http://localhost:3000/users/65b4c876e99f5693bb700f7a
+DELETE http://localhost:3000/users/65c11f29cf667911ae41259f
 
 ###
 
@@ -36,13 +36,13 @@ GET http://localhost:3000/users/65964a872e3fe6c5bf10e326
 GET http://localhost:3000/users/approved/registered
 
 ###
-
-GET http://localhost:3000/users/approved/registered
+ 
+GET http://localhost:3000/users/approved/pending
 
 ###
 
 
-DELETE http://localhost:3000/users/approved/pending
+DELETE http://localhost:3000/users/approved/pending/65c11f29cf667911ae4125a1
 
 
 ###
@@ -186,10 +186,20 @@ POST http://localhost:3000/guestHouse
 
 
 ###
+
+DELETE http://localhost:3000/guestHouse
+
+###
     
 GET  http://localhost:3000/guestHouse
 
 ###
+
+
+GET http://localhost:3000/admin/bookingApproval
+
+###
+
 
 POST http://localhost:4000/admin/bookingApproval
 Content-Type: application/json

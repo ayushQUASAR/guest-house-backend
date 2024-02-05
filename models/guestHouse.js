@@ -27,8 +27,7 @@ roomPrice:{
 
 roomType: {
     type: String,
-    enum: ['Non AC', 'AC'],
-    default: "Non AC",
+    default: "AC",
 }
 
 }, { timestamps: true });
@@ -38,21 +37,18 @@ guestHouseSchema.pre('save', function (next) {
     if(this.guestHouseId === 1) {
         this.noOfRooms = 10;
         this.roomPrice = 1000;
-        this.roomType = 'AC';
         this.rooms = new Array(10).fill(false);
     }
 
     if(this.guestHouseId === 2) {
         this.noOfRooms = 12;
         this.roomPrice = 300;
-        this.roomType = 'AC';
         this.rooms = new Array(12).fill(false);
     }
 
     if(this.guestHouseId === 3) {
         this.noOfRooms = 8;
         this.roomPrice = 300;
-        this.roomType = "AC";
         this.rooms = new Array(8).fill(false);
     }
 
