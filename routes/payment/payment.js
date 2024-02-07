@@ -12,7 +12,7 @@ router.post("/makepayment", async (req, res) => {
         if (data.paymentStatus == "success") {
             // update booking status
             const bookingDetails = await Booking.findByIdAndUpdate(
-                data.booking,
+                data.booking_id,
                 { status: "paid" },
                 { new: true}
             );
