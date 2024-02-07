@@ -26,7 +26,7 @@ router.post("/makepayment", async (req, res) => {
 
         else {
             res.status(200).json({
-                message: `Payment for ${data.booking} failed...`,
+                message: `Payment for ${data.booking_id} failed...`,
             });
         }
     } catch (err) {
