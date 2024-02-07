@@ -20,7 +20,7 @@ router.post("/makepayment", async (req, res) => {
             console.log(bookingDetails);
 
             res.status(200).json({
-                message: `Payment for ${data.booking} done successfully...`,
+                message: `Payment for ${data.booking_id} done successfully...`,
             });
         }
 
