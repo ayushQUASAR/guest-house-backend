@@ -103,6 +103,8 @@ else {
 router.delete("/:id", async (req,res) => {
   const id = req.params.id;
 try {
+
+  // booking cancelled
   const y = await Booking.findByIdAndUpdate(id, {
     status: 'cancelled'
   }, {
@@ -115,41 +117,43 @@ try {
 console.log(y);
 // update the info in guesthouse collection
 
-res.json({message: "Booking Cancelled Successfully..."});
 
 
-if(y.status === 'approved') {
+if(y.roomsAllotted.length > 0) {
   const rooms = y.roomsAllotted;
   const guestHouses = y.guestHouseAllotted;
-
+  
   for(let i = 0;i<rooms.length;i++) {
-       const incObject = {};
-       incObject[`rooms.${rooms[i]-1}`] = false;
-        await guestHouse.updateOne({
-              guestHouseId: guestHouses
-        }, {
-         $set:  incObject
-        });
+    const incObject = {};
+    incObject[`rooms.${rooms[i]-1}`] = false;
+    await guestHouse.updateOne({
+      guestHouseId: guestHouses
+    }, {
+      $set:  incObject
+    });
   }
 }
+
+
+
+
+// update the Registered user's booking history if booking cancelled
+if(!y.roomBooker.isAdmin) {
+  const registeredUsers = await RegisteredUser.find({}).populate('user');
+  const user =   registeredUsers.filter((user) => user.user.email === y.roomBooker.email);
   
-
-
-
-    // update the Registered user's booking history if booking cancelled
-    if(!y.roomBooker.isAdmin) {
-      const registeredUsers = await RegisteredUser.find({}).populate('user');
-      const user =   registeredUsers.filter((user) => user.user.email === y.roomBooker.email);
-
-
-   await RegisteredUser.updateOne(
-      {_id: user[0]._id}, {
+  
+  await RegisteredUser.updateOne(
+    {_id: user[0]._id}, {
       $pull: {
-          bookingHistory: id,
+        bookingHistory: id,
       },
-  });
-    }
-        
+    });
+  }
+
+  
+  
+  res.json({message: "Booking Cancelled Successfully..."});
 
 
 }

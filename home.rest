@@ -42,7 +42,7 @@ GET http://localhost:3000/users/approved/pending
 ###
 
 
-DELETE http://localhost:3000/users/approved/pending/65c11f29cf667911ae4125a1
+DELETE http://localhost:3000/users/approved/registered/65b7701c6cdb971024d4e877
 
 
 ###
@@ -166,7 +166,7 @@ GET http://localhost:3000/booking
 
 ### 
 
-GET http://localhost:3000/booking/approved/approved
+GET http://localhost:3000/booking/approved/cancelled
 
 
 ###
@@ -176,7 +176,7 @@ DELETE http://localhost:3000/booking
 
 ###
  
-DELETE http://localhost:3000/booking/65affb3701f71b8c485011a2
+DELETE http://localhost:3000/booking/65c5ffde82e2a077f4290597
 
 
 ###
