@@ -22,9 +22,7 @@ router.post("/", async (req, res) => {
 
       if(data[newComp]) companions.push(data[newComp]);
     }
-    // if (data.companion1) companions.push(data.companion1);
-    // if (data.companion2) companions.push(data.companion2);
-    // if (data.companion3) companions.push(data.companion3);
+   
 
     const actualData = {
       purpose: data.purpose,
@@ -38,6 +36,7 @@ router.post("/", async (req, res) => {
       companions: companions,
       startDate: data.arrivalDate,
       endDate: data.departureDate,
+      status: JSON.parse(data.isStudent) ? "hodPending" : "pending",
       roomBooker: !JSON.parse(data.isAdmin)
         ? {
             isAdmin: false,

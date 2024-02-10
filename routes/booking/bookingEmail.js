@@ -112,24 +112,30 @@ const userRejectionNotificationTemplate = () => `
 
 router.post("/sendApprovalNotification", async (req, res) => {
   const bookingDetails = req.body.booking;
-  const guestHouseDetails = bookingDetails.booking.guestHouseAllotted;
-  const roomsDetails = bookingDetails.booking.roomsAllotted;
-  //send alerts to user and visitor regarding the booking confirmation
-  const mailList = [
-    bookingDetails.booking.email,
-    bookingDetails.booking.roomBooker.email,
-  ];
-  const mailOptions = {
-    from: {
-      name: "donotreply",
-      address: "mrimann96@gmail.com",
-    },
-    to: mailList, // we need to change here to user email
-    subject: "Regarding approval for guest house",
-    html: userApprovalNotificationTemplate({ guestHouseDetails, roomsDetails }),
-  };
 
   try {
+    const existingBooking = await Booking.findById(bookingDetails.booking);
+    if(!existingBooking) {
+      throw new Error("Booking does not exist");
+    }
+
+
+    const mailList = [
+      existingBooking.email,
+      existingBooking.roomBooker.email,
+    ];
+
+    const guestHouseDetails = existingBooking.guestHouseAllotted;
+    const roomsDetails = existingBooking.roomsAllotted;
+    const mailOptions = {
+      from: {
+        name: "donotreply",
+        address: "mrimann96@gmail.com",
+      },
+      to: mailList, // we need to change here to user email
+      subject: "Regarding approval for guest house",
+      html: userApprovalNotificationTemplate({ guestHouseDetails, roomsDetails }),
+    };
     await transporter.sendMail(mailOptions);
     res.json({ message: "User has been notified about the approval" });
   } catch (err) {
@@ -140,11 +146,18 @@ router.post("/sendApprovalNotification", async (req, res) => {
 
 router.post("/sendRejectionNotification", async (req,res) => {
   const bookingDetails = req.body.booking;
+
+  
+  try {
+  const existingBooking = await Booking.findById(bookingDetails.booking);
+  if(!existingBooking) {
+    throw new Error("Booking does not exist");
+  }
+
   const mailList = [
-    bookingDetails.booking.email,
-    bookingDetails.booking.roomBooker.email,
+    existingBooking.email,
+    existingBooking.roomBooker.email,
   ]
-try {
   await transporter.sendMail({
     from: {
       name: "donotreply",
@@ -269,7 +282,8 @@ router.get("/hod", async (req, res) => {
 
     if (status) {
       if (status === "accepted") {
-
+          existingBooking.status = "pending";
+          await existingBooking.save();
         res.json("Notification sent to corresponding user and admin regarding booking status...");
       
         await Promise.all([
@@ -290,6 +304,8 @@ router.get("/hod", async (req, res) => {
         ]);
       }
       if (status === "rejected") {
+        existingBooking.status = "rejected";
+        await existingBooking.save();
         res.json("Notification sent to corresponding user regarding the booking status...")
         await axios.get(
           `${process.env.REMOTE_URL}/email/booking/hod/verification/${existingBooking.roomBooker.email}?status=rejected`
