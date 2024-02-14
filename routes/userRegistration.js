@@ -175,10 +175,19 @@ router.post("/", upload.single('idProof'), async (req, res) => {
         }
         
         // console.log("reference id: ", finalRef._id);
+
+        const studentUserData = {};
+        if(Number(data.registerOption) === 2) {
+         studentUserData['studRoll'] = data.StudentRollNumber
+        }
+        
         const collegeUserData = {
             nitUserDept: data.Department,
             isNitUser: true,
+           ...studentUserData
         }
+
+        
          
         
         const commonUserData = {

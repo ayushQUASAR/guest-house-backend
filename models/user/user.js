@@ -70,7 +70,8 @@ nitUserDept: {
 }, 
 isNitUser : {
     type: String
-}
+},
+studRoll: Number,
 }, { timestamps: true });
 
 const User = new mongoose.model("User", userSchema);
