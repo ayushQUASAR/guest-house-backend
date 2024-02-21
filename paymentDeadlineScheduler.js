@@ -4,7 +4,7 @@ const BookingApproval = require('./models/booking/bookingApproval');
 
 
 const cronJobForPaymentDeadline = () => {
-cron.schedule('30 0 * * *', async () => { // this will run at 00:30
+cron.schedule('0 * * * *', async () => { // this will run at 00:30
     
     const now = new Date();
 
@@ -16,7 +16,7 @@ cron.schedule('30 0 * * *', async () => { // this will run at 00:30
     });
 
     bookings.forEach(async (booking) => {
-        const deadlineHours = booking.paymentDeadline;
+        const deadlineHours = 24;
         const deadline = new Date(booking.createdAt.getTime() + deadlineHours * 60 * 60 * 1000);
 
         if (now >= deadline) {
