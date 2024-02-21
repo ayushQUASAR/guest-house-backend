@@ -138,18 +138,18 @@ if(y.roomsAllotted.length > 0) {
 
 
 // update the Registered user's booking history if booking cancelled
-if(!y.roomBooker.isAdmin) {
-  const registeredUsers = await RegisteredUser.find({}).populate('user');
-  const user =   registeredUsers.filter((user) => user.user.email === y.roomBooker.email);
+// if(!y.roomBooker.isAdmin) {
+//   const registeredUsers = await RegisteredUser.find({}).populate('user');
+//   const user =   registeredUsers.filter((user) => user.user.email === y.roomBooker.email);
   
   
-  await RegisteredUser.updateOne(
-    {_id: user[0]._id}, {
-      $pull: {
-        bookingHistory: id,
-      },
-    });
-  }
+//   await RegisteredUser.updateOne(
+//     {_id: user[0]._id}, {
+//       $pull: {
+//         bookingHistory: id,
+//       },
+//     });
+//   }
 
   
   
