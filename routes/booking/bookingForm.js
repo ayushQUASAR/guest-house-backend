@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
       companions: companions,
       startDate: data.arrivalDate,
       endDate: data.departureDate,
-      status: JSON.parse(data.isStudent) ? "hodPending" : "pending",
+      status: data.isStudent && JSON.parse(data.isStudent) ? "hodPending" : "pending",
       roomBooker: !JSON.parse(data.isAdmin)
         ? {
             isAdmin: false,
