@@ -30,7 +30,9 @@ const bookingSchema = new mongoose.Schema({
     },
 
     phone: {
-        type: String,
+        type:Number,
+max: [9999999999, "Phone no. must be 10 digit"],
+min: [1000000000, "Phone no. must be 10 digit"], 
         required: true,
     },
     email: {
@@ -115,7 +117,9 @@ const bookingSchema = new mongoose.Schema({
             // required: true
         },
         phone: {
-            type: String,
+            type:Number,
+            max: [9999999999, "Phone no. must be 10 digit"],
+            min: [1000000000, "Phone no. must be 10 digit"], 
             // required: true
         },
         email: {
