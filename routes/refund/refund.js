@@ -7,7 +7,7 @@ const Refund = require("../../models/refund/refund");
 
 router.post("/", async (req, res) => {
     const data = req.body;
-
+console.log("Data: ", data);
     // info regarding refund
     const actualData = {
         booking: data.booking,
@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
             message: `Refund ${refundDetails._id} created successfully...`,
         });
     } catch (err) {
-        console.log(err);
+        console.log(err.message);
         res.status(500).json({ message: err.message });
     }
 }

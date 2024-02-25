@@ -23,7 +23,7 @@ const refundSchema = new mongoose.Schema({
     IFSC: {
         type: String,
         required: true,
-    },
+    },  
 
 }, { timestamps: true });
 

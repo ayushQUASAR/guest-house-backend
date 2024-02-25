@@ -118,6 +118,27 @@ router.get('/approved/:approvalType', async (req, res) => {
 });
 
 
+router.patch("/:id", async (req,res) => {
+  const id = req.params.id;
+
+  try {
+    const existingBooking = await Booking.findById(id);
+    if(!existingBooking) {
+     return  res.status(404).json({message:"Booking not found"});
+    }
+
+    existingBooking.status = "paid";
+    await existingBooking.save();
+
+   return res.status(200).json({message: "Booking paid successfully..."})
+
+
+  } catch (error) {
+    console.log("/booking/:id PATCH Error: ", error.message);
+    return res.status(500).json({message: "Failed to update status"});
+  }
+})
+
 
 
 
