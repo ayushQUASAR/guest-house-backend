@@ -30,7 +30,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
-    secret: 'your secret key',
+    secret: process.env.JWT_SECRET,
     resave: true,
     saveUninitialized: true,
     cookie: {
