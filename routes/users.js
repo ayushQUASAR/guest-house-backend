@@ -246,7 +246,7 @@ router.delete("/approved/rejected", async (req, res) => {
 
 router.get('/approved/pending', async (req, res) => {
     try {
-        const users = await PendingUser.find({}).populate('user');
+        const users = await PendingUser.find({}).populate('user').populate('idProof');
         console.log(users);
         res.status(200).json(users);
     }
