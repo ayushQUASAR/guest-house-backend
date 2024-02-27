@@ -10,8 +10,8 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
-
-
+const {initializeApp} = require('firebase/app');
+const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage")
 const Image = require("../models/Image");
 const Ref = require("../models/user/ref");
 const User = require('../models/user/user');
@@ -21,20 +21,29 @@ const Faculty = require("../models/user/faculty");
 const Other = require("../models/user/other");
 const PendingUser = require('../models/pendingUsers');
 const RegisteredUser = require('../models/registeredUsers');
+const firebaseConfig = require("../config/firebase.config");
 
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads');
-    },
-    filename: (req, file, cb) => {
-        const [name, ext] = file.mimetype.split("/");
-        cb(null, `${name}-${Date.now()}.${ext}`);
-    }
-});
+
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'uploads');
+//     },
+//     filename: (req, file, cb) => {
+//         const [name, ext] = file.mimetype.split("/");
+//         cb(null, `${name}-${Date.now()}.${ext}`);
+//     }
+// });
+
+
+
+
+initializeApp(firebaseConfig);
+
+const storage = getStorage();
 
 const upload = multer({
-    storage: storage,
+    storage: multer.memoryStorage(),
     fileFilter: (req, file, cb) => {
         if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'application/pdf') {
             cb(null, true);
@@ -55,6 +64,7 @@ router.get("/", (req, res) => {
     res.write("hello from register");
     console.log(process.cwd());
 });
+
 router.post("/", upload.single('idProof'), async (req, res) => {
     // router.post("/", async (req, res) => {
     const data = req.body;
@@ -63,13 +73,34 @@ router.post("/", upload.single('idProof'), async (req, res) => {
         return res.status(400).json({ message: 'File not provided or does not meet requirements.' });
     }
     // console.log("this is file",req.file);
+    
+    const storageRef = ref(storage, `/id/${req.file.originalname}-${Date.now()}`);
+    const metaData = {
+        contentType : req.file.mimetype
+    }
 
-    const [extra, ext] = req.file.filename.split('.');
+    console.log(metaData);
+// upload file to firebase
+const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metaData);
+
+if (!snapshot) {
+    return res.status(500).json({ message: 'File could not be uploaded on the firebase.' });
+}
+
+let url = await getDownloadURL(snapshot.ref);
+
+if (!url) {
+    return res.status(500).json({ message: 'Could not find download url of snapshot on the firebase.' });
+}
+
+// return res.json({url}).end();
+
     const idProof = new Image({
-        // data: fs.readFileSync(path.join(process.cwd()+"/uploads/" + req.file.filename)),
-        data: `${process.env.REMOTE_URL}/images/${req.file.filename}`,
-        contentType: ext === 'pdf' ? "application/pdf" : `image/${ext}`
+        data: url,
+        contentType: metaData.contentType
     });
+
+    
 
 
 
