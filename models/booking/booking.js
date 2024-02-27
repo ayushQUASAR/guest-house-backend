@@ -30,9 +30,9 @@ const bookingSchema = new mongoose.Schema({
     },
 
     phone: {
-        type:Number,
-max: [9999999999, "Phone no. must be 10 digit"],
-min: [1000000000, "Phone no. must be 10 digit"], 
+        type:String,
+// max: [9999999999, "Phone no. must be 10 digit"],
+// min: [1000000000, "Phone no. must be 10 digit"], 
         required: true,
     },
     email: {
@@ -67,7 +67,7 @@ min: [1000000000, "Phone no. must be 10 digit"],
     status: {
         type: String,
         required: true,
-        enum: ['approved', 'pending','hodPending', 'cancelled', 'rejected', 'checkedOut', 'refunded', 'paid'],
+        enum: ['approved', 'pending','hodPending', 'cancelled', 'rejected', 'checkedOut', 'refunded', 'paid', 'autoReject'],
         default: 'pending'
     },
    
@@ -117,9 +117,9 @@ min: [1000000000, "Phone no. must be 10 digit"],
             // required: true
         },
         phone: {
-            type:Number,
-            max: [9999999999, "Phone no. must be 10 digit"],
-            min: [1000000000, "Phone no. must be 10 digit"], 
+            type:String,
+            // max: [9999999999, "Phone no. must be 10 digit"],
+            // min: [1000000000, "Phone no. must be 10 digit"], 
             // required: true
         },
         email: {

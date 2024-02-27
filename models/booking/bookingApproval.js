@@ -12,7 +12,7 @@ unique: true,
 status: {
    type: String,
    required: true,
-   enum: ["accept", "reject"]
+   enum: ["accept", "reject", "autoReject"],
 },
 
 roomsAllotted: {
