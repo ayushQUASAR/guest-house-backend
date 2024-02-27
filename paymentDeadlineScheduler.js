@@ -20,7 +20,7 @@ cron.schedule('* * * * *', async () => {
         console.log("Documents:" + documents);
     
         documents.forEach(async (doc) => {
-            const deadlineHours = 2;
+            const deadlineHours = 24;
             const deadline = new Date(doc.createdAt.getTime() + deadlineHours * 60 * 60 * 1000);
     
             console.log("Deadline: " + deadline);
