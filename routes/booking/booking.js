@@ -45,10 +45,9 @@ router.get("/admin/:email", async (req,res) => {
     return res.status(400).json({message: "Email Parameter not found"});
   }
 
-  const adminBookings = await Booking.find({"roomBooker.isAdmin" : true, "roomBooker.email": email });
-  return res.json(adminBookings);
-
   try {
+    const adminBookings = await Booking.find({"roomBooker.isAdmin" : true, "roomBooker.email": email });
+    return res.json(adminBookings);
     
   } catch (error) {
     console.log("GET /booking/admin/:email/bookingHistory error: ", error.message);
