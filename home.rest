@@ -286,3 +286,7 @@ Content-Type: application/json
       "PersonName": "Demo Person",
         "PersonEmail": "mriduld.cs.21@nitj.ac.in"
 }
+
+###
+
+GET http://localhost:3000/booking/admin/65b6954233b611a8c25c8

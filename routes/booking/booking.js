@@ -7,6 +7,7 @@ const router = express.Router();
 const Booking = require("../../models/booking/booking");
 const RegisteredUser = require('../../models/registeredUsers');
 const guestHouse = require('../../models/guestHouse');
+const Login = require('../../models/login');
 
 
 
@@ -38,19 +39,26 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/admin/:email", async (req,res) => {
+router.get("/admin/:id", async (req,res) => {
 
-  const email = req.params.email;
-  if(!email) {
-    return res.status(400).json({message: "Email Parameter not found"});
+  const id = req.params.id;
+  if(!id) {
+    return res.status(400).json({message: "ID Parameter not found"});
   }
 
   try {
+
+    const existingLogin = await Login.findById(id);
+    if(!existingLogin) {
+      res.status(404).json({message: "Login user not found"});
+    }
+
+    const email = existingLogin.email;
     const adminBookings = await Booking.find({"roomBooker.isAdmin" : true, "roomBooker.email": email });
     return res.json(adminBookings);
     
   } catch (error) {
-    console.log("GET /booking/admin/:email/bookingHistory error: ", error.message);
+    console.log("GET /booking/admin/:id error: ", error.message);
     return res.json({message:"Error in fetching admin's booking history"});
   }
 });
