@@ -38,6 +38,24 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/admin/:email", async (req,res) => {
+
+  const email = req.params.email;
+  if(!email) {
+    return res.status(400).json({message: "Email Parameter not found"});
+  }
+
+  const adminBookings = await Booking.find({"roomBooker.isAdmin" : true, "roomBooker.email": email });
+  return res.json(adminBookings);
+
+  try {
+    
+  } catch (error) {
+    console.log("GET /booking/admin/:email/bookingHistory error: ", error.message);
+    return res.json({message:"Error in fetching admin's booking history"});
+  }
+});
+
 
 // GET bookings by ID 
 router.get("/:id", async (req, res) => {
@@ -138,6 +156,8 @@ router.patch("/:id", async (req,res) => {
     return res.status(500).json({message: "Failed to update status"});
   }
 })
+
+
 
 
 

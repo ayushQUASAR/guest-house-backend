@@ -82,6 +82,7 @@ app.use("/admin/bookingApproval", bookingApprovalRoute);
 app.use("/guestHouse", guestHouseRoute);
 app.use("/refund", refundRoute);
 app.use("/payments", paymentRoute);
+
 // app.use("/check-session", sessionRoute);
 
 app.use("/images", require("./routes/images"));
