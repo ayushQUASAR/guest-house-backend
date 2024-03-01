@@ -290,3 +290,11 @@ Content-Type: application/json
 ###
 
 GET http://localhost:3000/booking/admin/65b6954233b611a8c25c8
+
+###
+
+GET http://localhost:3000/images/65b69f0333b611a8c25c9154
+
+### 
+
+GET http://localhost:3000/refund

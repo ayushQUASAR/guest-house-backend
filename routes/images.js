@@ -2,6 +2,11 @@ const express = require("express");
 const Image = require("../models/Image");
 const router = express.Router();
 
+
+router.get("/", async (req,res) => {
+   const images = await Image.find({});
+   res.json(images);
+})
 router.get("/:id", async (req,res) => {
 try {
    

@@ -40,6 +40,31 @@ console.log("Data: ", data);
 }
 );
 
+
+router.get("/:bookingId",  async (req,res) => {
+    const bookingId = req.params.bookingId;
+
+    if(!bookingId) {
+        return res.status(404).json({message:"Booking ID not found"});
+    }
+
+    try {
+
+        const refundBookingDetails = await Refund.findOne({booking: bookingId}).populate('booking');
+        if(!refundBookingDetails) {
+         return res.status(404).json({message: "Booking has not been refunded yet..."});
+        }
+
+      return res.status(200).json(refundBookingDetails);
+        
+        
+    } catch (error) {
+        console.log("Error in GET /refund/:id route: ", error.message);
+       return  res.status(500).json({message: "Could not fetch refund details"});
+    }
+
+
+})
 router.get("/", async (req, res) => {
     try {
         const refunds = await Refund.find({}).populate("booking");
