@@ -13,7 +13,7 @@ const cronJobForBookingCompletion = () => {
         const currentDate = new Date();
         try {
 
-            const checkedOutBookings = await Booking.find({ status: "approved", endDate: { $lt: currentDate } });
+            const checkedOutBookings = await Booking.find({ status: { $in : ["approved", "paid"]}, endDate: { $lt: currentDate } });
 
 // console.log("bookingScheduler.js" + checkedOutBookings);
 
