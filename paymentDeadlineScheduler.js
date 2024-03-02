@@ -13,6 +13,7 @@ cron.schedule('* * * * *', async () => {
 
     async function updateStatus(model, status) {
         const documents = await model.find({
+            "roomBooker.isAdmin": {$ne :true},
             status: { $nin: [status, 'paid', 'cancelled', 'checkedOut', 'refunded'] },
             createdAt: { $lt: new Date(now.getTime() - 24 * 60 * 60 * 1000) }
         });
