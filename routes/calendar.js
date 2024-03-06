@@ -52,7 +52,9 @@ router.get("/create",  async (req, res) => {
     // console.log('hello')
 try {
 
-   const data = await Booking.find({status: "approved"});
+   const data = await Booking.find({
+  "status": { $in: ["approved", "paid"] }
+});
 
 //    console.log("calender.js "+data);
 
