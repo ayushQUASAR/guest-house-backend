@@ -39,7 +39,6 @@ app.use(session({
         secure: true,
         httpOnly: false,
         sameSite: 'none',
-        expires: 0
     }
 }));
 
