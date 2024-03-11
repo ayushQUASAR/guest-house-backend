@@ -13,7 +13,7 @@ const cronJobForBookingCompletion = () => {
         const currentDate = new Date();
         try {
 
-            const checkedOutBookings = await Booking.find({ status: "approved", endDate: { $lt: currentDate } });
+            const checkedOutBookings = await Booking.find({ status: { $in : ["approved", "paid"]}, endDate: { $lt: currentDate } });
 
 // console.log("bookingScheduler.js" + checkedOutBookings);
 
@@ -39,8 +39,8 @@ const cronJobForBookingCompletion = () => {
             }
 
             await Promise.all([
-                axios.delete("http://localhost:3000/calendar"),
-                axios.get("http://localhost:3000/calendar/create"),
+                axios.delete(`${process.env.REMOTE_URL}/calendar`),
+                axios.get(`${process.env.REMOTE_URL}/calendar/create`),
             ]);
 
         }
