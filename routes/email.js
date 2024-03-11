@@ -31,24 +31,37 @@ const transportOptions = {
 const transporter = nodemailer.createTransport(transportOptions);
 
 // email template
-const emailHTMLTemplate = ({ email }) => `
-<p><b>Dear ${email} </b></p>
-<p> wassup </p>
- `;
+const emailHTMLTemplate = ({ email }) => `<h3> Hi Guest,</h3> 
+
+<p>Thank you for choosing the National Institute of Technology, Jalandhar (NITJ) Guest House for your upcoming stay.</p>
+<p>To proceed with your guest house booking, it's important that we verify your email address. This is a crucial step to protect your information and enhance the security of our booking system.</p>
+<p>Please click on the link below to verify your email address: <br/> verification Link</p>
+
+<p>We look forward to welcoming you to the NITJ Guest House and hope you have a pleasant stay with us.</p>
+
+<p>
+Best regards,<br/>
+NITJ Guest House
+</p>`
 
 const emailVerificationHTMLTemplate = ({ name, email, token }) => {
     const verificationLink = `${process.env.REMOTE_URL}/email/${email}/verify/${token}`;
 
-    return `<h3> Hi ${name},</h3> <br/>
-    <p>We just need to verify your email address before you can access the <u>ONLINE BOOKING</u>.</p>
+    return `
+    <h3> Dear Guest,</h3> 
+    <p>Thank you for choosing the National Institute of Technology, Jalandhar (NITJ) Guest House for your upcoming stay.
+    To proceed with your guest house booking, it's important that we verify your email address. This is a crucial step to protect your information and enhance the security of our booking system.</p>
+    <p>Please click on the link below to verify your email address: <br/>
+${verificationLink}
+    </p>
+
     
-    <p>Verify your email address: ${verificationLink}</p>
-    <br />
+    <p>We look forward to welcoming you to the NITJ Guest House and hope you have a pleasant stay with us.</p>
     
-    <p>For instant approval, contact ${process.env.ADMIN_EMAIL}</p>
-    <br />
-    
-    <p>Thanks! - The NITJ Guest House Online Booking team </p>`;
+    <p>
+    Best regards,<br/>
+NITJ Guest House
+    </p>`;
 }
 
 
@@ -94,7 +107,6 @@ const updatePasswordTemplate = ({ email, token }) => {
     
 Hi ${email},
 <br/>
-<br/>
 For your account security, please update your password by clicking on the link below:
 <br/>
 ${verificationLink}
@@ -103,7 +115,7 @@ This link is valid for 3 hours. Reach out to us at ${process.env.ADMIN_EMAIL}, i
 <br/>
 <br/>
 Best Regards,
-Online Guest House Room Allottment Team.
+NITJ Guest House.
     `
 }
 
@@ -210,14 +222,14 @@ try {
         to: email,
         subject: "Registration Approval Status",
         html: `
-        <h3>Dear Sir/Madam,</h3>
+        <h3>Dear Sir/Mam,</h3>
        ${
          status === "accept"
            ? "<p>Your Registration request has been accepted by Guest House Admin. You can now access user dashboard using valid login credentials.</p>"
            : `<p>Your request has been rejected by Guest House Admin. Contact ${process.env.ADMIN_EMAIL} to get details.</p>`
        } 
         Best Regards,
-        Online Guest House Room Alottment Team.
+        NITJ Guest House.
         `,
 
     })
@@ -242,7 +254,7 @@ router.post("/sendVerificationEmail", async (req, res) => {
             address: "mrimann96@gmail.com",
         },
         to: email,
-        subject: "Confirm Your Email Address",
+        subject: "Verify Your Email for NITJ Guest House Booking",
         html: emailVerificationHTMLTemplate({ name, email, token })
     };
 
