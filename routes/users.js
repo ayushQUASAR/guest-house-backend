@@ -12,6 +12,7 @@ const PendingUser = require("../models/pendingUsers");
 const Ref =require("../models/user/ref");
 const Booking = require("../models/booking/booking");
 const Login = require("../models/login");
+const { REMOTE_URL } = require("../config/env.config");
 
 router.get("/", async (req, res) => {
     try {
@@ -163,8 +164,8 @@ router.get("/:id/bookingHistory/:type", async (req,res) => {
 router.get("/:id/bookingHistory", async (req, res) => {
     const userId = req.params.id;
     try {
-        const response = await axios.get(`${process.env.REMOTE_URL}/users/${userId}`);
-        const registeredUsers = await axios.get(`${process.env.REMOTE_URL}/users/approved/registered`);
+        const response = await axios.get(`${REMOTE_URL}/users/${userId}`);
+        const registeredUsers = await axios.get(`${REMOTE_URL}/users/approved/registered`);
 
         const arr = registeredUsers.data;
         const a = arr.filter((user) => user.user?._id === userId);

@@ -14,6 +14,7 @@ const router = express.Router();
 
 const Login = require("../models/login");
 const User = require("../models/user/user");
+const { JWT_SECRET, REMOTE_URL, FRONTEND_URL } = require("../config/env.config");
 
 
 router.get("/admin", async (req, res) => {
@@ -217,10 +218,10 @@ router.post("/forgot-password", async (req, res) => {
             res.status(401).json({ message: "email does not matches" });
         }
 
-        const token = jwt.sign({ email: email }, process.env.JWT_SECRET, { expiresIn: '3h' })
+        const token = jwt.sign({ email: email }, JWT_SECRET, { expiresIn: '3h' })
 
         res.json({ message: "Check Mail to update password..." });
-        await axios.get(`${process.env.REMOTE_URL}/email/forgot-password/${encodeURIComponent(email)}/token/${encodeURIComponent(token)}`);
+        await axios.get(`${REMOTE_URL}/email/forgot-password/${encodeURIComponent(email)}/token/${encodeURIComponent(token)}`);
 
     }
 
@@ -234,10 +235,10 @@ router.post("/forgot-password", async (req, res) => {
 router.get("/forgot-password/verify/:token", (req, res) => {
     const token = req.params.token;
     try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        const payload = jwt.verify(token, JWT_SECRET);
         // res.send(`${payload.email} verified successfully...`);
         res.writeHead(302, {
-            Location: `${process.env.FRONTEND_URL}/update-password`
+            Location: `${FRONTEND_URL}/update-password`
         });
 
 

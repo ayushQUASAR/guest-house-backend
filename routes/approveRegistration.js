@@ -8,6 +8,7 @@ const Ref = require("../models/user/ref");
 const Login = require("../models/login");
 const PendingUser = require("../models/pendingUsers");
 const { default: axios } = require("axios");
+const { REMOTE_URL } = require("../config/env.config");
 
 router.delete("/", async (req, res) => {
   try {
@@ -120,7 +121,7 @@ router.post("/", async (req, res) => {
 
 
     // send mail
-    await axios.post(`${process.env.REMOTE_URL}/email/sendApprovalNotification`, {
+    await axios.post(`${REMOTE_URL}/email/sendApprovalNotification`, {
       status: newApproval.status,
       userId: newApproval.user
     }, {

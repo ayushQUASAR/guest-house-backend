@@ -22,6 +22,7 @@ const Other = require("../models/user/other");
 const PendingUser = require('../models/pendingUsers');
 const RegisteredUser = require('../models/registeredUsers');
 const firebaseConfig = require("../config/firebase.config");
+const { JWT_SECRET, REMOTE_URL } = require("../config/env.config");
 
 
 
@@ -196,7 +197,7 @@ if (!url) {
             throw new Error("hash could not be created");
         }
 
-        const token = jwt.sign({ email: data.Email.toLowerCase() }, process.env.JWT_SECRET);
+        const token = jwt.sign({ email: data.Email.toLowerCase() }, JWT_SECRET);
 
         const nonCollegeUserData = {
             address: data.Address,
@@ -268,7 +269,7 @@ if (!url) {
             // console.log(data.registerOption);
             if (isNitUser && email.endsWith("@nitj.ac.in")) {
                 console.log("this is working");
-                  await  axios.post(`${process.env.REMOTE_URL}/email/sendVerificationEmail`, {
+                  await  axios.post(`${REMOTE_URL}/email/sendVerificationEmail`, {
                         name: actualData.name,
                         email: actualData.email,
                         token: token
@@ -283,9 +284,9 @@ if (!url) {
 
             else if(Number(data.registerOption) === 3) {
                 await Promise.all([
-                    axios.get(`${process.env.REMOTE_URL}/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}}`),
+                    axios.get(`${REMOTE_URL}/email/adminNotification/${encodeURIComponent(actualData.name)}/${encodeURIComponent(actualData.email)}/${encodeURIComponent(actualData.phone)}/${encodeURIComponent(actualData.address)}/${encodeURIComponent(actualData.refInfo)}/${encodeURIComponent(refName)}}`),
 
-                    axios.post(`${process.env.REMOTE_URL}/email/sendVerificationEmail`, {
+                    axios.post(`${REMOTE_URL}/email/sendVerificationEmail`, {
                         name: actualData.name,
                         email: actualData.email,
                         token: token
@@ -300,6 +301,7 @@ if (!url) {
                 return;
             }
 
+            
         }
 
     }

@@ -5,6 +5,7 @@ const router = express.Router();
 
 const Booking = require("../../models/booking/booking");
 const RegisteredUser = require("../../models/registeredUsers");
+const { REMOTE_URL } = require("../../config/env.config");
 
 router.post("/", async (req, res) => {
   console.log(req.body);
@@ -79,7 +80,7 @@ router.post("/", async (req, res) => {
 
       const isStudent = JSON.parse(data.isStudent);
       if (!isStudent) {
-        await axios.post(`${process.env.REMOTE_URL}/email/booking/adminNotification`,
+        await axios.post(`${REMOTE_URL}/email/booking/adminNotification`,
        {
             actualData,
           },
@@ -92,7 +93,7 @@ router.post("/", async (req, res) => {
       }
 
       if (isStudent) {
-        await axios.post(`${process.env.REMOTE_URL}/email/booking/hod`,
+        await axios.post(`${REMOTE_URL}/email/booking/hod`,
           {
             bookingId: finalBooking._id,
           },

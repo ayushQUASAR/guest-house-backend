@@ -2,6 +2,7 @@ const cron = require("node-cron");
 const Booking = require("./models/booking/booking");
 const guestHouse = require("./models/guestHouse");
 const axios = require('axios');
+const { REMOTE_URL } = require("./config/env.config");
 
 
 const cronJobForBookingCompletion = () => {
@@ -39,8 +40,8 @@ const cronJobForBookingCompletion = () => {
             }
 
             await Promise.all([
-                axios.delete(`${process.env.REMOTE_URL}/calendar`),
-                axios.get(`${process.env.REMOTE_URL}/calendar/create`),
+                axios.delete(`${REMOTE_URL}/calendar`),
+                axios.get(`${REMOTE_URL}/calendar/create`),
             ]);
 
         }

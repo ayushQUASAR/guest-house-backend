@@ -9,7 +9,7 @@ cron.schedule('* * * * *', async () => {
     
     const now = new Date();
 
-    console.log("hello from cron job on ", now);
+    console.log("hello from payment deadline cron job on ", now);
 
     async function updateStatus(model, status) {
         const documents = await model.find({
@@ -18,13 +18,13 @@ cron.schedule('* * * * *', async () => {
             createdAt: { $lt: new Date(now.getTime() - 24 * 60 * 60 * 1000) }
         });
     
-        console.log("Documents:" + documents);
+        // console.log("Documents:" + documents);
     
         documents.forEach(async (doc) => {
             const deadlineHours = 24;
             const deadline = new Date(doc.createdAt.getTime() + deadlineHours * 60 * 60 * 1000);
     
-            console.log("Deadline: " + deadline);
+            // console.log("Deadline: " + deadline);
     
             if (now >= deadline) {
                 doc.status = 'autoReject';

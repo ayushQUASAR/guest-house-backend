@@ -1,0 +1,10 @@
+<body>
+    <header>
+      <h1>Merchant Details</h1>
+    </header>
+    <form action="<%= formData.spURL %>" method="POST">
+      <input type="hidden" name="statusTransEncData" value="<%= formData.statusTransEncData %>">
+      <input type="hidden" name="clientCode" value="<%= formData.clientCode %>">
+      <input type="submit" id="submitButton" name="submit" value="Check Transaction Details">
+    </form>
+</body>

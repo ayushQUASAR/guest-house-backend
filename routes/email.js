@@ -1,4 +1,4 @@
-require('dotenv').config();
+
 const express = require("express");
 const nodemailer = require("nodemailer");
 
@@ -8,6 +8,7 @@ const bookingEmailRoute = require('./booking/bookingEmail');
 const Login = require("../models/login");
 const PendingUser = require("../models/pendingUsers");
 const RegisteredUser = require("../models/registeredUsers");
+const { REMOTE_URL, ADMIN_EMAIL } = require('../config/env.config');
 
 const router = express.Router();
 
@@ -45,7 +46,7 @@ NITJ Guest House
 </p>`
 
 const emailVerificationHTMLTemplate = ({ name, email, token }) => {
-    const verificationLink = `${process.env.REMOTE_URL}/email/${email}/verify/${token}`;
+    const verificationLink = `${REMOTE_URL}/email/${email}/verify/${token}`;
 
     return `
     <h3> Dear Guest,</h3> 
@@ -102,7 +103,7 @@ const adminNotificationTemplate = ({ name, email, phone, address, refInfo, refNa
 
 const updatePasswordTemplate = ({ email, token }) => {
 
-    const verificationLink = `${process.env.REMOTE_URL}/login/forgot-password/verify/${token}`;
+    const verificationLink = `${REMOTE_URL}/login/forgot-password/verify/${token}`;
     return `
     
 Hi ${email},
@@ -111,7 +112,7 @@ For your account security, please update your password by clicking on the link b
 <br/>
 ${verificationLink}
 <br/>
-This link is valid for 3 hours. Reach out to us at ${process.env.ADMIN_EMAIL}, if you encounter any issues.
+This link is valid for 3 hours. Reach out to us at ${ADMIN_EMAIL}, if you encounter any issues.
 <br/>
 <br/>
 Best Regards,
@@ -226,7 +227,7 @@ try {
        ${
          status === "accept"
            ? "<p>Your Registration request has been accepted by Guest House Admin. You can now access user dashboard using valid login credentials.</p>"
-           : `<p>Your request has been rejected by Guest House Admin. Contact ${process.env.ADMIN_EMAIL} to get details.</p>`
+           : `<p>Your request has been rejected by Guest House Admin. Contact ${ADMIN_EMAIL} to get details.</p>`
        } 
         Best Regards,
         NITJ Guest House.
@@ -284,7 +285,7 @@ router.get("/:id/verify/:token", async (req, res) => {
                 throw new Error("user could not be updated");
             }
       
-        res.redirect(`${process.env.REMOTE_URL}/email/verificationSuccess/${id}/${user[0].registerOption}`);
+        res.redirect(`${REMOTE_URL}/email/verificationSuccess/${id}/${user[0].registerOption}`);
     }
     catch (err) {
         res.status(500).json({ message: err.message })
@@ -302,7 +303,7 @@ router.get("/adminNotification/:name/:email/:phone/:address/:refInfo/:refName", 
             name: "donotreply",
             address: "mrimann96@gmail.com",
         },
-        to: `${process.env.ADMIN_EMAIL}`,
+        to: `${ADMIN_EMAIL}`,
         subject: "New user registration",
         html: adminNotificationTemplate({ name, email, phone, address, refInfo, refName }),
     };

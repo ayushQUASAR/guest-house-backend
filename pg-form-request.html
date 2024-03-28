@@ -1,0 +1,10 @@
+<body>
+    <header>
+      <h1>Merchant Details</h1>
+    </header>
+    <form action="<%= formData.spURL %>" method="POST">
+      <input type="hidden" name="encData" value="<%= formData.encData %>">
+      <input type="hidden" name="clientCode" value="<%= formData.clientCode %>">
+      <input type="submit" id="submitButton" name="submit" value="Go To PG">
+    </form>
+</body>

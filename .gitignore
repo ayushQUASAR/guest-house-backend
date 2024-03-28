@@ -1,4 +1,4 @@
 node_modules
+.env.local
+http.rest
 .env
-home.rest
-

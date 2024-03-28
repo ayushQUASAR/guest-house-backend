@@ -8,6 +8,7 @@ const axios = require('axios');
 
 const BookingApproval = require("../../models/booking/bookingApproval");
 const Booking = require("../../models/booking/booking");
+const { REMOTE_URL } = require("../../config/env.config");
 
 
 
@@ -86,7 +87,7 @@ router.post("/", async (req, res) => {
 
 
          await Promise.all([
-            axios.put(`${process.env.REMOTE_URL}/guestHouse/room/allot`, {
+            axios.put(`${REMOTE_URL}/guestHouse/room/allot`, {
                roomsAllotted: actualData.roomsAllotted,
                guestHouseAllotted: actualData.guestHouseAllotted,
                startDate: actualData.startDate,
@@ -96,7 +97,7 @@ router.post("/", async (req, res) => {
                   "Content-Type": "application/json"
                }
             }),
-            axios.post(`${process.env.REMOTE_URL}/email/booking/sendApprovalNotification`, {
+            axios.post(`${REMOTE_URL}/email/booking/sendApprovalNotification`, {
                booking: approvalDetails,
             }, {
                headers: {
@@ -119,7 +120,7 @@ router.post("/", async (req, res) => {
           
 
          res.json({ message: `Booking ${actualData.booking} rejected successfully` });
-         await axios.post(`${process.env.REMOTE_URL}/email/booking/sendRejectionNotification`, {
+         await axios.post(`${REMOTE_URL}/email/booking/sendRejectionNotification`, {
             booking: approvalDetails,
          }, {
             headers: {

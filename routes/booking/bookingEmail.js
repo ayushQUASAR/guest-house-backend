@@ -7,6 +7,8 @@ const Booking = require("../../models/booking/booking");
 const { default: axios } = require("axios");
 const User = require("../../models/user/user");
 const { formatDate } = require("../../utils");
+const { ADMIN_EMAIL, REMOTE_URL } = require("../../config/env.config");
+
 
 const transportOptions = {
   host: "smtp.gmail.com",
@@ -80,7 +82,7 @@ router.post("/adminNotification", async (req, res) => {
       name: "donotreply",
       address: "mrimann96@gmail.com",
     },
-    to: `${process.env.ADMIN_EMAIL}`,
+    to: `${ADMIN_EMAIL}`,
     subject: "New booking form filled for guest house",
     html: adminNotificationTemplate({ actualData }),
   };
@@ -215,11 +217,11 @@ const hodBookingRequestTemplate = ({
 <p> Please click on Yes to approve the student's request and click on No to reject the student's request. </p>
 <button style="padding:0.5rem 1rem;cursor:pointer;border-radius:4px;border:none;outline:none;background:blueviolet;">
 <a style="cursor:pointer;text-decoration:none;color:white;"
- href="${process.env.REMOTE_URL}/email/booking/hod?status=accepted&bookingId=${bookingId}">Yes</a>
+ href="${REMOTE_URL}/email/booking/hod?status=accepted&bookingId=${bookingId}">Yes</a>
 </button>
 <button style="padding:0.5rem 1rem;cursor:pointer;border-radius:4px;border:none;outline:none;background:red;">
 <a style="cursor:pointer;text-decoration:none;color:white;" 
-href="${process.env.REMOTE_URL}/email/booking/hod?status=rejected&bookingId=${bookingId}">No</a>
+href="${REMOTE_URL}/email/booking/hod?status=rejected&bookingId=${bookingId}">No</a>
 </button>
 </div>
 <p>
@@ -259,7 +261,7 @@ router.post("/hod", async (req, res) => {
         name: "donotreply",
         address: "mrimann96@gmail.com",
       },
-      to: `${process.env.ADMIN_EMAIL}`,
+      to: `${ADMIN_EMAIL}`,
       subject: "Request for Approval: Guest House Room Allottment",
       html: hodBookingRequestTemplate({
         dept,
@@ -343,7 +345,7 @@ router.get("/hod", async (req, res) => {
 
         await Promise.all([
           axios.post(
-            `${process.env.REMOTE_URL}/email/booking/adminNotification`,
+            `${REMOTE_URL}/email/booking/adminNotification`,
             {
               actualData: existingBooking,
             },
@@ -354,7 +356,7 @@ router.get("/hod", async (req, res) => {
             }
           ),
           axios.get(
-            `${process.env.REMOTE_URL}/email/booking/hod/verification/${existingBooking.roomBooker.email}?status=accepted`
+            `${REMOTE_URL}/email/booking/hod/verification/${existingBooking.roomBooker.email}?status=accepted`
           ),
         ]);
       }
@@ -365,7 +367,7 @@ router.get("/hod", async (req, res) => {
           "Notification sent to corresponding user regarding the booking status..."
         );
         await axios.get(
-          `${process.env.REMOTE_URL}/email/booking/hod/verification/${existingBooking.roomBooker.email}?status=rejected`
+          `${REMOTE_URL}/email/booking/hod/verification/${existingBooking.roomBooker.email}?status=rejected`
         );
       }
     }

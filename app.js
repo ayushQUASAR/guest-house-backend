@@ -1,4 +1,4 @@
-require("dotenv").config();
+
 const express = require("express");
 const cors = require('cors');
 const session = require("express-session")
@@ -18,9 +18,14 @@ const bookingApprovalRoute = require("./routes/booking/bookingApproval");
 const guestHouseRoute = require("./routes/guestHouse")
 const refundRoute = require("./routes/refund/refund");
 const paymentRoute = require("./routes/payment/payment");
+const { JWT_SECRET } = require("./config/env.config");
 
 app.enable('trust proxy');
 // const origins = ['http://localhost:5173',"https://guest-house-system-eight.vercel.app/"];
+app.set("view engine", "html");
+app.engine("html", require("ejs").renderFile);
+app.use(express.static(__dirname));
+
 app.use(cors({
     origin: ["http://localhost:5173", "https://guest-house-frontend.onrender.com"],
     // default: "http://localhost:5173",
@@ -30,8 +35,9 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
 app.use(session({
-    secret: process.env.JWT_SECRET,
+    secret: JWT_SECRET,
     resave: true,
     saveUninitialized: true,
     store: MongoStore.create({ mongoUrl: "mongodb+srv://user:user@cluster0.uunf6ts.mongodb.net/guestHouse?retryWrites=true&w=majority" }),
@@ -68,6 +74,25 @@ app.get('/logout', (req, res) => {
         }
     });
 });
+
+
+app.post("/getPgRes", (req, res) => {
+    let body = "";
+    req.on("data", function (data) {
+      body += data;
+      console.log("sabpaisa response :: " + body);
+      let decryptedResponse = decrypt(
+        decodeURIComponent(body.split("&")[1].split("=")[1])
+      );
+      console.log("decryptedResponse :: " + decryptedResponse);
+  
+      res.render(process.cwd() + "/pg-form-response.html", {
+        decryptedResponse: decryptedResponse,
+      });
+    });
+  
+  });
+  
 
 //listening on port 3000
 app.use("/register", registerRoute);
